@@ -1,17 +1,17 @@
-#include "Stage.h"
+#include "StageManager.h"
 #include "DxLib.h"
 
 constexpr int kBlockSize = 10;
 
-Stage::Stage()
+StageManager::StageManager()
 {
 }
 
-Stage::~Stage()
+StageManager::~StageManager()
 {
 }
 
-void Stage::DrawStage() const
+void StageManager::DrawStage() const
 {
 	for (int i = 0; i < 10; i++) 
 	{

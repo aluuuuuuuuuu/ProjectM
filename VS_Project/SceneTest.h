@@ -4,7 +4,7 @@
 #include <memory>
 
 class Player;
-class Stage;
+class StageManager;
 class SceneTest :
     public SceneBase,
     public Constant
@@ -54,7 +54,7 @@ private:
     void NormalDraw() const;
 
     // ステージポインタ
-    std::shared_ptr<Stage> _pStage;
+    std::shared_ptr<StageManager> _pStage;
 
     // プレイヤーポインタ
     std::shared_ptr<Player> _pPlayer;

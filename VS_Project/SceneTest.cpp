@@ -1,14 +1,14 @@
 #include "SceneTest.h"
-#include "Stage.h"
+#include "StageManager.h"
 #include "Player.h"
 
 SceneTest::SceneTest()
 {
-	// ステージクラスのインスタンス作成
-	_pStage = std::make_shared<Stage>();
-
-	// プレイヤークラスのインスタンス作成
-	_pPlayer = std::make_shared<Player>();
+	// 各クラスのインスタンス作成
+	{
+		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
+		_pPlayer = std::make_shared<Player>();		// プレイヤー
+	}
 
 	// 関数ポインタの初期化
 	{
@@ -86,7 +86,7 @@ void SceneTest::NormalUpdate()
 void SceneTest::NormalDraw() const
 {
 	// グリッドの描画
-	DrawGrid();
+	//DrawGrid();
 	
 	// ステージブロックの描画
 	_pStage->DrawStage();

@@ -1,9 +1,9 @@
 #pragma once
-class Stage
+class StageManager
 {
 public:
-	Stage();
-	virtual ~Stage();
+	StageManager();
+	virtual ~StageManager();
 
 	void DrawStage() const;
 
