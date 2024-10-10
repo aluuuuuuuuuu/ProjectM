@@ -4,7 +4,7 @@
 #include <variant>
 
 // 変数型
-enum MyDataType { _INT, _FLOAT, _BOOL, _STRING };
+enum DataType { _INT, _FLOAT, _BOOL, _STRING };
 
 // 定数管理クラス
 class Constant
@@ -14,9 +14,12 @@ class Constant
 
 public:
 
-	// 定数mapを得る
+	/// <summary>
+	/// 定数mapをそのまま返す
+	/// </summary>
+	/// <returns>定数map配列</returns>
 	std::map<std::string, ConstantVariant> GetConstants();
-	
+
 	// 定数を取得する
 	std::variant<int, float, bool, std::string> GetConstant(const std::string& name);
 
@@ -24,14 +27,20 @@ public:
 	std::map<std::string, ConstantVariant> Constants;
 protected:
 
-	// CSVから定数を読み込む
+	/// <summary>
+	/// CSVから定数を読み込む
+	/// </summary>
+	/// <param name="filename">ファイルパス</param>
 	void ReadCSV(const std::string& filename);
 
-	
-private:
-	
 
-	// 引数の文字列から変数型を推測する
-	MyDataType GetDataType(const std::string& type);
+private:
+
+	/// <summary>
+	/// 引数の文字列から変数型を推測する
+	/// </summary>
+	/// <param name="type">_INTなどの型名の文字列</param>
+	/// <returns>DataTypeのデータ型のいずれか</returns>
+	DataType GetDataType(const std::string& type);
 
 };

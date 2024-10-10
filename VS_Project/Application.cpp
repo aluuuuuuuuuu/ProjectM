@@ -1,11 +1,10 @@
 #include "Application.h"
-#include "SceneManager.h"
 #include "DxLib.h"
+#include "Constant.h"
+#include "SceneManager.h"
 #include "Input.h"
 #include "SceneTest.h"
-#include <cassert>
 
-// 初期化処理
 bool Application::Init()
 {
 	// 外部ファイルから定数を取得する
@@ -15,7 +14,7 @@ bool Application::Init()
 	ChangeWindowMode(true);
 
 	// ウィンドウ名の設定
-	DxLib::SetWindowTextDX(L"ProjectM");
+	DxLib::SetWindowTextDX("ProjectM");
 	// 画面サイズの設定
 	SetGraphMode(std::get<int>(Constants["SCREEN_WIDTH"]),
 		std::get<int>(Constants["SCREEN_HEIGHT"]),
@@ -70,7 +69,6 @@ bool Application::Init()
 	return true;
 }
 
-// メイン処理
 void Application::Run()
 {
 	// シーンマネージャーのインスタンスを取得
@@ -122,9 +120,7 @@ void Application::Run()
 	Terminate();
 }
 
-// 終了処理
 void Application::Terminate()
 {
-
-	DxLib_End();	// DxLibの終了処理
+    DxLib_End();    // DXライブラリの終了処理
 }

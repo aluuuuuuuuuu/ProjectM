@@ -61,27 +61,27 @@ void Constant::ReadCSV(const std::string& filename)
 		// —áŠOˆ—
 		try {
 			switch (GetDataType(type)) {
-				case _INT: {
-					int intValue = std::stoi(value);
-					Constants[name] = intValue;
-					break;
-				}
-				case _FLOAT: {
-					float floatValue = std::stof(value);
-					Constants[name] = floatValue;
-					break;
-				}
-				case _BOOL: {
-					std::stringstream boolStream(value);
-					bool boolValue;
-					boolStream >> std::boolalpha >> boolValue;
-					Constants[name] = boolValue;
-					break;
-				}
-				case _STRING: {
-					Constants[name] = value;
-					break;
-				}
+			case _INT: {
+				int intValue = std::stoi(value);
+				Constants[name] = intValue;
+				break;
+			}
+			case _FLOAT: {
+				float floatValue = std::stof(value);
+				Constants[name] = floatValue;
+				break;
+			}
+			case _BOOL: {
+				std::stringstream boolStream(value);
+				bool boolValue;
+				boolStream >> std::boolalpha >> boolValue;
+				Constants[name] = boolValue;
+				break;
+			}
+			case _STRING: {
+				Constants[name] = value;
+				break;
+			}
 			}
 			//// •Ï”‚ÌŒ^‚ğ„‘ª‚·‚é
 			//auto dataType = GetDataType(type);
@@ -132,7 +132,7 @@ void Constant::ReadCSV(const std::string& filename)
 	file.close();
 }
 
-MyDataType Constant::GetDataType(const std::string& type)
+DataType Constant::GetDataType(const std::string& type)
 {
 	// •¶š—ñ‚É‰‚¶‚Ä•Ï”Œ^‚ğ•Ô‚·
 	if (type == "_INT") return _INT;
