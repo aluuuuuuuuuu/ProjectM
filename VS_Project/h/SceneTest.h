@@ -3,6 +3,7 @@
 #include "Constant.h"
 #include <memory>
 
+class StageCollisionManager;
 class Player;
 class StageManager;
 class SceneTest :
@@ -58,6 +59,9 @@ private:
 
     // プレイヤーポインタ
     std::shared_ptr<Player> _pPlayer;
+
+    // ステージコリジョンマネージャポインタ
+    std::shared_ptr<StageCollisionManager> _pStageCollisionManager;
 
 };
 

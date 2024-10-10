@@ -99,126 +99,126 @@ Animation::~Animation()
 
 void Animation::InitAnimation(int& modelHandle, int tag, float rate)
 {
-	m_defaultRate = rate;
+	_defaultRate = rate;
 
-	m_defaultTag = tag;
+	_defaultTag = tag;
 
-	m_loopFlag = true;
+	_loopFlag = true;
 
-	m_endAnimFlag = false;
+	_endAnimFlag = false;
 
-	m_attachIndex1 = MV1AttachAnim(modelHandle, tag);
-	m_attachIndex2 = MV1AttachAnim(modelHandle, tag);
-	m_maxFlame = MV1GetAttachAnimTotalTime(modelHandle, m_attachIndex1);
+	_attachIndex1 = MV1AttachAnim(modelHandle, tag);
+	_attachIndex2 = MV1AttachAnim(modelHandle, tag);
+	_maxFlame = MV1GetAttachAnimTotalTime(modelHandle, _attachIndex1);
 
 	// 再生中のアニメーションのタグを保存する
-	m_playAnimation = tag;
+	_playAnimation = tag;
 }
 
 void Animation::UpdateAnimation(int& modelHandle)
 {
 	// 前のフレームでアニメーションが終了していたらデフォルトに戻す
-	if (m_endAnimFlag) {
-		ChangeAnimation(modelHandle, m_defaultTag, true, m_defaultRate);
+	if (_endAnimFlag) {
+		ChangeAnimation(modelHandle, _defaultTag, true, _defaultRate);
 	}
 
 	// 再生時間を進める
-	m_flameCount += 0.5f;
+	_flameCount += 0.5f;
 
 	// ブレンドレートを加算していく
-	if (m_blendRate >= 1.0f) {
-		MV1SetAttachAnimBlendRate(modelHandle, m_attachIndex1, 1.0f);
+	if (_blendRate >= 1.0f) {
+		MV1SetAttachAnimBlendRate(modelHandle, _attachIndex1, 1.0f);
 	}
 	else {
-		m_blendRate += m_blendRateSave;
+		_blendRate += _blendRateSave;
 
-		MV1SetAttachAnimBlendRate(modelHandle, m_attachIndex2, 1.0f - m_blendRate);
+		MV1SetAttachAnimBlendRate(modelHandle, _attachIndex2, 1.0f - _blendRate);
 
-		MV1SetAttachAnimBlendRate(modelHandle, m_attachIndex1, m_blendRate);
+		MV1SetAttachAnimBlendRate(modelHandle, _attachIndex1, _blendRate);
 	}
 
 	// 再生時間がアニメーションの総再生時間に達したとき
-	if (m_flameCount >= m_maxFlame) {
+	if (_flameCount >= _maxFlame) {
 
 		// コネクトフラグがtrueだったら次のアニメーションをスタートさせる
-		if (m_connectFlag) {
-			m_animationState++;
-			ChangeAnimation(modelHandle, m_connectAnimation[m_animationState], true, m_rate2);
-			m_connectAnimation.clear();
-			m_animationState = 0;
+		if (_connectFlag) {
+			_animationState++;
+			ChangeAnimation(modelHandle, _connectAnimation[_animationState], true, _rate2);
+			_connectAnimation.clear();
+			_animationState = 0;
 		}
 		// ループフラグがtrueだったらループさせる
-		else if (m_loopFlag) {
-			m_flameCount = 0.0f;
+		else if (_loopFlag) {
+			_flameCount = 0.0f;
 		}
 		// 完全に終了したらフラグを立てる
 		else {
-			m_endAnimFlag = true;
+			_endAnimFlag = true;
 		}
 	}
 
 	// アニメーション更新
-	MV1SetAttachAnimTime(modelHandle, m_attachIndex1, m_flameCount);
+	MV1SetAttachAnimTime(modelHandle, _attachIndex1, _flameCount);
 }
 
 // アニメーション変更
 void Animation::ChangeAnimation(int& modelHandle, int tag, bool loop, float blendRate)
 {
 	// 再生するアニメーションを変更する
-	if (tag != m_playAnimation) {
+	if (tag != _playAnimation) {
 		// 現行のアニメーションをデタッチする
-		MV1DetachAnim(modelHandle, m_attachIndex2);
+		MV1DetachAnim(modelHandle, _attachIndex2);
 
 		// ループフラグを保存
-		m_loopFlag = loop;
+		_loopFlag = loop;
 
 		// ブレンドレートを変更
-		m_blendRateSave = blendRate;
+		_blendRateSave = blendRate;
 
 		// 再生時間を最初に戻す
-		m_flameCount = 0.0f;
+		_flameCount = 0.0f;
 
 		// 行っていたアニメーションを保存
-		m_attachIndex2 = m_attachIndex1;
+		_attachIndex2 = _attachIndex1;
 
 		// アニメーションを変更
-		m_attachIndex1 = MV1AttachAnim(modelHandle, tag);
+		_attachIndex1 = MV1AttachAnim(modelHandle, tag);
 
 		// アニメーションのフレーム数を保存
-		m_maxFlame = MV1GetAttachAnimTotalTime(modelHandle, m_attachIndex1);
+		_maxFlame = MV1GetAttachAnimTotalTime(modelHandle, _attachIndex1);
 
 		// 再生中のアニメーションのタグを保存する
-		m_playAnimation = tag;
+		_playAnimation = tag;
 
 		// アニメーション終了フラグをfalseに
-		m_endAnimFlag = false;
+		_endAnimFlag = false;
 
 		// ブレンドレートを初期化する
-		m_blendRate = 0.0f;
+		_blendRate = 0.0f;
 
 		// コネクトフラグを下げる
-		m_connectFlag = false;
+		_connectFlag = false;
 	}
 }
 
 // アニメーションを連続させたいときの変更関数
 void Animation::ChangeAnimationConnect(int& modelHandle, int tag1, int tag2, float rate1, float rate2)
 {
-	m_endAnimFlag = false;
-	m_connectAnimation.push_back(tag1);
-	m_connectAnimation.push_back(tag2);
-	ChangeAnimation(modelHandle, m_connectAnimation[m_animationState], false, rate1);
-	m_connectFlag = true;
+	_endAnimFlag = false;
+	_connectAnimation.push_back(tag1);
+	_connectAnimation.push_back(tag2);
+	ChangeAnimation(modelHandle, _connectAnimation[_animationState], false, rate1);
+	_connectFlag = true;
 }
 
 bool Animation::GetEndAnimFlag()
 {
-	return m_endAnimFlag;
+	return _endAnimFlag;
 }
 
 int Animation::GetAnimTag()
 {
-	return m_playAnimation;
+	return _playAnimation;
 }
 
 // カプセル
@@ -233,14 +233,14 @@ CapsuleCollision::~CapsuleCollision()
 
 void CapsuleCollision::InitCapsule(Vec3 pos, float radius, float height)
 {
-	m_data.Radius = radius;
+	_data.Radius = radius;
 	m_height = height;
 
-	Vec3 vecA = Vec3{ pos.x,pos.y + m_data.Radius,pos.z };
-	Vec3 vecB = Vec3{ pos.x,pos.y + m_data.Radius + m_height,pos.z };
+	Vec3 vecA = Vec3{ pos.x,pos.y + _data.Radius,pos.z };
+	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + m_height,pos.z };
 
-	m_data.PointA = vecA;
-	m_data.PointB = vecB;
+	_data.PointA = vecA;
+	_data.PointB = vecB;
 }
 
 void CapsuleCollision::Aactivation()
@@ -260,11 +260,16 @@ bool CapsuleCollision::IsActivation()
 
 void CapsuleCollision::Set(Vec3 pos)
 {
-	Vec3 vecA = Vec3{ pos.x,pos.y + m_data.Radius,pos.z };
-	Vec3 vecB = Vec3{ pos.x,pos.y + m_data.Radius + m_height,pos.z };
+	// 座標を保存しておく
+	_data.FrontPointA = _data.PointA;
+	_data.FrontPointB = _data.PointB;
 
-	m_data.PointA = vecA;
-	m_data.PointB = vecB;
+	// 新しい座標をセットする
+	Vec3 vecA = Vec3{ pos.x,pos.y + _data.Radius,pos.z };
+	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + m_height,pos.z };
+
+	_data.PointA = vecA;
+	_data.PointB = vecB;
 }
 
 void CapsuleCollision::SetHeight(float height)
@@ -315,23 +320,23 @@ float CapsuleCollision::CapsuleDistance(const Vec3& p1, const Vec3& q1, const Ve
 void CapsuleCollision::DrawCapsule() const
 {
 	if (m_valid) {
-		DrawSphere3D(m_data.PointA.VGet(), m_data.Radius, 4, 0xff0000, 0xff0000, false);
-		DrawSphere3D(m_data.PointB.VGet(), m_data.Radius, 4, 0xff0000, 0xff0000, false);
+		DrawSphere3D(_data.PointA.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
+		DrawSphere3D(_data.PointB.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
 
-		Vec3 veca = Vec3{ m_data.PointA.x + m_data.Radius,m_data.PointA.y,m_data.PointA.z };
-		Vec3 vecb = Vec3{ m_data.PointB.x + m_data.Radius,m_data.PointB.y,m_data.PointB.z };
+		Vec3 veca = Vec3{ _data.PointA.x + _data.Radius,_data.PointA.y,_data.PointA.z };
+		Vec3 vecb = Vec3{ _data.PointB.x + _data.Radius,_data.PointB.y,_data.PointB.z };
 		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
 
-		veca = Vec3{ m_data.PointA.x - m_data.Radius,m_data.PointA.y,m_data.PointA.z };
-		vecb = Vec3{ m_data.PointB.x - m_data.Radius,m_data.PointB.y,m_data.PointB.z };
+		veca = Vec3{ _data.PointA.x - _data.Radius,_data.PointA.y,_data.PointA.z };
+		vecb = Vec3{ _data.PointB.x - _data.Radius,_data.PointB.y,_data.PointB.z };
 		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
 
-		veca = Vec3{ m_data.PointA.x ,m_data.PointA.y,m_data.PointA.z + m_data.Radius };
-		vecb = Vec3{ m_data.PointB.x ,m_data.PointB.y,m_data.PointB.z + m_data.Radius };
+		veca = Vec3{ _data.PointA.x ,_data.PointA.y,_data.PointA.z + _data.Radius };
+		vecb = Vec3{ _data.PointB.x ,_data.PointB.y,_data.PointB.z + _data.Radius };
 		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
 
-		veca = Vec3{ m_data.PointA.x ,m_data.PointA.y,m_data.PointA.z - m_data.Radius };
-		vecb = Vec3{ m_data.PointB.x ,m_data.PointB.y,m_data.PointB.z - m_data.Radius };
+		veca = Vec3{ _data.PointA.x ,_data.PointA.y,_data.PointA.z - _data.Radius };
+		vecb = Vec3{ _data.PointB.x ,_data.PointB.y,_data.PointB.z - _data.Radius };
 		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
 	}
 }

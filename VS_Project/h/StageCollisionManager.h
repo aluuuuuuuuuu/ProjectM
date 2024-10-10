@@ -1,0 +1,68 @@
+#pragma once
+#include <memory>
+#include "Vec3.h"
+#include "Components.h"
+
+class StageManager;
+class StageCollisionManager
+{
+public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	StageCollisionManager(std::shared_ptr <StageManager>& stage);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~StageCollisionManager();
+
+	
+	/// <summary>
+	/// カプセルとステージの当たり判定を取る
+	/// </summary>
+	/// <param name="data">当たり判定を取る対象のカプセルデータ</param>
+	/// <returns>判定した結果ずらす移動ベクトル</returns>
+	Vec3 CapsuleCollision(CapsuleData data);
+
+private:
+
+	/// <summary>
+	/// ボックスとカプセルの当たり判定を取る
+	/// </summary>
+	/// <param name="max">ボックスの最大座標</param>
+	/// <param name="min">ボックスの最小座標</param>
+	/// <param name ="data">カプセルのデータ</param>
+	/// <returns>あたっていればtrue</returns>
+	bool CollisionBoxCapsule(Vec3 max, Vec3 min, CapsuleData data);
+
+	/// <summary>
+	/// 点とボックスの最短距離を求める
+	/// </summary>
+	/// <param name="point">点の座標</param>
+	/// <param name="max">ボックスの最大座標</param>
+	/// <param name="min">ボックスの最小座標</param>
+	/// <returns></returns>
+	float DistancePointToBox(Vec3 point, Vec3 max, Vec3 min);
+
+	/// <summary>
+	/// ボックスにめり込んだ分のカプセルをずらす移動ベクトルを作成する
+	/// </summary>
+	/// <param name="max">ボックスの最大座標</param>
+	/// <param name="min">ボックスの最小座標</param>
+	/// <param name="data">カプセルのデータ</param>
+	/// <returns>ずらす分の移動ベクトル</returns>
+	Vec3 CreateMoveVector(Vec3 max, Vec3 min, CapsuleData data);
+
+	// 最終的にずらす移動ベクトル
+	Vec3 _vResultMove;
+
+	// 衝突した壁からずらす全ての移動ベクトル
+	std::vector<Vec3> _vAllMove;
+
+	// ステージマネージャーの参照
+	std::shared_ptr<StageManager>& _pStage;
+
+};
+

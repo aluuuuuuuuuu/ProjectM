@@ -15,12 +15,13 @@ bool Application::Init()
 
 	// ウィンドウ名の設定
 	DxLib::SetWindowTextDX("ProjectM");
-	// 画面サイズの設定
+
+	// 解像度の設定
 	SetGraphMode(std::get<int>(Constants["SCREEN_WIDTH"]),
 		std::get<int>(Constants["SCREEN_HEIGHT"]),
 		std::get<int>(Constants["COLOR_BIT"]));
 
-	// 解像度の設定
+	// 画面サイズの設定
 	SetWindowSize(std::get<int>(Constants["RESOLUTION_WIDTH"]),
 		std::get<int>(Constants["RESOLUTION_HEIGHT"]));
 

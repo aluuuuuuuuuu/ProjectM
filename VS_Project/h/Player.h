@@ -3,7 +3,8 @@
 
 
 class Player:
-	public Transform
+	public Transform,
+	public CapsuleCollision
 {
 public:
 

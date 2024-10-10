@@ -88,91 +88,133 @@ public:
 private:
 
 	// デフォルトのブレンドレート
-	float m_defaultRate = 0.0f;
+	float _defaultRate = 0.0f;
 
 	// コネクト先のブレンドレートを保存する
-	float m_rate2 = 0.0f;
+	float _rate2 = 0.0f;
 
 	// ブレンドレート
-	float m_blendRateSave = 0.0f;
+	float _blendRateSave = 0.0f;
 
 	// 再生時間
-	float m_flameCount = 0.0f;
+	float _flameCount = 0.0f;
 
 	// 総フレーム数
-	float m_maxFlame = 0.0f;
+	float _maxFlame = 0.0f;
 
 	// アニメーションインデックス
-	int m_attachIndex1 = 0;
-	int m_attachIndex2 = 0;
+	int _attachIndex1 = 0;
+	int _attachIndex2 = 0;
 
 	// 再生中のアニメーション
-	int m_playAnimation = 0;
+	int _playAnimation = 0;
 
 	// 連続で再生するアニメーション
-	std::vector<int> m_connectAnimation;
+	std::vector<int> _connectAnimation;
 
 	// 連続で再生するアニメーションの進行状況
-	int m_animationState = 0;
+	int _animationState = 0;
 	
 	// 現行のアニメーションタグ
 	int m_runTag = 0;
 
 	// ループ再生フラグ
-	bool m_loopFlag = false;
+	bool _loopFlag = false;
 
 	// デフォルトアニメーションタグ
-	int m_defaultTag = 0;
+	int _defaultTag = 0;
 
 	// アニメーションコネクトフラグ
-	bool m_connectFlag = false;
+	bool _connectFlag = false;
 
 	// アニメーションブレンドレート
-	float m_blendRate = 0.0f;
+	float _blendRate = 0.0f;
 
 	// アニメーション終了フラグ
-	bool m_endAnimFlag = true;
+	bool _endAnimFlag = true;
 
 };
 
 struct CapsuleData
 {
+	// 半径
+	float Radius;
+
+	// 現フレームの座標
 	Vec3 PointA;
 	Vec3 PointB;
-	float Radius;
+
+	// 前フレームの座標
+	Vec3 FrontPointA;
+	Vec3 FrontPointB;
 };
 
 class CapsuleCollision
 {
 public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	CapsuleCollision();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~CapsuleCollision();
 
-	// 初期化処理
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="pos">座標</param>
+	/// <param name="radius">半径</param>
+	/// <param name="height">高さ</param>
 	void InitCapsule(Vec3 pos, float radius, float height);
 
-	// 有効化
+	/// <summary>
+	/// 有効化
+	/// </summary>
 	void Aactivation();
 
-	// 無効化
+	/// <summary>
+	/// 無効化
+	/// </summary>
 	void Invalidation();
 
-	// 有効フラグを得る
+	/// <summary>
+	/// 有効フラグを取得する
+	/// </summary>
+	/// <returns>有効であればtrue</returns>
 	bool IsActivation();
 
-	// コリジョンに値をセットする
+	/// <summary>
+	/// コリジョンに値をセットする
+	/// </summary>
+	/// <param name="pos">座標</param>
 	void Set(Vec3 pos);
 
-	// コリジョンの高さをセットする
+	/// <summary>
+	/// コリジョンの高さをセットする
+	/// </summary>
+	/// <param name="height">高さ</param>
 	void SetHeight(float height);
 
-	// 線分間の距離を求める
+	/// <summary>
+	/// 線分間の距離を求める
+	/// </summary>
+	/// <param name="p1">線分1の上点</param>
+	/// <param name="q1">線分1の下点</param>
+	/// <param name="p2">線分2の上点</param>
+	/// <param name="q2">線分2の下点</param>
+	/// <returns>距離</returns>
 	float CapsuleDistance(const Vec3& p1, const Vec3& q1, const Vec3& p2, const Vec3& q2) const;
 
-	// テスト表示
+	/// <summary>
+	/// カプセルを表示する
+	/// </summary>
 	void DrawCapsule() const;
 
-	CapsuleData m_data;
+	CapsuleData _data;
 private:
 	float m_height = 0;
 	bool m_valid = true;	// 基本有効化されている

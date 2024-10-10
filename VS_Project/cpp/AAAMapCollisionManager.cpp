@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <algorithm>
+#include ""
 
 MapCollisionManager::MapCollisionManager(CapsuleData& cap, StaticObjectManager& manager) :
 	m_playerCapsule(cap),

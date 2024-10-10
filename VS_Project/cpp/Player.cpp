@@ -9,6 +9,9 @@ Player::Player()
 
 	// 座標の設定
 	Position = Vec3{ 0.0f,25.0f,0.0f };
+
+	// カプセルの初期化
+	InitCapsule(Position, 10.0f, 10);
 }
 
 Player::~Player()
@@ -35,11 +38,23 @@ void Player::Update()
 	}
 
 	// とりあえず落下
-	Position.y -= 0.5;
+	if (Input::getInstance().IsHold(INPUT_A)) {
+		Position.y -= 1;
+	}
+	if (Input::getInstance().IsHold(INPUT_Y)) {
+		Position.y += 1;
+	}
+
+	//Position.y -= 0.5f;
+	
+
+	// カプセルに座標を渡す
+	Set(Position);
 }
 
 void Player::Draw() const
 {
-	auto pos2 = VECTOR{ Position.x,Position.y + 10,Position.z };
-	DrawCapsule3D(Position.VGet(), pos2, 3, 16, 0x00ff00, 0x00ff00, true);
+
+	// カプセルを描画
+	DrawCapsule();
 }

@@ -1,6 +1,7 @@
 #include "SceneTest.h"
 #include "StageManager.h"
 #include "Player.h"
+#include "StageCollisionManager.h"
 
 SceneTest::SceneTest()
 {
@@ -8,6 +9,7 @@ SceneTest::SceneTest()
 	{
 		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
 		_pPlayer = std::make_shared<Player>();		// プレイヤー
+		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);
 	}
 
 	// 関数ポインタの初期化
@@ -77,10 +79,13 @@ void SceneTest::DrawGrid() const
 
 void SceneTest::NormalUpdate()
 {
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ -4.0f,32.0f,-96.0f }, VECTOR{ 0,0,0 });
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ 50.0f,32.0f,-96.0f }, VECTOR{ 50,0,0 });
 
 	// プレイヤーの更新処理
 	_pPlayer->Update();
+
+	// プレイヤーとステージの当たり判定
+	_pStageCollisionManager->CapsuleCollision(_pPlayer->_data);
 }
 
 void SceneTest::NormalDraw() const
