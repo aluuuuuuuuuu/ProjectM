@@ -44,7 +44,17 @@ private:
 	/// <param name="max">ボックスの最大座標</param>
 	/// <param name="min">ボックスの最小座標</param>
 	/// <returns></returns>
-	float DistancePointToBox(Vec3 point, Vec3 max, Vec3 min);
+	float DistancePointToBox(CapsuleData data, Vec3 max, Vec3 min);
+
+	/// <summary>
+	/// BOX上の最近接点を求める関数
+	/// </summary>
+	/// <param name="max">最大座標</param>
+	/// <param name="min">最小座標</param>
+	/// <param name="point">比較する座標</param>
+	/// <returns>最近接点</returns>
+	Vec3 ClosetPointBox(Vec3 max, Vec3 min, Vec3 point);
+
 
 	/// <summary>
 	/// ボックスにめり込んだ分のカプセルをずらす移動ベクトルを作成する

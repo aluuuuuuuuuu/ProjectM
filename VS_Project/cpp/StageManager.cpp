@@ -14,7 +14,17 @@ StageManager::StageManager()
 		}
 	}
 
-	_stage[0][1][0] = 0;
+	_stage[0][0][0] = 0;
+	_stage[1][1][1] = 0;
+	_stage[1][1][0] = 0;
+	_stage[0][1][1] = 0;
+	_stage[2][1][2] = 0;
+	_stage[1][0][0] = 0;
+	_stage[0][0][1] = 0;
+
+
+
+	_stage[6][1][0] = 0;
 	_stage[4][1][2] = 0;
 }
 

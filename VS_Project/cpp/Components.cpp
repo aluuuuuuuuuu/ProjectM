@@ -234,10 +234,10 @@ CapsuleCollision::~CapsuleCollision()
 void CapsuleCollision::InitCapsule(Vec3 pos, float radius, float height)
 {
 	_data.Radius = radius;
-	m_height = height;
+	_height = height;
 
 	Vec3 vecA = Vec3{ pos.x,pos.y + _data.Radius,pos.z };
-	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + m_height,pos.z };
+	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + _height,pos.z };
 
 	_data.PointA = vecA;
 	_data.PointB = vecB;
@@ -245,17 +245,17 @@ void CapsuleCollision::InitCapsule(Vec3 pos, float radius, float height)
 
 void CapsuleCollision::Aactivation()
 {
-	m_valid = true;
+	_valid = true;
 }
 
 void CapsuleCollision::Invalidation()
 {
-	m_valid = false;
+	_valid = false;
 }
 
 bool CapsuleCollision::IsActivation()
 {
-	return m_valid;
+	return _valid;
 }
 
 void CapsuleCollision::Set(Vec3 pos)
@@ -266,7 +266,7 @@ void CapsuleCollision::Set(Vec3 pos)
 
 	// 新しい座標をセットする
 	Vec3 vecA = Vec3{ pos.x,pos.y + _data.Radius,pos.z };
-	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + m_height,pos.z };
+	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + _height,pos.z };
 
 	_data.PointA = vecA;
 	_data.PointB = vecB;
@@ -274,7 +274,7 @@ void CapsuleCollision::Set(Vec3 pos)
 
 void CapsuleCollision::SetHeight(float height)
 {
-	m_height = height;
+	_height = height;
 }
 
 float CapsuleCollision::CapsuleDistance(const Vec3& p1, const Vec3& q1, const Vec3& p2, const Vec3& q2) const
@@ -319,7 +319,7 @@ float CapsuleCollision::CapsuleDistance(const Vec3& p1, const Vec3& q1, const Ve
 
 void CapsuleCollision::DrawCapsule() const
 {
-	if (m_valid) {
+	if (_valid) {
 		DrawSphere3D(_data.PointA.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
 		DrawSphere3D(_data.PointB.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
 

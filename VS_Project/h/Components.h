@@ -216,8 +216,8 @@ public:
 
 	CapsuleData _data;
 private:
-	float m_height = 0;
-	bool m_valid = true;	// 基本有効化されている
+	float _height = 0;
+	bool _valid = true;	// 基本有効化されている
 };
 
 class BoxCollision

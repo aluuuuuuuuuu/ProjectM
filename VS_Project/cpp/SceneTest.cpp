@@ -85,7 +85,9 @@ void SceneTest::NormalUpdate()
 	_pPlayer->Update();
 
 	// プレイヤーとステージの当たり判定
-	_pStageCollisionManager->CapsuleCollision(_pPlayer->_data);
+	_pPlayer->Position += _pStageCollisionManager->CapsuleCollision(_pPlayer->_data);
+
+	_pPlayer->Set(_pPlayer->Position);
 }
 
 void SceneTest::NormalDraw() const

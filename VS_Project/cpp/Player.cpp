@@ -11,7 +11,7 @@ Player::Player()
 	Position = Vec3{ 0.0f,25.0f,0.0f };
 
 	// ÉJÉvÉZÉãÇÃèâä˙âª
-	InitCapsule(Position, 10.0f, 10);
+	InitCapsule(Position, 4.0f, 10);
 }
 
 Player::~Player()
@@ -20,30 +20,36 @@ Player::~Player()
 
 void Player::Update()
 {
+
+	Vec3 move;
 	// Ç∆ÇËÇ†Ç¶Ç∏à⁄ìÆ
 	if (Input::getInstance().IsHold(INPUT_RIGHT)) {
-		Position.x += 1;
+		move.x += 1;
 	}
 
 	if (Input::getInstance().IsHold(INPUT_LEFT)) {
-		Position.x -= 1;
+		move.x -= 1;
 	}
 
 	if (Input::getInstance().IsHold(INPUT_DOWN)) {
-		Position.z -= 1;
+		move.z -= 1;
 	}
 
 	if (Input::getInstance().IsHold(INPUT_UP)) {
-		Position.z += 1;
+		move.z += 1;
 	}
 
 	// Ç∆ÇËÇ†Ç¶Ç∏óéâ∫
 	if (Input::getInstance().IsHold(INPUT_A)) {
-		Position.y -= 1;
+		move.y -= 1;
 	}
 	if (Input::getInstance().IsHold(INPUT_Y)) {
-		Position.y += 1;
+		move.y += 1;
 	}
+
+	move.Normalize();
+
+	Position += move;
 
 	//Position.y -= 0.5f;
 	
