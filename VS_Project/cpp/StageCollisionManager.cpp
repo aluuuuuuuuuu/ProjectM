@@ -37,12 +37,11 @@ Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 					max = Vec3{ static_cast<float>(a * 10),static_cast<float>(b * 10),static_cast<float>(c * 10) };
 					min = Vec3{ max - 10 };
 
-					// 判定
+					// めり込んでいるかどうか判定する
 					if (CollisionBoxCapsule(max, min, data)) {
 
 						// ずらす分の移動ベクトルを作成
 						ColData colData = CreateMoveVector(max, min, data);
-						return colData.moveVec;
 
 						// 配列に保存
 						_vAllColldata.push_back(colData);
