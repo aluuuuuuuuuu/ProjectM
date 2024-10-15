@@ -11,13 +11,19 @@ StageCollisionManager::~StageCollisionManager()
 {
 }
 
+bool CompareByDist(const ColData& a, const ColData& b)
+{
+	return a.dist < b.dist; // value を基準に小さい順に並べ替える
+}
+
 Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 {
 	// 移動ベクトルを初期化する
 	_vResultMove = 0;
+	_vAllColldata.clear();
 	_vAllMove.clear();
 
-	Vec3 max,min;// 最大座標,最小座標
+	Vec3 max, min;// 最大座標,最小座標
 
 	// カプセルとステージの当たり判定を取る
 	for (int a = 0; a < 10; a++) {
@@ -34,20 +40,31 @@ Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 					// 判定
 					if (CollisionBoxCapsule(max, min, data)) {
 
-						DrawString(10, 10, "atatta", 0xffff00);
-
 						// ずらす分の移動ベクトルを作成
-						Vec3 move = CreateMoveVector(max, min, data);
+						ColData colData = CreateMoveVector(max, min, data);
+						return colData.moveVec;
 
 						// 配列に保存
-						_vAllMove.push_back(move);
-
-						// カプセルのデータも座標移動させておく
-						data.PointA += move;
-						data.PointB += move;
+						_vAllColldata.push_back(colData);
 					}
 				}
 			}
+		}
+	}
+
+	// distが短い順に並べ替える
+	std::sort(_vAllColldata.begin(), _vAllColldata.end(), CompareByDist);
+
+	// distが短い順に判定しながらずらしていく
+	for (const auto& colData : _vAllColldata) {
+		if (CollisionBoxCapsule(colData.max, colData.min, data)) {
+
+			// 移動ベクトルをプッシュする
+			_vAllMove.push_back(colData.moveVec);
+			
+			// カプセルのデータも座標移動させておく
+			data.PointA += colData.moveVec;
+			data.PointB += colData.moveVec;
 		}
 	}
 
@@ -97,7 +114,7 @@ float StageCollisionManager::DistancePointToBox(CapsuleData data, Vec3 max, Vec3
 	float distEnd = (data.PointB - closetPointEnd).SqLength();
 
 	// 最小の値を求める
-	minDist =(std::min)(distStart, distEnd);
+	minDist = (std::min)(distStart, distEnd);
 
 	return minDist;
 }
@@ -111,17 +128,21 @@ Vec3 StageCollisionManager::ClosetPointBox(Vec3 max, Vec3 min, Vec3 point)
 	closestPoint.x = (std::max)(min.x, (std::min)(point.x, max.x));
 	closestPoint.y = (std::max)(min.y, (std::min)(point.y, max.y));
 	closestPoint.z = (std::max)(min.z, (std::min)(point.z, max.z));
-	//DrawSphere3D(closestPoint.VGet(), 2, 8, 0xffff00, 0xffff00, true);
+	DrawSphere3D(closestPoint.VGet(), 2, 8, 0xffff00, 0xffff00, true);
 
 	return closestPoint;
 }
 
-Vec3 StageCollisionManager::CreateMoveVector(Vec3 max, Vec3 min, CapsuleData data)
+ColData StageCollisionManager::CreateMoveVector(Vec3 max, Vec3 min, CapsuleData data)
 {
 	// 当たる直前にカプセルがボックスに対してどの位置にいたのかを調べる
 	// ボックスの中で直前のカプセルの中心に最も近い点を算出
-	Vec3 closestA,closestB,unit;
-	float dist;
+	Vec3 closestA, closestB, unit;
+
+	ColData colData;
+
+	colData.max = max;
+	colData.min = min;
 
 	closestA = ClosetPointBox(max, min, data.FrontPointA);
 	closestB = ClosetPointBox(max, min, data.FrontPointB);
@@ -132,14 +153,14 @@ Vec3 StageCollisionManager::CreateMoveVector(Vec3 max, Vec3 min, CapsuleData dat
 		// Aのほうが近い場合
 		// 最近接点からAまでの単位ベクトルを作成
 		unit = (data.FrontPointA - closestA).GetNormalized();
-		dist = (closestA - data.PointA).Length();
+		colData.dist = (closestA - data.PointA).Length();
 	}
 	else {
 
 		// Bのほうが近い場合
 		// 最近接点からBまでの単位ベクトルを作成
 		unit = (data.FrontPointB - closestB).GetNormalized();
-		dist = (closestB - data.PointB).Length();
+		colData.dist = (closestB - data.PointB).Length();
 	}
 
 	// あたっている面を判定して面と垂直方向以外の移動量をゼロにする
@@ -158,5 +179,9 @@ Vec3 StageCollisionManager::CreateMoveVector(Vec3 max, Vec3 min, CapsuleData dat
 	}
 
 	// 半径から前座標への距離を引いた値がめり込んだ分の距離になる
-	return (unit * (data.Radius - dist));
+
+	colData.moveVec = (unit * (data.Radius - colData.dist));
+
+
+	return colData;
 }

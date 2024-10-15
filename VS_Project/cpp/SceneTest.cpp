@@ -8,8 +8,8 @@ SceneTest::SceneTest()
 	// 各クラスのインスタンス作成
 	{
 		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
-		_pPlayer = std::make_shared<Player>();		// プレイヤー
-		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);
+		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);	// ステージコリジョンマネージャー
+		_pPlayer = std::make_shared<Player>(_pStageCollisionManager);		// プレイヤー
 	}
 
 	// 関数ポインタの初期化
@@ -83,11 +83,6 @@ void SceneTest::NormalUpdate()
 
 	// プレイヤーの更新処理
 	_pPlayer->Update();
-
-	// プレイヤーとステージの当たり判定
-	_pPlayer->Position += _pStageCollisionManager->CapsuleCollision(_pPlayer->_data);
-
-	_pPlayer->Set(_pPlayer->Position);
 }
 
 void SceneTest::NormalDraw() const

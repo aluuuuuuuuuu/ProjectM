@@ -42,7 +42,7 @@ void StageManager::DrawStage() const
 			{
 				if (_stage[i][n][k] != 0) {
 					VECTOR pos = { i * 10  , n * 10 , k * 10};
-					DrawSphere3D(VECTOR{ pos.x - 5,pos.y - 5 ,pos.z - 5 }, 5.0f, 8, 0xff0000, 0xff0000, true);
+					DrawSphere3D(VECTOR{ pos.x - 5,pos.y - 5 ,pos.z - 5 }, 5.0f, 8, 0xff0000, 0xff0000, false);
 				}
 			}
 		}

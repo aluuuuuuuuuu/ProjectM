@@ -3,6 +3,14 @@
 #include "Vec3.h"
 #include "Components.h"
 
+struct ColData
+{
+	Vec3 max;
+	Vec3 min;
+	Vec3 moveVec;
+	float dist = 0;
+};
+
 class StageManager;
 class StageCollisionManager
 {
@@ -63,12 +71,15 @@ private:
 	/// <param name="min">ボックスの最小座標</param>
 	/// <param name="data">カプセルのデータ</param>
 	/// <returns>ずらす分の移動ベクトル</returns>
-	Vec3 CreateMoveVector(Vec3 max, Vec3 min, CapsuleData data);
+	ColData CreateMoveVector(Vec3 max, Vec3 min, CapsuleData data);
 
 	// 最終的にずらす移動ベクトル
 	Vec3 _vResultMove;
 
-	// 衝突した壁からずらす全ての移動ベクトル
+	// 判定したデータ
+	std::vector<ColData> _vAllColldata;
+
+	// 移動ベクトル
 	std::vector<Vec3> _vAllMove;
 
 	// ステージマネージャーの参照
