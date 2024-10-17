@@ -48,6 +48,9 @@
     <ClCompile Include="cpp\StageManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\PlayerCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\Application.h">
@@ -89,5 +92,20 @@
     <ClInclude Include="h\Vec3.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="h\PlayerCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\constant\Application.csv" />
+    <None Include="data\constant\Collision.csv" />
+    <None Include="data\constant\Direction.csv" />
+    <None Include="data\constant\Enemy.csv" />
+    <None Include="data\constant\Input.csv" />
+    <None Include="data\constant\MainActor.csv" />
+    <None Include="data\constant\PlayerCamera.csv" />
+    <None Include="data\constant\SceneSelect.csv" />
+    <None Include="data\constant\SubActor.csv" />
+    <None Include="data\constant\Tama.csv" />
   </ItemGroup>
 </Project>

@@ -16,14 +16,14 @@ bool Application::Init()
 	// ウィンドウ名の設定
 	DxLib::SetWindowTextDX("ProjectM");
 
-	// 解像度の設定
-	SetGraphMode(std::get<int>(Constants["SCREEN_WIDTH"]),
-		std::get<int>(Constants["SCREEN_HEIGHT"]),
-		std::get<int>(Constants["COLOR_BIT"]));
-
 	// 画面サイズの設定
-	SetWindowSize(std::get<int>(Constants["RESOLUTION_WIDTH"]),
-		std::get<int>(Constants["RESOLUTION_HEIGHT"]));
+	SetWindowSize(GetConstantInt("SCREEN_WIDTH"),
+		GetConstantInt("SCREEN_HEIGHT"));
+
+	// 解像度の設定
+	SetGraphMode(GetConstantInt("RESOLUTION_WIDTH"),
+		GetConstantInt("RESOLUTION_HEIGHT"),
+		GetConstantInt("COLOR_BIT"));
 
 	// 背面の描画を行わない
 	SetUseBackCulling(true);
@@ -73,13 +73,13 @@ bool Application::Init()
 void Application::Run()
 {
 	// シーンマネージャーのインスタンスを取得
-	auto& manager = SceneManager::getInstance();
+	auto& manager = SceneManager::GetInstance();
 	int a = 0;
 	// 初期シーンを設定
 	manager.ChangeScene(std::make_shared <SceneTest>());
 
 	// インプットのインスタンスを取得
-	auto& input = Input::getInstance();
+	auto& input = Input::GetInstance();
 
 	// ゲームループ
 	while (ProcessMessage() != -1)
@@ -123,5 +123,5 @@ void Application::Run()
 
 void Application::Terminate()
 {
-    DxLib_End();    // DXライブラリの終了処理
+	DxLib_End();    // DXライブラリの終了処理
 }

@@ -3,6 +3,10 @@
 #include <string>
 #include <variant>
 
+#define INT_ 0
+#define FLOAT_ 0.0f
+#define BOOL_ false
+
 // 変数型
 enum DataType { _INT, _FLOAT, _BOOL, _STRING };
 
@@ -20,11 +24,27 @@ public:
 	/// <returns>定数map配列</returns>
 	std::map<std::string, ConstantVariant> GetConstants();
 
-	// 定数を取得する
-	std::variant<int, float, bool, std::string> GetConstant(const std::string& name);
+	/// <summary>
+	/// int型の定数を返す
+	/// </summary>
+	/// <param name="name">定数名</param>
+	/// <returns>定数の値</returns>
+	int GetConstantInt(std::string name);
 
-	// 定数を格納するmap配列
-	std::map<std::string, ConstantVariant> Constants;
+	/// <summary>
+	/// float型の定数を返す
+	/// </summary>
+	/// <param name="name">定数名</param>
+	/// <returns>定数の値</returns>
+	float GetConstantFloat(std::string name);
+
+	/// <summary>
+	/// bool型の定数を返す
+	/// </summary>
+	/// <param name="name">定数名</param>
+	/// <returns>定数の値</returns>
+	bool GetConstatBool(std::string name);
+
 protected:
 
 	/// <summary>
@@ -32,7 +52,6 @@ protected:
 	/// </summary>
 	/// <param name="filename">ファイルパス</param>
 	void ReadCSV(const std::string& filename);
-
 
 private:
 
@@ -43,4 +62,6 @@ private:
 	/// <returns>DataTypeのデータ型のいずれか</returns>
 	DataType GetDataType(const std::string& type);
 
+	// 定数を格納するmap配列
+	std::map<std::string, ConstantVariant> Constants;
 };

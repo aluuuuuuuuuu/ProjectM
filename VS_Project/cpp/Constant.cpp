@@ -8,29 +8,19 @@ std::map<std::string, Constant::ConstantVariant> Constant::GetConstants()
 	return Constants;
 }
 
-std::variant<int, float, bool, std::string> Constant::GetConstant(const std::string& name)
+int Constant::GetConstantInt(std::string name)
 {
-	// ’è”‚ÌŒ^‚É•ÏŠ·‚µ‚Ä•Ô‚·
+	return std::get<int>(Constants[name]);
+}
 
-	// int‚Ìê‡
-	if (std::holds_alternative<int>(Constants[name])) {
-		return std::get<int>(Constants[name]);
-	}
+float Constant::GetConstantFloat(std::string name)
+{
+	return std::get<float>(Constants[name]);
+}
 
-	// float‚Ìê‡
-	if (std::holds_alternative<float>(Constants[name])) {
-		return std::get<float>(Constants[name]);
-	}
-
-	// bool 
-	if (std::holds_alternative<bool>(Constants[name])) {
-		return std::get<bool>(Constants[name]);
-	}
-
-	// string
-	if (std::holds_alternative<std::string>(Constants[name])) {
-		return std::get<std::string>(Constants[name]);
-	}
+bool Constant::GetConstatBool(std::string name)
+{
+	return std::get<bool>(Constants[name]);
 }
 
 void Constant::ReadCSV(const std::string& filename)

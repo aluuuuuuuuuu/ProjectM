@@ -4,7 +4,7 @@
 //int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) 
 int main()
 {
-	auto& application = Application::getInstance();
+	auto& application = Application::GetInstance();
 	if (!application.Init()) return-1;
 
 	application.Run();

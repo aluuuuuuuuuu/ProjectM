@@ -7,7 +7,7 @@ class Vec2
 public:
 	float x;
 	float y;
-private:
+public:
 	Vec2() :
 		x(0.0f),
 		y(0.0f)

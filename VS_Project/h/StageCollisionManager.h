@@ -85,5 +85,7 @@ private:
 	// ステージマネージャーの参照
 	std::shared_ptr<StageManager>& _pStage;
 
+
+	bool testFlag = false;
 };
 

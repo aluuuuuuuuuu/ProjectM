@@ -4,6 +4,12 @@
 #include "Singleton.h"
 #include "Vec3.h"
 
+// 各パッド
+#define INPUT_PAD_1 0
+#define INPUT_PAD_2 1
+#define INPUT_PAD_3 2
+#define INPUT_PAD_4 3
+
 // 各ボタンの定数
 #define INPUT_A 0
 #define INPUT_B 1
@@ -47,37 +53,37 @@ public:
 	void Update();
 
 	// 押した瞬間をとる
-	bool IsTrigger(int input) const;
+	bool IsTrigger(int input, int padNum) const;
 
 	// 押している間をとる
-	bool IsHold(int input) const;
+	bool IsHold(int input, int padNum) const;
 
 	// 離した瞬間をとる
-	bool IsRelease(int input) const;
+	bool IsRelease(int input, int padNum) const;
 
 	// スティック入力の方向ベクトルを返す
-	Vec3 GetStickVector(int input) const;
+	Vec3 GetStickVector(int input, int padNum) const;
 
 	// スティック入力の単位方向ベクトルを返す
-	Vec3 GetStickUnitVector(int input) const;
+	Vec3 GetStickUnitVector(int input, int padNum) const;
 
 	// スティック入力の長さを返す
-	float GetStickVectorLength(int input) const;
+	float GetStickVectorLength(int input, int padNum) const;
 
 	// スティックを傾けたX値を返す
-	float GetStickThumbX(int input) const;
+	float GetStickThumbX(int input, int padNum) const;
 
 	// スティックを傾けたY値を返す
-	float GetStickThumbY(int input) const;
+	float GetStickThumbY(int input, int padNum) const;
 
 private:
 	// 今フレームのインプットステート
-	XINPUT_STATE m_padState;
+	XINPUT_STATE m_padState[4];
 
 	// 前フレームのインプットステート
-	XINPUT_STATE m_lastPadState;
+	XINPUT_STATE m_lastPadState[4];
 
 	// プライベートコンストラクタ
-	Input():m_padState(),m_lastPadState() {};
+	Input() {};
 };
 

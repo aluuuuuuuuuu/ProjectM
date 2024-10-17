@@ -20,10 +20,6 @@ SceneTest::SceneTest()
 
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/PlayerCamera.csv");
-
-	// カメラのニアファーの設定
-	DxLib::SetCameraNearFar(std::get<float>(Constants["CAMERA_NEAR"]), std::get<float>(Constants["CAMERA_FAR"]));
-
 }
 
 SceneTest::~SceneTest()
@@ -79,8 +75,6 @@ void SceneTest::DrawGrid() const
 
 void SceneTest::NormalUpdate()
 {
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 50.0f,32.0f,-96.0f }, VECTOR{ 50,0,0 });
-
 	// プレイヤーの更新処理
 	_pPlayer->Update();
 }

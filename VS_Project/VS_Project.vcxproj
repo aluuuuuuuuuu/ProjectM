@@ -147,6 +147,7 @@
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
+    <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
     <ClCompile Include="cpp\SceneTest.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Input.h" />
     <ClInclude Include="h\Player.h" />
+    <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\SceneBase.h" />
     <ClInclude Include="h\SceneManager.h" />
     <ClInclude Include="h\SceneTest.h" />
@@ -168,6 +170,18 @@
     <ClInclude Include="h\StageManager.h" />
     <ClInclude Include="h\Vec2.h" />
     <ClInclude Include="h\Vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\constant\Application.csv" />
+    <None Include="data\constant\Collision.csv" />
+    <None Include="data\constant\Direction.csv" />
+    <None Include="data\constant\Enemy.csv" />
+    <None Include="data\constant\Input.csv" />
+    <None Include="data\constant\MainActor.csv" />
+    <None Include="data\constant\PlayerCamera.csv" />
+    <None Include="data\constant\SceneSelect.csv" />
+    <None Include="data\constant\SubActor.csv" />
+    <None Include="data\constant\Tama.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
