@@ -67,22 +67,50 @@ public:
 	Animation();
 	virtual ~Animation();
 
-	// アニメーション初期処理
+	/// <summary>
+	/// アニメーション初期処理
+	/// </summary>
+	/// <param name="modelHandle">モデルハンドル</param>
+	/// <param name="tag">デフォルトのアニメーションタグ</param>
+	/// <param name="rate">デフォルトのブレンドレート</param>
 	void InitAnimation(int& modelHandle, int tag, float rate);
 
-	// アニメーション更新処理
-	void UpdateAnimation(int& modelHandle);
+	/// <summary>
+	/// アニメーション更新処理
+	/// </summary>
+	/// <param name="modelHandle">モデルハンドル</param>
+	/// <param name="count">再生速度</param>
+	void UpdateAnimation(int& modelHandle, float count);
 
-	// アニメーション変更
+	/// <summary>
+	/// アニメーション変更
+	/// </summary>
+	/// <param name="modelHandle">モデルハンドル</param>
+	/// <param name="tag">変更するアニメーションタグ</param>
+	/// <param name="loop">ループフラグ</param>
+	/// <param name="blendRate">ブレンドレート</param>
 	void ChangeAnimation(int& modelHandle, int tag, bool loop,float blendRate);
 
-	// 連続でアニメを切り替えたい場合のアニメーション変更
+	/// <summary>
+	/// 連続で切り替えたいときのアニメーション変更
+	/// </summary>
+	/// <param name="modelHandle">モデルハンドル</param>
+	/// <param name="tag1">1つ目のアニメーションタグ</param>
+	/// <param name="tag2">2つ目のアニメーションタグ</param>
+	/// <param name="rate1">1つ目のブレンドレート</param>
+	/// <param name="rate2">2つ目のブレンドレート</param>
 	void ChangeAnimationConnect(int& modelHandle, int tag1, int tag2, float rate1,float rate2);
 
-	// アニメーション終了フラグを返す
+	/// <summary>
+	/// アニメーションが終了したことを知らせる
+	/// </summary>
+	/// <returns>アニメーション終了フラグ</returns>
 	bool GetEndAnimFlag();
 
-	// 現行のアニメーションタグを返す
+	/// <summary>
+	/// 現行のアニメーションタグを返す
+	/// </summary>
+	/// <returns>現行のアニメーション</returns>
 	int GetAnimTag();
 
 private:

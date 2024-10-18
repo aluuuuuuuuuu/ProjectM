@@ -19,7 +19,7 @@ bool CompareByDist(const ColData& a, const ColData& b)
 
 Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 {
-	testFlag = false;
+	//testFlag = false;
 	// 移動ベクトルを初期化する
 	_vResultMove = 0;
 	_vAllColldata.clear();
@@ -53,6 +53,7 @@ Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 
 						data.FrontPointA += colData.moveVec;
 						data.FrontPointB += colData.moveVec;
+
 					}
 				}
 			}
@@ -75,9 +76,11 @@ Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 	//	}
 	//}
 
+	
+
 	// 保存した全ての移動ベクトルを足して最終的な移動ベクトルを作成する
-	for (auto& vec : _vAllMove) {
-		_vResultMove += vec;
+	for (auto& vec : _vAllColldata) {
+		_vResultMove += vec.moveVec;
 	}
 
 	// 最終的な移動ベクトルを返す
@@ -135,7 +138,7 @@ Vec3 StageCollisionManager::ClosetPointBox(Vec3 max, Vec3 min, Vec3 point)
 	closestPoint.x = (std::max)(min.x, (std::min)(point.x, max.x));
 	closestPoint.y = (std::max)(min.y, (std::min)(point.y, max.y));
 	closestPoint.z = (std::max)(min.z, (std::min)(point.z, max.z));
-	DrawSphere3D(closestPoint.VGet(), 2, 8, 0xffff00, 0xffff00, true);
+	//DrawSphere3D(closestPoint.VGet(), 2, 8, 0xffff00, 0xffff00, true);
 
 	return closestPoint;
 }
@@ -161,24 +164,42 @@ ColData StageCollisionManager::CreateMoveVector(Vec3 max, Vec3 min, CapsuleData 
 
 		// 前フレームのAのy座標から半径分引いた値がmaxのyより上にあればyのみ計算yより下だったらxzのみ計算
 
-		if (((data.FrontPointA.y - data.Radius) >= max.y) && !testFlag) {	// yのみ計算
+		if (((data.FrontPointA.y - data.Radius) >= max.y)) {	// yのみ計算
 
-			Vec3 test = Vec3{ data.PointA.x, data.FrontPointA.y,data.PointA.z };
+			Vec3 target = Vec3{ data.PointA.x,max.y + data.Radius,data.PointA.z };
 
-			// 最近接点から作成した座標までの単位ベクトルを作成する
-			unit = (test - closestA).GetNormalized();
-			colData.dist = (closestA - test).Length();
-			colData.dist -= data.Radius;
+			unit = (target - closestA).GetNormalized();
+			colData.dist = (target - closestA).Length();
 
-			colData.moveVec = unit * colData.dist;
+			colData.moveVec = Vec3{ 0.0f,target.y - data.PointA.y,0.0f };
 
 			return colData;
 
 		}
-		else {	// xzyのみ計算
+		else {	// xzのみ計算
 
-			unit = (data.FrontPointA - closestA).GetNormalized();
-			colData.dist = (closestA - data.PointA).Length();
+			// 当たる直前にプレイヤーが箱に対してどの位置にいたのかを調べる
+			// 四角形の中で直前のプレイヤーの中心に最も近い点を計算
+			float closestX = (std::max)(min.x, (std::min)(data.FrontPointA.x, max.x));
+			float closestY = (std::max)(min.z, (std::min)(data.FrontPointA.z, max.z));
+
+			// 最近点からプレイヤーの中心へ向かう単位ベクトルを作成する
+			Vec3 center = (Vec3{ data.FrontPointA.x,0.0f,data.FrontPointA.z } - Vec3{ closestX,0.0f,closestY }).GetNormalized();
+
+			// 最近点からプレイヤーの座標への距離を求める
+			float length = (Vec3{ data.PointA.x,0.0f,data.PointA.z } - Vec3{ closestX,0.0f,closestY }).Length();
+
+			colData.dist = length;
+
+			// 半径から前座標への距離を引いた値がめり込んだ分の距離になる
+			length = data.Radius - length;
+
+			colData.moveVec = center * length;
+
+			// 最近点からボックスの判定外への移動ベクトルを作成
+			return colData;
+
+
 
 		}
 	}
@@ -187,73 +208,42 @@ ColData StageCollisionManager::CreateMoveVector(Vec3 max, Vec3 min, CapsuleData 
 		// Bのほうが近い
 		// 前フレームのBのy座標に半径分足した値がminのyyより下にあればyのみ計算
 
-		// Bのほうが近い場合
-		// 最近接点からBまでの単位ベクトルを作成
-		unit = (data.FrontPointB - closestB).GetNormalized();
-		colData.dist = (closestB - data.PointB).Length();
+
+		if (((data.FrontPointB.y + data.Radius) <= min.y)) {	// yのみ計算
+
+			Vec3 target = Vec3{ data.PointB.x,min.y - data.Radius,data.PointB.z };
+
+			unit = (target - closestB).GetNormalized();
+			colData.dist = (target - closestB).Length();
+
+			colData.moveVec = Vec3{ 0.0f,target.y + data.PointA.y,0.0f };
+
+			return colData;
+
+		}
+		else {	// xzのみ計算
+
+			// 当たる直前にプレイヤーが箱に対してどの位置にいたのかを調べる
+			// 四角形の中で直前のプレイヤーの中心に最も近い点を計算
+			float closestX = (std::max)(min.x, (std::min)(data.FrontPointA.x, max.x));
+			float closestY = (std::max)(min.z, (std::min)(data.FrontPointA.z, max.z));
+
+			// 最近点からプレイヤーの中心へ向かう単位ベクトルを作成する
+			Vec3 center = (Vec3{ data.FrontPointA.x,0.0f,data.FrontPointA.z } - Vec3{ closestX,0.0f,closestY }).GetNormalized();
+
+			// 最近点からプレイヤーの座標への距離を求める
+			float length = (Vec3{ data.PointA.x,0.0f,data.PointA.z } - Vec3{ closestX,0.0f,closestY }).Length();
+
+			colData.dist = length;
+
+			// 半径から前座標への距離を引いた値がめり込んだ分の距離になる
+			length = data.Radius - length;
+
+			colData.moveVec = center * length;
+
+			// 最近点からボックスの判定外への移動ベクトルを作成
+			return colData;
+		};
 
 	}
-
-	// 半径から前座標への距離を引いた値がめり込んだ分の距離になる
-	colData.moveVec = (unit * (data.Radius - colData.dist));
-
-	return colData;
-
-
-
-
-
-
-
-
-
-
-
-	// 当たる直前にカプセルがボックスに対してどの位置にいたのかを調べる
-	// ボックスの中で直前のカプセルの中心に最も近い点を算出
-	//Vec3 closestA, closestB, unit;
-
-	//ColData colData;
-
-	//colData.max = max;
-	//colData.min = min;
-
-	//closestA = ClosetPointBox(max, min, data.FrontPointA);
-	//closestB = ClosetPointBox(max, min, data.FrontPointB);
-
-	//// より近い方を求める
-	//if ((closestA - data.FrontPointA).Length() < (closestB - data.FrontPointB).Length()) {
-
-	//	// Aのほうが近い場合
-	//	// 最近接点からAまでの単位ベクトルを作成
-	//	unit = (data.FrontPointA - closestA).GetNormalized();
-	//	colData.dist = (closestA - data.PointA).Length();
-	//}
-	//else {
-
-	//	// Bのほうが近い場合
-	//	// 最近接点からBまでの単位ベクトルを作成
-	//	unit = (data.FrontPointB - closestB).GetNormalized();
-	//	colData.dist = (closestB - data.PointB).Length();
-	//}
-
-	////// あたっている面を判定して面と垂直方向以外の移動量をゼロにする
-	////// 中心方向にスライドしてしまうバグが起こってしまったための突貫工事
-	////if (std::abs(unit.x) > std::abs(unit.y) && std::abs(unit.x) > std::abs(unit.z)) {
-	////	unit.y = 0;
-	////	unit.z = 0;
-	////}
-	////else if (std::abs(unit.y) > std::abs(unit.x) && std::abs(unit.y) > std::abs(unit.z)) {
-	////	unit.x = 0;
-	////	unit.z = 0;
-	////}
-	////else {
-	////	unit.x = 0;
-	////	unit.y = 0;
-	////}
-
-	//// 半径から前座標への距離を引いた値がめり込んだ分の距離になる
-	//colData.moveVec = (unit * (data.Radius - colData.dist));
-
-	//return colData;
 }

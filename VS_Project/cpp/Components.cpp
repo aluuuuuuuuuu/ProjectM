@@ -115,7 +115,7 @@ void Animation::InitAnimation(int& modelHandle, int tag, float rate)
 	_playAnimation = tag;
 }
 
-void Animation::UpdateAnimation(int& modelHandle)
+void Animation::UpdateAnimation(int& modelHandle, float count)
 {
 	// 前のフレームでアニメーションが終了していたらデフォルトに戻す
 	if (_endAnimFlag) {
@@ -123,7 +123,7 @@ void Animation::UpdateAnimation(int& modelHandle)
 	}
 
 	// 再生時間を進める
-	_flameCount += 0.5f;
+	_flameCount += count;
 
 	// ブレンドレートを加算していく
 	if (_blendRate >= 1.0f) {
@@ -320,24 +320,7 @@ float CapsuleCollision::CapsuleDistance(const Vec3& p1, const Vec3& q1, const Ve
 void CapsuleCollision::DrawCapsule() const
 {
 	if (_valid) {
-		DrawSphere3D(_data.PointA.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
-		DrawSphere3D(_data.PointB.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
-
-		Vec3 veca = Vec3{ _data.PointA.x + _data.Radius,_data.PointA.y,_data.PointA.z };
-		Vec3 vecb = Vec3{ _data.PointB.x + _data.Radius,_data.PointB.y,_data.PointB.z };
-		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
-
-		veca = Vec3{ _data.PointA.x - _data.Radius,_data.PointA.y,_data.PointA.z };
-		vecb = Vec3{ _data.PointB.x - _data.Radius,_data.PointB.y,_data.PointB.z };
-		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
-
-		veca = Vec3{ _data.PointA.x ,_data.PointA.y,_data.PointA.z + _data.Radius };
-		vecb = Vec3{ _data.PointB.x ,_data.PointB.y,_data.PointB.z + _data.Radius };
-		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
-
-		veca = Vec3{ _data.PointA.x ,_data.PointA.y,_data.PointA.z - _data.Radius };
-		vecb = Vec3{ _data.PointB.x ,_data.PointB.y,_data.PointB.z - _data.Radius };
-		DrawLine3D(veca.VGet(), vecb.VGet(), 0xff0000);
+		DrawCapsule3D(_data.PointA.VGet(), _data.PointB.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
 	}
 }
 

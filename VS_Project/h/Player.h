@@ -36,16 +36,33 @@ public:
 private:
 
 	/// <summary>
+	/// 自身の回転
+	/// </summary>
+	void Rotate();
+
+	/// <summary>
+	/// 移動関数をまとめた関数
+	/// </summary>
+	void Move();
+
+	void RotateMoveVec();
+
+	/// <summary>
+	/// 当たり判定系関数をまとめた関数
+	/// </summary>
+	void Collision();
+
+	/// <summary>
 	/// コントローラー入力で移動ベクトルを作成する
 	/// </summary>
 	/// <returns>移動ベクトル</returns>
-	Vec3 CreateMoveVec();
+	void CreateMoveVec();
 
 	/// <summary>
 	/// ジャンプ力を返す
 	/// </summary>
 	/// <returns>ジャンプ力</returns>
-	float CreateYMoveScale();
+	void CreateYMoveScale();
 
 	/// <summary>
 	/// 現在地上にいるか判定する
@@ -54,21 +71,23 @@ private:
 	bool OnGround();
 
 	/// <summary>
-	/// 引数のベクトルを引数の回転値に合わせてY軸回転させる
+	/// Y軸の回転値を引数の値に徐々に近づけていく
 	/// </summary>
-	/// <param name="vec">対象のベクトル</param>
-	/// <param name="angle">Y軸の回転値</param>
-	/// <returns>回転後のベクトル</returns>
-	Vec3 RotateVec(Vec3 vec, float angle);
+	/// <param name="targetAngle">目標の値</param>
+	void RotateAngleY(float targetAngle);
 
 	/// <summary>
-	/// 引数のベクトルの向きにY軸回転する
+	/// カメラの向きにY軸回転する
 	/// </summary>
-	/// <param name="moveVec">移動ベクトル</param>
-	void RotateAngle(Vec3 moveVec);
+	void RotateAngleToCamera();
+
+	/// <summary>
+	/// 移動ベクトルの向きにY軸回転する
+	/// </summary>
+	void RotateAngleToVec();
 
 	// Y軸の移動量
-	float _MoveScaleY;
+	float _moveScaleY;
 
 	// 地上に立っているフラグ
 	bool _isGround;
@@ -79,10 +98,16 @@ private:
 	// 移動ベクトル
 	Vec3 _moveVec;
 
+	// Y軸が一定になったカウント
+	int _groundCount;
+
 	//  ステージコリジョンマネージャーの参照
 	std::shared_ptr<StageCollisionManager>& _collManager;
 
 	// カメラポインタ
 	std::shared_ptr<PlayerCamera> _pCamera;
+
+	// 走っているフラグ
+	bool _runFlag;
 };
 

@@ -5,9 +5,9 @@
 
 struct ColData
 {
-	Vec3 max;
-	Vec3 min;
-	Vec3 moveVec;
+	Vec3 max = 0;
+	Vec3 min = 0;
+	Vec3 moveVec = 0;
 	float dist = 0;
 };
 

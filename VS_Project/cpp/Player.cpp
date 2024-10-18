@@ -5,15 +5,17 @@
 #include "PlayerCamera.h"
 
 Player::Player(std::shared_ptr<StageCollisionManager>& col) :
-	_MoveScaleY(0),
+	_moveScaleY(0),
 	_isGround(false),
-	_collManager(col)
+	_collManager(col),
+	_groundCount(0),
+	_runFlag(false)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
 
 	// 拡大の設定
-	Scale = Vec3{ 0.2f,0.2f,0.2f };
+	Scale = Vec3{ 0.12f,0.12f,0.12f };
 
 	// モデルの初期処理
 	InitModel(MV1LoadModel("data/model/MainActor.mv1"));
@@ -22,7 +24,7 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col) :
 	Position = Vec3{ 0.0f,25.0f,0.0f };
 
 	// カプセルの初期化
-	InitCapsule(Position, 4.0f, 10);
+	InitCapsule(Position, 3.0f, 12);
 
 	// カメラの作成
 	_pCamera = std::make_shared<PlayerCamera>(Position);
@@ -41,26 +43,14 @@ void Player::Update()
 
 	if (_isGround) DrawString(10, 30, "OnGround", 0xffffff);
 
-	// xz軸方向の移動
-	_moveVec += CreateMoveVec();
-
-	// Y軸方向の移動
-	_moveVec.y += CreateYMoveScale();
-
-	// 移動ベクトルをy軸回転させる
-	_moveVec = RotateVec(_moveVec, _pCamera->Angle.y);
-
-	// 座標に移動ベクトルを足す
-	Position += _moveVec;
+	// 移動
+	Move();
 
 	// 自身の回転値を更新する
-	RotateAngle(_moveVec);
+	Rotate();
 
-	// コリジョンの判定をする
-	Position += _collManager->CapsuleCollision(_data);
-
-	// カプセルに座標を渡す
-	Set(Position);
+	// 当たり判定
+	Collision();
 
 	// 地上にいるか判定する
 	_isGround = OnGround();
@@ -81,84 +71,129 @@ void Player::Draw() const
 	DrawCapsule();
 #endif // DEBUG
 
-	//DrawModel();
+	DrawModel();
 }
 
-Vec3 Player::CreateMoveVec()
+void Player::Rotate()
 {
-	// 移動量を返すベクトル
-	Vec3 move;
-
-	// スティックの入力値を移動ベクトルに代入する
-	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK,INPUT_PAD_1) > 3000) {
-		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, INPUT_PAD_1);
+	// 歩き中はカメラと同じ方向を向く
+	if (!_runFlag) {
+		RotateAngleY(_pCamera->Angle.y);
 	}
+	// 走り中は移動方向を向く
+	else {
 
-	return move.GetNormalized();
-}
+		float targetAngle;
 
-float Player::CreateYMoveScale()
-{
-
-	// 地上にいなかったら
-	// 一定の落下速度になるまで落下速度を上げる
-	//if (_isGround) {
-
-	//}
-	//else {
-
-	if (_MoveScaleY > -1.5f) {
-		_MoveScaleY -= 0.1f;
-	}
-	//}
-
-	// Aボタンでジャンプ
-	if (Input::GetInstance().IsHold(INPUT_A, INPUT_PAD_1) && _isGround) {
-
-		// ジャンプ力を与える
-		_MoveScaleY = 2.0f;
-	}
-
-	return _MoveScaleY;
-}
-
-bool Player::OnGround()
-{
-	if (_frontPos.y == Position.y) {
-		return true;
-	}
-
-	return false;
-}
-
-Vec3 Player::RotateVec(Vec3 vec, float angle)
-{
-	// Y軸回転行列に変換
-	MATRIX rotaMtx = MGetRotY(angle);
-
-	vec = Vec3{ vec.x * -1 , vec.y,vec.z * -1 };
-
-	// 移動ベクトルを回転値に合わせてY軸回転させる
-	vec = VTransform(vec.VGet(), rotaMtx);
-
-	return vec;
-}
-
-void Player::RotateAngle(Vec3 moveVec)
-{
-
-	float targetAngle = Angle.y;
-
-	// 移動ベクトルが0じゃないときだけ角度を計算する
-	if (moveVec.x != 0.0f && moveVec.z != 0.0f) {
 		// 移動する方向の角度を求める
-		Vec3 targetPos = Position + moveVec;
+		Vec3 targetPos = Position + _moveVec;
 		float x = targetPos.x - Position.x;
 		float z = targetPos.z - Position.z;
 		targetAngle = atan2f(x, z);
 		targetAngle = targetAngle + static_cast<float>(DX_PI);
 		DX_TWO_PI;
 
+		RotateAngleY(targetAngle);
+	}
+}
+
+void Player::Move()
+{
+	// xz軸方向の移動
+	CreateMoveVec();
+
+	// Y軸方向の移動
+	CreateYMoveScale();
+
+	// 移動ベクトルをy軸回転させる
+	RotateMoveVec();
+
+	// 座標に移動ベクトルを足す
+	Position += _moveVec;
+}
+
+void Player::Collision()
+{
+	// カプセルに座標を渡す
+	Set(Position);
+
+	// コリジョンの判定をする
+	Position += _collManager->CapsuleCollision(_data);
+
+	// カプセルに座標を渡す
+	Set(Position);
+}
+
+void Player::CreateMoveVec()
+{
+	// 移動量を返すベクトル
+	Vec3 move;
+
+	// スティックの入力値を移動ベクトルに代入する
+	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, INPUT_PAD_1) > 3000) {
+		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, INPUT_PAD_1);
+	}
+
+	_moveVec += move;
+}
+
+void Player::CreateYMoveScale()
+{
+
+	// 地上にいなかったら
+	// 一定の落下速度になるまで落下速度を上げる
+	if (_isGround) {
+		//_moveScaleY = 0.1f;
+	}
+	else {
+
+		if (_moveScaleY > -1.5f) {
+			_moveScaleY -= 0.1f;
+		}
+	}
+
+	// Aボタンでジャンプ
+	if (Input::GetInstance().IsHold(INPUT_A, INPUT_PAD_1) && _isGround) {
+
+		// ジャンプ力を与える
+		_moveScaleY = 2.0f;
+	}
+
+	_moveVec.y += _moveScaleY;
+}
+
+bool Player::OnGround()
+{
+	if (_frontPos.y == Position.y) {
+		if (_groundCount == 0) {
+			_groundCount++;
+		}
+		else {
+			return true;
+		}
+	}
+	else {
+		_groundCount = 0;
+	}
+
+	return false;
+}
+
+void Player::RotateMoveVec()
+{
+	// Y軸回転行列に変換
+	MATRIX rotaMtx = MGetRotY(_pCamera->Angle.y);
+
+	_moveVec = Vec3{ _moveVec.x * -1, _moveVec.y, _moveVec.z * -1 };
+
+	// 移動ベクトルを回転値に合わせてY軸回転させる
+	_moveVec = VTransform(_moveVec.VGet(), rotaMtx);
+}
+
+void Player::RotateAngleY(float targetAngle)
+{
+	// 平行移動ベクトルが0じゃないときだけ角度を計算する
+	if (_moveVec.x != 0.0f && _moveVec.z != 0.0f) {
 		// 移動する方向に徐々に回転する
 
 		// 差が移動量より小さくなったら目標の値を代入する
@@ -184,4 +219,19 @@ void Player::RotateAngle(Vec3 moveVec)
 			Angle.y = targetAngle;
 		}
 	}
+}
+
+void Player::RotateAngleToCamera()
+{
+	float targetAngle = _pCamera->Angle.y;
+
+	RotateAngleY(targetAngle);
+}
+
+void Player::RotateAngleToVec()
+{
+
+	float targetAngle = Angle.y;
+
+	RotateAngleY(targetAngle);
 }

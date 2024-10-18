@@ -64,7 +64,7 @@ Vec3 PlayerCamera::Rotate(Vec3 pos)
 	Vec3 basePos = VGet(GetConstantFloat("CAMERA_BASE_POS_X"),GetConstantFloat("CAMERA_BASE_POS_Y"), GetConstantFloat("CAMERA_BASE_POS_Z"));
 
 	// カメラ座標はプレイヤー座標から変換した座標を足したところ
-	return VAdd(VGet(pos.x, pos.y, pos.z), RotatePos(basePos).VGet());
+	return VAdd(VGet(pos.x, pos.y + GetConstantFloat("CAMERA_BASE_POS_Y"), pos.z), RotatePos(basePos).VGet());
 }
 
 Vec3 PlayerCamera::RotatePos(Vec3 pos)
