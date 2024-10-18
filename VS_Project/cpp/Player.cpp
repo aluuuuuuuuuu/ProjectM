@@ -18,7 +18,7 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col) :
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
 
 	// ƒ‚ƒfƒ‹‚Ì‰Šúˆ—
-	InitModel(MV1LoadModel("data/model/MainActor.mv1"));
+	InitModel(MV1LoadModel("data/model/Player1.mv1"));
 
 	// À•W‚Ìİ’è
 	Position = Vec3{ 0.0f,25.0f,0.0f };
