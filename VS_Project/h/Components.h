@@ -51,7 +51,7 @@ public:
 
 protected:
 	// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
-	int ModelHandle = 0;
+	int _modelHandle = 0;
 
 private:
 

@@ -26,6 +26,12 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col) :
 	// カプセルの初期化
 	InitCapsule(Position, 3.0f, 12);
 
+
+	// アニメーションの初期処理
+	InitAnimation(_modelHandle, GetConstantInt("ANIM_TPOSE"), GetConstantFloat("BLEND_RATE"));
+
+	ChangeAnimation(_modelHandle, GetConstantInt("ANIM_AIMING_IDLE"), true, GetConstantFloat("BLEND_RATE"));
+
 	// カメラの作成
 	_pCamera = std::make_shared<PlayerCamera>(Position);
 }
@@ -36,6 +42,12 @@ Player::~Player()
 
 void Player::Update()
 {
+
+	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
+		//	ChangeAnimationConnect(_modelHandle, GetConstantInt("ANIM_JUMP_UP"), GetConstantInt("ANIM_RUN_FORWARD"), GetConstantFloat("BLEND_RATE"), GetConstantFloat("BLEND_RATE"));
+	}
+
+
 	DrawFormatString(10, 10, 0xffffff, "x:%f y:%f z:%f angleY:%f", Position.x, Position.y, Position.z, Angle.y);
 
 	// 移動ベクトルの初期化
@@ -60,8 +72,24 @@ void Player::Update()
 	// カメラの更新
 	_pCamera->Update(Position);
 
+
+	// アニメーションコントロール
+	WalkRunAnimControl();
+
+	// アニメーションの更新
+	UpdateAnimation(_modelHandle, GetConstantFloat("ANIM_SPEED"));
+
 	// モデルの更新
-	UpdateModel(GetTransformInstance());
+	//if (GetAnimTag() == GetConstantInt("ANIM_JUMP_LOOP")) {
+		//Transform trans;
+		//trans.Angle = Angle;
+		//trans.Scale = Scale;
+		//trans.Position = Vec3(Position.x, Position.y + 3.5f, Position.z);
+		//UpdateModel(trans);
+	//}
+	//else {
+		UpdateModel(GetTransformInstance());
+	//}
 }
 
 void Player::Draw() const
@@ -70,7 +98,6 @@ void Player::Draw() const
 	// カプセルを描画
 	DrawCapsule();
 #endif // DEBUG
-
 	DrawModel();
 }
 
@@ -106,10 +133,25 @@ void Player::Move()
 	CreateYMoveScale();
 
 	// 移動ベクトルをy軸回転させる
-	RotateMoveVec();
+	_moveVec = RotateMoveVec(_moveVec, _pCamera->Angle.y);
 
 	// 座標に移動ベクトルを足す
 	Position += _moveVec;
+}
+
+Vec3 Player::RotateMoveVec(Vec3 vec, float angle)
+{
+	Vec3 ret;
+
+	// Y軸回転行列に変換
+	MATRIX rotaMtx = MGetRotY(angle);
+
+	ret = Vec3{ vec.x * -1, vec.y, vec.z * -1 };
+
+	// 移動ベクトルを回転値に合わせてY軸回転させる
+	ret = VTransform(ret.VGet(), rotaMtx);
+
+	return ret;
 }
 
 void Player::Collision()
@@ -135,6 +177,7 @@ void Player::CreateMoveVec()
 	}
 
 	_moveVec += move;
+	DrawFormatString(30, 50, 0xffffff, "%f %f %f", _moveVec.x, _moveVec.y, _moveVec.x);
 }
 
 void Player::CreateYMoveScale()
@@ -157,6 +200,9 @@ void Player::CreateYMoveScale()
 
 		// ジャンプ力を与える
 		_moveScaleY = 2.0f;
+
+		// ジャンプの開始アニメーションを再生
+		ChangeAnimation(_modelHandle, GetConstantInt("ANIM_JUMP_UP"), false, GetConstantFloat("BLEND_RATE"));
 	}
 
 	_moveVec.y += _moveScaleY;
@@ -177,17 +223,6 @@ bool Player::OnGround()
 	}
 
 	return false;
-}
-
-void Player::RotateMoveVec()
-{
-	// Y軸回転行列に変換
-	MATRIX rotaMtx = MGetRotY(_pCamera->Angle.y);
-
-	_moveVec = Vec3{ _moveVec.x * -1, _moveVec.y, _moveVec.z * -1 };
-
-	// 移動ベクトルを回転値に合わせてY軸回転させる
-	_moveVec = VTransform(_moveVec.VGet(), rotaMtx);
 }
 
 void Player::RotateAngleY(float targetAngle)
@@ -234,4 +269,97 @@ void Player::RotateAngleToVec()
 	float targetAngle = Angle.y;
 
 	RotateAngleY(targetAngle);
+}
+
+int Player::ClassifyDirection()
+{
+	// キャラクターの向きに合わせて移動ベクトルを回転
+	float rotatedX = _moveVec.x * cos(Angle.y) - _moveVec.z * sin(Angle.y);
+	float rotatedZ = _moveVec.x * sin(Angle.y) + _moveVec.z * cos(Angle.y);
+
+	float angle = atan2(rotatedX, rotatedZ);
+
+
+
+	// 45度（π/4）ごとに方向を分類
+	if (angle >= -DX_PI / 8 && angle < DX_PI / 8) {
+		return 0;  // 前
+	}
+	else if (angle >= DX_PI / 8 && angle < 3 * DX_PI / 8) {
+		return 1;  // 前右
+	}
+	else if (angle >= 3 * DX_PI / 8 && angle < 5 * DX_PI / 8) {
+		return 2;  // 右
+	}
+	else if (angle >= 5 * DX_PI / 8 && angle < 7 * DX_PI / 8) {
+		return 3;  // 後右
+	}
+	else if ((angle >= 7 * DX_PI / 8 && angle <= DX_PI) || (angle < -7 * DX_PI / 8 && angle >= -DX_PI)) {
+		return 4;  // 後
+	}
+	else if (angle >= -7 * DX_PI / 8 && angle < -5 * DX_PI / 8) {
+		return 5;  // 後左
+	}
+	else if (angle >= -5 * DX_PI / 8 && angle < -3 * DX_PI / 8) {
+		return 6;  // 左
+	}
+	else if (angle >= -3 * DX_PI / 8 && angle < -DX_PI / 8) {
+		return 7;  // 前左
+	}
+
+	return 0;  // デフォルトは前
+}
+
+void Player::WalkRunAnimControl()
+{
+	// 地面についていないとき
+	if (!_isGround) {
+		// ジャンプアップアニメーション出なければループアニメーションを再生する
+		if (GetAnimTag() != GetConstantInt("ANIM_JUMP_UP")) {
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_JUMP_LOOP"), true, GetConstantFloat("BLEND_RATE"));
+		}
+		return;
+	}
+
+	if (_moveVec.x == 0.0f && _moveVec.z == 0.0f) {
+		ChangeAnimation(_modelHandle, GetConstantInt("ANIM_AIMING_IDLE"), true, GetConstantFloat("BLEND_RATE"));
+		return;
+	}
+
+	// 走っている
+	if (_runFlag) {
+
+		// 常に走っているアニメーション
+		ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_FORWARD"), true, GetConstantFloat("BLEND_RATE"));
+	}
+	// 歩いている
+	else {
+		// 方向に対応するアニメーションを再生
+		switch (ClassifyDirection()) {
+		case 0:
+			printfDx("aa");
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_BACKWARD"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 1:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_BACKWARD_LEFT"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 2:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_LEFT"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 3:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_FORWARD_LEFT"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 4:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_FORWARD"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 5:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_FORWARD_RIGHT"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 6:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_RIGHT"), true, GetConstantFloat("BLEND_RATE"));
+			break;
+		case 7:
+			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, GetConstantFloat("BLEND_RATE"));			break;
+		}
+	}
 }

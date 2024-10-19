@@ -2,6 +2,7 @@
 #include "Components.h"
 #include <memory>
 #include "Constant.h"
+#include "Vec2.h"
 
 class PlayerCamera;
 class StageCollisionManager;
@@ -9,7 +10,8 @@ class Player:
 	public Transform,
 	public CapsuleCollision,
 	public Model,
-	public Constant
+	public Constant,
+	public Animation
 {
 public:
 
@@ -45,7 +47,17 @@ private:
 	/// </summary>
 	void Move();
 
-	void RotateMoveVec();
+	/// <summary>
+	/// カメラに合わせて移動ベクトルを回転させる
+	/// </summary>
+	
+	/// <summary>
+	/// 引数のラジアンに合わせてベクトルを回転させる
+	/// </summary>
+	/// <param name="vec">回転させるベクトル</param>
+	/// <param name="angle">ラジアン</param>
+	/// <returns>回転後のベクトル</returns>
+	Vec3 RotateMoveVec(Vec3 vec,float angle);
 
 	/// <summary>
 	/// 当たり判定系関数をまとめた関数
@@ -85,6 +97,14 @@ private:
 	/// 移動ベクトルの向きにY軸回転する
 	/// </summary>
 	void RotateAngleToVec();
+
+	/// <summary>
+	/// 2次元ベクトルを角度ごとに8つに分類する
+	/// </summary>
+	/// <returns>分類先</returns>
+	int ClassifyDirection();
+
+	void WalkRunAnimControl();
 
 	// Y軸の移動量
 	float _moveScaleY;

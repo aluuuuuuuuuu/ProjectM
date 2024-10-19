@@ -106,5 +106,8 @@
     <None Include="data\constant\SceneSelect.csv" />
     <None Include="data\constant\SubActor.csv" />
     <None Include="data\constant\Tama.csv" />
+    <None Include="data\constant\Player.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>

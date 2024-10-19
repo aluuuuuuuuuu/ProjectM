@@ -177,6 +177,7 @@
     <None Include="data\constant\Direction.csv" />
     <None Include="data\constant\Enemy.csv" />
     <None Include="data\constant\Input.csv" />
+    <None Include="data\constant\Player.csv" />
     <None Include="data\constant\PlayerCamera.csv" />
     <None Include="data\constant\SceneSelect.csv" />
     <None Include="data\constant\SubActor.csv" />

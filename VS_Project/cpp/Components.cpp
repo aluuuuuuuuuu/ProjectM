@@ -21,30 +21,30 @@ Transform& Transform::GetTransformInstance()
 // モデル
 
 Model::Model() :
-	ModelHandle(0),
+	_modelHandle(0),
 	m_textureHandle(0)
 {
 }
 
 Model::~Model()
 {
-	MV1DeleteModel(ModelHandle);
+	MV1DeleteModel(_modelHandle);
 	DeleteGraph(m_textureHandle);
 
 }
 
 void Model::InitModel(int modelHandle, int textureHandle)
 {
-	ModelHandle = modelHandle;
+	_modelHandle = modelHandle;
 	m_textureHandle = textureHandle;
 
 	// テクスチャで使用するグラフィックハンドルを変更する
-	MV1SetTextureGraphHandle(ModelHandle, 0, textureHandle, FALSE);
+	MV1SetTextureGraphHandle(_modelHandle, 0, textureHandle, FALSE);
 }
 
 void Model::InitModel(int modelHandle)
 {
-	ModelHandle = modelHandle;
+	_modelHandle = modelHandle;
 }
 
 void Model::UpdateModel(Transform& transform)
@@ -68,18 +68,18 @@ void Model::UpdateModel(Transform& transform)
 	modelMtx = MMult(modelMtx, transMtx);
 
 	// モデルハンドルに反映
-	MV1SetMatrix(ModelHandle, modelMtx);
+	MV1SetMatrix(_modelHandle, modelMtx);
 }
 
 void Model::DrawModel() const
 {
 	// モデルの描画
-	MV1DrawModel(ModelHandle);
+	MV1DrawModel(_modelHandle);
 }
 
 int Model::GetModelHandle() const
 {
-	return ModelHandle;
+	return _modelHandle;
 }
 
 int Model::GetTextureHandle() const
@@ -107,8 +107,8 @@ void Animation::InitAnimation(int& modelHandle, int tag, float rate)
 
 	_endAnimFlag = false;
 
-	_attachIndex1 = MV1AttachAnim(modelHandle, tag);
-	_attachIndex2 = MV1AttachAnim(modelHandle, tag);
+	_attachIndex1 = MV1AttachAnim(modelHandle, tag, -1, true);
+	_attachIndex2 = MV1AttachAnim(modelHandle, tag, -1, true);
 	_maxFlame = MV1GetAttachAnimTotalTime(modelHandle, _attachIndex1);
 
 	// 再生中のアニメーションのタグを保存する
@@ -144,8 +144,11 @@ void Animation::UpdateAnimation(int& modelHandle, float count)
 		if (_connectFlag) {
 			_animationState++;
 			ChangeAnimation(modelHandle, _connectAnimation[_animationState], true, _rate2);
-			_connectAnimation.clear();
+			//_connectAnimation.clear();
 			_animationState = 0;
+
+			// コネクトフラグを下げる
+			_connectFlag = false;
 		}
 		// ループフラグがtrueだったらループさせる
 		else if (_loopFlag) {
@@ -158,10 +161,18 @@ void Animation::UpdateAnimation(int& modelHandle, float count)
 	}
 
 	// アニメーション更新
-	MV1SetAttachAnimTime(modelHandle, _attachIndex1, _flameCount);
+	int a =MV1SetAttachAnimTime(modelHandle, _attachIndex1, _flameCount);
+
+	int n = 0;
 }
 
-// アニメーション変更
+/// <summary>
+/// アニメーション変更
+/// </summary>
+/// <param name="modelHandle">モデルハンドル</param>
+/// <param name="tag">アニメーションタグ</param>
+/// <param name="loop">ループフラグ</param>
+/// <param name="blendRate">ブレンドレート</param>
 void Animation::ChangeAnimation(int& modelHandle, int tag, bool loop, float blendRate)
 {
 	// 再生するアニメーションを変更する
@@ -195,9 +206,6 @@ void Animation::ChangeAnimation(int& modelHandle, int tag, bool loop, float blen
 
 		// ブレンドレートを初期化する
 		_blendRate = 0.0f;
-
-		// コネクトフラグを下げる
-		_connectFlag = false;
 	}
 }
 
