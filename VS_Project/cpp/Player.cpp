@@ -3,11 +3,15 @@
 #include "Input.h"
 #include "StageCollisionManager.h"
 #include "PlayerCamera.h"
+#include "NormalBullet.h"
+#include "BulletManager.h"
+#include "BulletBase.h"
 
-Player::Player(std::shared_ptr<StageCollisionManager>& col) :
+Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet) :
 	_moveScaleY(0),
 	_isGround(false),
 	_collManager(col),
+	_bulletManager(bullet),
 	_groundCount(0),
 	_runFlag(false)
 {
@@ -44,7 +48,9 @@ void Player::Update()
 {
 
 	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
-		//	ChangeAnimationConnect(_modelHandle, GetConstantInt("ANIM_JUMP_UP"), GetConstantInt("ANIM_RUN_FORWARD"), GetConstantFloat("BLEND_RATE"), GetConstantFloat("BLEND_RATE"));
+		Vec3 vec = { 0.0f,0.0f,1.0f };
+
+		_bulletManager->PushBullet(NORMAL_BULLET, RotateMoveVec(vec,Angle.y), Position);
 	}
 
 

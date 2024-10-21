@@ -4,6 +4,7 @@
 #include "Constant.h"
 #include "Vec2.h"
 
+class BulletManager;
 class PlayerCamera;
 class StageCollisionManager;
 class Player:
@@ -18,7 +19,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Player(std::shared_ptr<StageCollisionManager>& col);
+	Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet);
 
 	/// <summary>
 	/// デストラクタ
@@ -36,6 +37,8 @@ public:
 	void Draw() const;
 
 private:
+
+
 
 	/// <summary>
 	/// 自身の回転
@@ -123,6 +126,9 @@ private:
 
 	//  ステージコリジョンマネージャーの参照
 	std::shared_ptr<StageCollisionManager>& _collManager;
+
+	// バレットマネージャーの参照
+	std::shared_ptr<BulletManager>& _bulletManager;
 
 	// カメラポインタ
 	std::shared_ptr<PlayerCamera> _pCamera;

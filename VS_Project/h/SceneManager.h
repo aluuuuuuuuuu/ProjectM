@@ -30,7 +30,7 @@ private:
 	SceneManager() {};
 
 	// 各シーンのシェアポインタを格納するリスト配列
-	std::list<std::shared_ptr<SceneBase>> m_pScene;
+	std::list<std::shared_ptr<SceneBase>> _pScene;
 
 	// ゲーム終了フラグ
 	bool m_endFlag = false;

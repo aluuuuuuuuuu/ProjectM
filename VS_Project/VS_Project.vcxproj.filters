@@ -51,6 +51,15 @@
     <ClCompile Include="cpp\PlayerCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\BulletManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\BulletBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\NormalBullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\Application.h">
@@ -95,6 +104,15 @@
     <ClInclude Include="h\PlayerCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="h\BulletManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="h\BulletBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="h\NormalBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
@@ -109,5 +127,6 @@
     <None Include="data\constant\Player.csv">
       <Filter>リソース ファイル</Filter>
     </None>
+    <None Include="data\constant\NormalBullet.csv" />
   </ItemGroup>
 </Project>

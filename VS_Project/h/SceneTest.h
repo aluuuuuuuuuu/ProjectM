@@ -3,6 +3,7 @@
 #include "Constant.h"
 #include <memory>
 
+class BulletManager;
 class StageCollisionManager;
 class Player;
 class StageManager;
@@ -62,6 +63,9 @@ private:
 
     // ステージコリジョンマネージャポインタ
     std::shared_ptr<StageCollisionManager> _pStageCollisionManager;
+
+    // バレットマネージャポインタ
+    std::shared_ptr<BulletManager> _pBulletManager;
 
 };
 

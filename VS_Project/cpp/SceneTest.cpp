@@ -2,14 +2,16 @@
 #include "StageManager.h"
 #include "Player.h"
 #include "StageCollisionManager.h"
+#include "BulletManager.h"
 
 SceneTest::SceneTest()
 {
 	// 各クラスのインスタンス作成
 	{
+		_pBulletManager = std::make_shared <BulletManager>();	// バレットマネージャー
 		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);	// ステージコリジョンマネージャー
-		_pPlayer = std::make_shared<Player>(_pStageCollisionManager);		// プレイヤー
+		_pPlayer = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager);		// プレイヤー
 	}
 
 	// 関数ポインタの初期化
@@ -77,12 +79,18 @@ void SceneTest::NormalUpdate()
 {
 	// プレイヤーの更新処理
 	_pPlayer->Update();
+
+	// バレットの更新
+	_pBulletManager->Update();
 }
 
 void SceneTest::NormalDraw() const
 {
 	// グリッドの描画
 	//DrawGrid();
+
+	// バレットの描画
+	_pBulletManager->Draw();
 	
 	// ステージブロックの描画
 	_pStage->DrawStage();
