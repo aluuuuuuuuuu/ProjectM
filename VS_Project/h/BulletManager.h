@@ -5,11 +5,12 @@
 
 #define NORMAL_BULLET 0
 
+class MapBulletCollisionManager;
 class BulletBase;
 class BulletManager
 {
 public:
-	BulletManager();
+	BulletManager(std::shared_ptr<MapBulletCollisionManager>& col);
 	virtual ~BulletManager();
 
 	/// <summary>
@@ -26,4 +27,6 @@ public:
 
 	std::list<std::shared_ptr<BulletBase>> _pBullet;
 private:
+
+	std::shared_ptr<MapBulletCollisionManager>& _collManager;
 };

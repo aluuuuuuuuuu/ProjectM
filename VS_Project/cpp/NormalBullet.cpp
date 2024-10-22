@@ -1,7 +1,10 @@
 #include "NormalBullet.h"
+#include "MapBulletCollisionManager.h"
 
-NormalBullet::NormalBullet(Vec3 dist, Vec3 pos):
-	_distVec(dist)
+NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col):
+	_distVec(dist),
+	_gravity(0),
+	_collManager(col)
 {
 	// ’è”‚Ì“Ç‚Ýž‚Ý
 	ReadCSV("data/constant/NormalBullet.csv");
@@ -17,6 +20,11 @@ NormalBullet::~NormalBullet()
 void NormalBullet::Update()
 {
 	Position += _distVec * GetConstantFloat("SPEED");
+	_gravity += GetConstantFloat("GRAVITY");
+	Position.y -= _gravity;
+
+	// ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
+	_collManager->CollisionBullet(Position, 3.0f);
 }
 
 void NormalBullet::Draw() const

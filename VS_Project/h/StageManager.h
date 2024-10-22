@@ -19,6 +19,14 @@ public:
     /// <returns>配列の要素</returns>
     int GetStageInfo(int a, int b, int c);
 
+    /// <summary>
+    /// 指定されたボックスに0を入れる
+    /// </summary>
+    /// <param name="x">マスの要素数x</param>
+    /// <param name="y">マスの要素数y</param>
+    /// <param name="z">マスの要素数z</param>
+    void DeleteBox(int x, int y, int z);
+
 private:
 
 

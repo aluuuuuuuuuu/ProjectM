@@ -3,13 +3,15 @@
 #include "Player.h"
 #include "StageCollisionManager.h"
 #include "BulletManager.h"
+#include "MapBulletCollisionManager.h"
 
 SceneTest::SceneTest()
 {
 	// 各クラスのインスタンス作成
 	{
-		_pBulletManager = std::make_shared <BulletManager>();	// バレットマネージャー
+		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager);	// バレットマネージャー
 		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
+		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);	// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);	// ステージコリジョンマネージャー
 		_pPlayer = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager);		// プレイヤー
 	}

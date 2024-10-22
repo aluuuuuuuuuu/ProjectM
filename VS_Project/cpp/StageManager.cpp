@@ -63,3 +63,8 @@ int StageManager::GetStageInfo(int a, int b, int c)
 {
 	return _stage[a][b][c];
 }
+
+void StageManager::DeleteBox(int x, int y, int z)
+{
+	_stage[x][y][z] = 0;
+}

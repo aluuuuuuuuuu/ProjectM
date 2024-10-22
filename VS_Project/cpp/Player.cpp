@@ -49,8 +49,9 @@ void Player::Update()
 
 	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
 		Vec3 vec = { 0.0f,0.0f,1.0f };
+		Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
 
-		_bulletManager->PushBullet(NORMAL_BULLET, RotateMoveVec(vec,Angle.y), Position);
+		_bulletManager->PushBullet(NORMAL_BULLET, RotateMoveVec(vec,Angle.y), pos);
 	}
 
 

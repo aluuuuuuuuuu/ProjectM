@@ -148,6 +148,7 @@
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
+    <ClCompile Include="cpp\MapBulletCollisionManager.cpp" />
     <ClCompile Include="cpp\NormalBullet.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
     <ClCompile Include="cpp\PlayerCamera.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Input.h" />
+    <ClInclude Include="h\MapBulletCollisionManager.h" />
     <ClInclude Include="h\NormalBullet.h" />
     <ClInclude Include="h\Player.h" />
     <ClInclude Include="h\PlayerCamera.h" />

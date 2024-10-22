@@ -1,10 +1,11 @@
 #include "BulletManager.h"
 #include "NormalBullet.h"
 #include "Vec3.h"
+#include "MapBulletCollisionManager.h"
 
-BulletManager::BulletManager()
+BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col):
+	_collManager(col)
 {
-	_pBullet.push_back(std::make_shared<NormalBullet>(Vec3(), Vec3()));
 }
 
 BulletManager::~BulletManager()
@@ -30,7 +31,7 @@ void BulletManager::PushBullet(int bul, Vec3 dist, Vec3 pos)
 	switch (bul)
 	{
 	case NORMAL_BULLET:
-		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos));
+		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos,_collManager));
 		break;
 	default:
 		break;
