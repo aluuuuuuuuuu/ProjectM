@@ -32,7 +32,10 @@ bool Application::Init()
 	SetUseLighting(true);
 
 	// ライトのカラーを調整する
-	SetLightDifColor(GetColorF(0.9f, 0.9f, 0.9f, 0.0f));
+	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+
+	// ライトの角度を設定
+	SetLightDirection(VECTOR{ 1.0f, -1.0f ,0.0f, });
 
 	// ニアレストネイバー法で描画する
 	SetDrawMode(DX_DRAWMODE_NEAREST);
@@ -66,6 +69,8 @@ bool Application::Init()
 	// Zバッファへの書き込みを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
+
+	
 
 	return true;
 }

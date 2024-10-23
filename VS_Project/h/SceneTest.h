@@ -61,6 +61,7 @@ private:
 
     // プレイヤーポインタ
     std::shared_ptr<Player> _pPlayer;
+    std::shared_ptr<Player> _pPlayer1;
 
     // ステージコリジョンマネージャポインタ
     std::shared_ptr<StageCollisionManager> _pStageCollisionManager;

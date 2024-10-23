@@ -189,6 +189,7 @@
     <None Include="data\constant\Player.csv" />
     <None Include="data\constant\PlayerCamera.csv" />
     <None Include="data\constant\SceneSelect.csv" />
+    <None Include="data\constant\Stage.csv" />
     <None Include="data\constant\SubActor.csv" />
     <None Include="data\constant\Tama.csv" />
   </ItemGroup>

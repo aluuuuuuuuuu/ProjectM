@@ -14,8 +14,19 @@ BulletManager::~BulletManager()
 
 void BulletManager::Update()
 {
+	// バレットの更新
 	for (auto& bullet : _pBullet) {
 		bullet->Update();
+	}
+
+	// バレットが死んでいたら削除する
+	for (auto it = _pBullet.begin(); it != _pBullet.end();) {
+		if ((*it)->IsDead()) {
+			it = _pBullet.erase(it);	//要素を削除し次の要素を指すイテレータを取得
+		}
+		else {
+			it++;
+		}
 	}
 }
 

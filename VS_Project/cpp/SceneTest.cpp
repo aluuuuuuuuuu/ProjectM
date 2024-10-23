@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "StageCollisionManager.h"
 #include "BulletManager.h"
+#include "Input.h"
 #include "MapBulletCollisionManager.h"
 
 SceneTest::SceneTest()
@@ -13,7 +14,8 @@ SceneTest::SceneTest()
 		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);	// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);	// ステージコリジョンマネージャー
-		_pPlayer = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager);		// プレイヤー
+		_pPlayer = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager,INPUT_PAD_1);		// プレイヤー
+		_pPlayer1 = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager, INPUT_PAD_2);		// プレイヤー
 	}
 
 	// 関数ポインタの初期化
@@ -81,6 +83,7 @@ void SceneTest::NormalUpdate()
 {
 	// プレイヤーの更新処理
 	_pPlayer->Update();
+	_pPlayer1->Update();
 
 	// バレットの更新
 	_pBulletManager->Update();
@@ -91,6 +94,9 @@ void SceneTest::NormalDraw() const
 	// グリッドの描画
 	//DrawGrid();
 
+	SetDrawArea(0, 0, 800, 900);
+	SetCameraScreenCenter(400, 450);
+
 	// バレットの描画
 	_pBulletManager->Draw();
 	
@@ -98,5 +104,16 @@ void SceneTest::NormalDraw() const
 	_pStage->DrawStage();
 
 	// プレイヤーの描画
+	_pPlayer1->Draw();
+	_pPlayer->Draw();
+
+	SetDrawArea(800, 0, 1600, 900);
+	SetCameraScreenCenter(1200, 450);
+
+	_pBulletManager->Draw();
+
+	_pStage->DrawStage();
+
+	_pPlayer1->Draw();
 	_pPlayer->Draw();
 }

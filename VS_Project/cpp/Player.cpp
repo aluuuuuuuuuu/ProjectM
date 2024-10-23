@@ -7,13 +7,14 @@
 #include "BulletManager.h"
 #include "BulletBase.h"
 
-Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet) :
+Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet, int padNum) :
 	_moveScaleY(0),
 	_isGround(false),
 	_collManager(col),
 	_bulletManager(bullet),
 	_groundCount(0),
-	_runFlag(false)
+	_runFlag(false),
+	_padNum(padNum)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
@@ -47,11 +48,11 @@ Player::~Player()
 void Player::Update()
 {
 
-	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
+	if (Input::GetInstance().IsTrigger(INPUT_B, _padNum)) {
 		Vec3 vec = { 0.0f,0.0f,1.0f };
 		Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
 
-		_bulletManager->PushBullet(NORMAL_BULLET, RotateMoveVec(vec,Angle.y), pos);
+		_bulletManager->PushBullet(NORMAL_BULLET, RotateMoveVec(vec, Angle.y), pos);
 	}
 
 
@@ -79,7 +80,6 @@ void Player::Update()
 	// カメラの更新
 	_pCamera->Update(Position);
 
-
 	// アニメーションコントロール
 	WalkRunAnimControl();
 
@@ -87,16 +87,8 @@ void Player::Update()
 	UpdateAnimation(_modelHandle, GetConstantFloat("ANIM_SPEED"));
 
 	// モデルの更新
-	//if (GetAnimTag() == GetConstantInt("ANIM_JUMP_LOOP")) {
-		//Transform trans;
-		//trans.Angle = Angle;
-		//trans.Scale = Scale;
-		//trans.Position = Vec3(Position.x, Position.y + 3.5f, Position.z);
-		//UpdateModel(trans);
-	//}
-	//else {
-		UpdateModel(GetTransformInstance());
-	//}
+	UpdateModel(GetTransformInstance());
+
 }
 
 void Player::Draw() const
@@ -133,6 +125,12 @@ void Player::Rotate()
 
 void Player::Move()
 {
+
+	// Xボタンでダッシュ切り替え
+	if (Input::GetInstance().IsTrigger(INPUT_X, _padNum)) {
+		_runFlag = !_runFlag;
+	}
+
 	// xz軸方向の移動
 	CreateMoveVec();
 
@@ -179,11 +177,17 @@ void Player::CreateMoveVec()
 	Vec3 move;
 
 	// スティックの入力値を移動ベクトルに代入する
-	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, INPUT_PAD_1) > 3000) {
-		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, INPUT_PAD_1);
+	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, _padNum) > 3000) {
+		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum);
 	}
 
-	_moveVec += move;
+	if (_runFlag) {
+		_moveVec += move * GetConstantFloat("RUN_SPEED");
+	}
+	else {
+		_moveVec += move * GetConstantFloat("WALK_SPEED");
+	}
+
 	DrawFormatString(30, 50, 0xffffff, "%f %f %f", _moveVec.x, _moveVec.y, _moveVec.x);
 }
 
@@ -203,7 +207,7 @@ void Player::CreateYMoveScale()
 	}
 
 	// Aボタンでジャンプ
-	if (Input::GetInstance().IsHold(INPUT_A, INPUT_PAD_1) && _isGround) {
+	if (Input::GetInstance().IsHold(INPUT_A, _padNum) && _isGround) {
 
 		// ジャンプ力を与える
 		_moveScaleY = 2.0f;
@@ -344,7 +348,6 @@ void Player::WalkRunAnimControl()
 		// 方向に対応するアニメーションを再生
 		switch (ClassifyDirection()) {
 		case 0:
-			printfDx("aa");
 			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_BACKWARD"), true, GetConstantFloat("BLEND_RATE"));
 			break;
 		case 1:

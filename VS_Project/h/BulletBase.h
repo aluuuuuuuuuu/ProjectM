@@ -22,5 +22,15 @@ public:
 	/// </summary>
 	virtual void Draw() const = 0;
 
+	/// <summary>
+	/// 死亡フラグを返す
+	/// </summary>
+	/// <returns>死亡フラグ</returns>
+	bool IsDead() const;
+protected:
+
+	// 死亡フラグ
+	bool _deadFlag;
+
 };
 

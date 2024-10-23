@@ -16,9 +16,9 @@ bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius)
 	Vec3 max, min;// 最大座標,最小座標
 
 	// カプセルとステージの当たり判定を取る
-	for (int a = 0; a < 10; a++) {
-		for (int b = 0; b < 2; b++) {
-			for (int c = 0; c < 10; c++) {
+	for (int a = 0; a < BLOCK_NUM_X; a++) {
+		for (int b = 0; b < BLOCK_NUM_Y; b++) {
+			for (int c = 0; c < BLOCK_NUM_Z; c++) {
 
 				// 対象のボックスが存在した場合のみ判定する
 				if (_stage->GetStageInfo(a, b, c) != 0) {
@@ -32,6 +32,9 @@ bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius)
 
 						// 当たっていたら当たったマスを削除する
 						_stage->DeleteBox(a, b, c);
+
+						// 当たったと返す
+						return true;
 
 					}
 				}

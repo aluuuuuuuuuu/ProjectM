@@ -19,7 +19,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet);
+	Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet, int padNum);
 
 	/// <summary>
 	/// デストラクタ
@@ -135,5 +135,8 @@ private:
 
 	// 走っているフラグ
 	bool _runFlag;
+
+	// 使用するパッドのナンバー
+	int _padNum;
 };
 

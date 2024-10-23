@@ -33,7 +33,7 @@ private:
 	/// 回転
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
-	/// <returns>回転後の座標/returns>
+	/// <returns>回転後の座標</returns>
 	Vec3 Rotate(Vec3 pos);
 
 
@@ -44,5 +44,7 @@ private:
 	/// <returns>回転後の座標</returns> 
 	Vec3 RotatePos(Vec3 pos);
 
+	// カメラから発せられるライトハンドル
+	int _lightHandle;
 };
 

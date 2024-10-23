@@ -1,5 +1,13 @@
 #pragma once
-class StageManager
+#include "Constant.h"
+#include <vector>
+
+constexpr int BLOCK_NUM_X = 20;
+constexpr int BLOCK_NUM_Y = 2;
+constexpr int BLOCK_NUM_Z = 20;
+
+class StageManager:
+    public Constant
 {
 public:
 	StageManager();
@@ -29,8 +37,13 @@ public:
 
 private:
 
+    // ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
+    int _modelHandle;
 
+    int _stage[BLOCK_NUM_X][BLOCK_NUM_Y][BLOCK_NUM_Z];
 
-    int _stage[10][2][10];
+    int _model[BLOCK_NUM_X][BLOCK_NUM_Y][BLOCK_NUM_Z];
+
+    int _size;
 };
 

@@ -6,6 +6,7 @@
 StageCollisionManager::StageCollisionManager(std::shared_ptr<StageManager>& stage) :
 	_pStage(stage)
 {
+	
 }
 
 StageCollisionManager::~StageCollisionManager()
@@ -28,16 +29,17 @@ Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 	Vec3 max, min;// 最大座標,最小座標
 
 	// カプセルとステージの当たり判定を取る
-	for (int a = 0; a < 10; a++) {
-		for (int b = 0; b < 2; b++) {
-			for (int c = 0; c < 10; c++) {
+	for (int a = 0; a < BLOCK_NUM_X; a++) {
+		for (int b = 0; b < BLOCK_NUM_Y; b++) {
+			for (int c = 0; c < BLOCK_NUM_Z; c++) {
 
 				// 対象のボックスが存在した場合のみ判定する
 				if (_pStage->GetStageInfo(a, b, c) != 0) {
 
 					// ボックスの最大座標と最小座標を求める
-					max = Vec3{ static_cast<float>(a * 10),static_cast<float>(b * 10),static_cast<float>(c * 10) };
-					min = Vec3{ max - 10 };
+					Vec3 vec = { a,b,c };
+					max = Vec3{ vec * _pStage->GetConstantInt("BLOCK_SIZE")};
+					min = Vec3{ max - _pStage->GetConstantInt("BLOCK_SIZE") };
 
 					// めり込んでいるかどうか判定する
 					if (CollisionBoxCapsule(max, min, data)) {
@@ -58,25 +60,7 @@ Vec3 StageCollisionManager::CapsuleCollision(CapsuleData data)
 				}
 			}
 		}
-	}
-
-	//// distが短い順に並べ替える
-	//std::sort(_vAllColldata.begin(), _vAllColldata.end(), CompareByDist);
-
-	//// distが短い順に判定しながらずらしていく
-	//for (const auto& colData : _vAllColldata) {
-	//	if (CollisionBoxCapsule(colData.max, colData.min, data)) {
-
-	//		// 移動ベクトルをプッシュする
-	//		_vAllMove.push_back(colData.moveVec);
-	//		
-	//		// カプセルのデータも座標移動させておく
-	//		data.PointA += colData.moveVec;
-	//		data.PointB += colData.moveVec;
-	//	}
-	//}
-
-	
+	}	
 
 	// 保存した全ての移動ベクトルを足して最終的な移動ベクトルを作成する
 	for (auto& vec : _vAllColldata) {

@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <variant>
+#include <tchar.h>
 
 #define INT_ 0
 #define FLOAT_ 0.0f

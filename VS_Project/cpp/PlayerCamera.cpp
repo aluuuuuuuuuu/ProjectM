@@ -2,7 +2,8 @@
 #include "DxLib.h"
 #include "Input.h"
 
-PlayerCamera::PlayerCamera(Vec3 pos)
+PlayerCamera::PlayerCamera(Vec3 pos):
+	_lightHandle(0)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/PlayerCamera.csv");
@@ -14,6 +15,10 @@ PlayerCamera::PlayerCamera(Vec3 pos)
 	Position = Vec3{ pos.x + GetConstantFloat("CAMERA_BASE_POS_X"),
 					 pos.y + GetConstantFloat("CAMERA_BASE_POS_Y"),
 					 pos.z + GetConstantFloat("CAMERA_BASE_POS_Z"), };
+
+	// ライトの作成
+	_lightHandle = CreateDirLightHandle(VECTOR{ 0,0,0 });
+	SetLightDifColorHandle(_lightHandle, GetColorF(0.5f, 0.5f, 0.5f, 0.0f));
 }
 
 PlayerCamera::~PlayerCamera()
@@ -27,8 +32,14 @@ void PlayerCamera::Update(Vec3 pos)
 	target = Vec3(pos.x, pos.y + GetConstantFloat("CAMERA_MARGIN_Y"), pos.z);
 
 	// 座標の設定
+	Position = Rotate(pos);
 
-	SetCameraPositionAndTarget_UpVecY(Rotate(pos).VGet(), target.VGet());
+	// ライトの角度を設定
+	SetLightDirectionHandle(_lightHandle, (target - Position).VGet());
+
+	// 座標の設定
+
+	SetCameraPositionAndTarget_UpVecY(Position.VGet(), target.VGet());
 }
 
 Vec3 PlayerCamera::Rotate(Vec3 pos)

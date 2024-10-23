@@ -134,5 +134,6 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="data\constant\NormalBullet.csv" />
+    <None Include="data\constant\Stage.csv" />
   </ItemGroup>
 </Project>

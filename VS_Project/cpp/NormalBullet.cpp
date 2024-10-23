@@ -24,10 +24,11 @@ void NormalBullet::Update()
 	Position.y -= _gravity;
 
 	// ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
-	_collManager->CollisionBullet(Position, 3.0f);
+	if (_collManager->CollisionBullet(Position, 3.0f)) _deadFlag = true;
 }
 
 void NormalBullet::Draw() const
 {
 	DrawSphere3D(Position.VGet(), 3.0f, 16, 0x0000ff, 0x0000ff, true);
 }
+
