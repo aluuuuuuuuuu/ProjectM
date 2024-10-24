@@ -38,7 +38,7 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<Bull
 	ChangeAnimation(_modelHandle, GetConstantInt("ANIM_AIMING_IDLE"), true, GetConstantFloat("BLEND_RATE"));
 
 	// カメラの作成
-	_pCamera = std::make_shared<PlayerCamera>(Position);
+	_pCamera = std::make_shared<PlayerCamera>(Position,_padNum);
 }
 
 Player::~Player()
@@ -93,11 +93,18 @@ void Player::Update()
 
 void Player::Draw() const
 {
+
 #ifdef _DEBUG
 	// カプセルを描画
 	DrawCapsule();
 #endif // DEBUG
 	DrawModel();
+}
+
+void Player::CameraSet() const
+{
+
+	SetCameraPositionAndTarget_UpVecY(_pCamera->Position.VGet(), _pCamera->GetTarget().VGet());
 }
 
 void Player::Rotate()

@@ -13,7 +13,8 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
-	PlayerCamera(Vec3 pos);
+	/// <param name="padNum">パッドナンバー</param>
+	PlayerCamera(Vec3 pos, int padNum);
 
 	/// <summary>
 	/// デストラクタ
@@ -25,6 +26,12 @@ public:
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
 	void Update(Vec3 pos);
+
+	/// <summary>
+	/// ターゲットの座標を取得する
+	/// </summary>
+	/// <returns>ターゲットの座標</returns>
+	Vec3 GetTarget();
 
 
 private:
@@ -44,7 +51,11 @@ private:
 	/// <returns>回転後の座標</returns> 
 	Vec3 RotatePos(Vec3 pos);
 
+	Vec3 _target;
+
 	// カメラから発せられるライトハンドル
 	int _lightHandle;
+
+	int _padNum;
 };
 

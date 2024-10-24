@@ -83,6 +83,7 @@ void SceneTest::NormalUpdate()
 {
 	// プレイヤーの更新処理
 	_pPlayer->Update();
+
 	_pPlayer1->Update();
 
 	// バレットの更新
@@ -91,9 +92,11 @@ void SceneTest::NormalUpdate()
 
 void SceneTest::NormalDraw() const
 {
-	// グリッドの描画
-	//DrawGrid();
 
+	// プレイヤー1のカメラのセット
+	_pPlayer->CameraSet();
+
+	// 左半分のみ描画
 	SetDrawArea(0, 0, 800, 900);
 	SetCameraScreenCenter(400, 450);
 
@@ -104,16 +107,23 @@ void SceneTest::NormalDraw() const
 	_pStage->DrawStage();
 
 	// プレイヤーの描画
-	_pPlayer1->Draw();
 	_pPlayer->Draw();
+	_pPlayer1->Draw();
+	
+	// プレイヤー2のカメラのセット
+	_pPlayer1->CameraSet();
 
+	// 右半分のみ描画
 	SetDrawArea(800, 0, 1600, 900);
 	SetCameraScreenCenter(1200, 450);
 
+	// バレットの描画
 	_pBulletManager->Draw();
 
+	// ステージブロックの描画
 	_pStage->DrawStage();
 
+	// プレイヤーの描画
 	_pPlayer1->Draw();
 	_pPlayer->Draw();
 }

@@ -2,8 +2,9 @@
 #include "DxLib.h"
 #include "Input.h"
 
-PlayerCamera::PlayerCamera(Vec3 pos):
-	_lightHandle(0)
+PlayerCamera::PlayerCamera(Vec3 pos, int padNum):
+	_lightHandle(0),
+	_padNum(padNum)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/PlayerCamera.csv");
@@ -28,18 +29,21 @@ PlayerCamera::~PlayerCamera()
 void PlayerCamera::Update(Vec3 pos)
 {
 	// ターゲットの設定
-	Vec3 target;
-	target = Vec3(pos.x, pos.y + GetConstantFloat("CAMERA_MARGIN_Y"), pos.z);
+	_target = Vec3(pos.x, pos.y + GetConstantFloat("CAMERA_MARGIN_Y"), pos.z);
 
 	// 座標の設定
 	Position = Rotate(pos);
 
 	// ライトの角度を設定
-	SetLightDirectionHandle(_lightHandle, (target - Position).VGet());
+	SetLightDirectionHandle(_lightHandle, (_target - Position).VGet());
 
-	// 座標の設定
 
-	SetCameraPositionAndTarget_UpVecY(Position.VGet(), target.VGet());
+	//SetCameraPositionAndTarget_UpVecY(Position.VGet(), _target.VGet());
+}
+
+Vec3 PlayerCamera::GetTarget()
+{
+	return _target;
 }
 
 Vec3 PlayerCamera::Rotate(Vec3 pos)
@@ -48,14 +52,14 @@ Vec3 PlayerCamera::Rotate(Vec3 pos)
 	auto& input = Input::GetInstance();
 
 	// 右スティックで回転
-	if (input.GetStickVectorLength(INPUT_RIGHT_STICK, INPUT_PAD_1) > GetConstantFloat("STICK_INVALID_VALUE")) {
+	if (input.GetStickVectorLength(INPUT_RIGHT_STICK, _padNum) > GetConstantFloat("STICK_INVALID_VALUE")) {
 
 		// スティックを傾けた方向の回転の値を増減させる
-		if (input.GetStickVector(INPUT_RIGHT_STICK, INPUT_PAD_1).x != 0) {
-			Angle.y += GetConstantFloat("CAMERA_ANGLE_VARIATION") * (input.GetStickThumbX(INPUT_RIGHT_STICK, INPUT_PAD_1));
+		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).x != 0) {
+			Angle.y += GetConstantFloat("CAMERA_ANGLE_VARIATION") * (input.GetStickThumbX(INPUT_RIGHT_STICK, _padNum));
 		}
-		if (input.GetStickVector(INPUT_RIGHT_STICK, INPUT_PAD_1).z != 0) {
-			Angle.z += GetConstantFloat("CAMERA_ANGLE_VARIATION") * (input.GetStickThumbY(INPUT_RIGHT_STICK, INPUT_PAD_1));
+		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).z != 0) {
+			Angle.z += GetConstantFloat("CAMERA_ANGLE_VARIATION") * (input.GetStickThumbY(INPUT_RIGHT_STICK, _padNum));
 		}
 
 		// ラジアン角を正規化する

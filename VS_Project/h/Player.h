@@ -36,6 +36,11 @@ public:
 	/// </summary>
 	void Draw() const;
 
+	/// <summary>
+	/// カメラの座標をセットする
+	/// </summary>
+	void CameraSet() const;
+
 private:
 
 
