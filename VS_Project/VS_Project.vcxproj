@@ -154,7 +154,9 @@
     <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
+    <ClCompile Include="cpp\SceneSelect.cpp" />
     <ClCompile Include="cpp\SceneTest.cpp" />
+    <ClCompile Include="cpp\SceneTitle.cpp" />
     <ClCompile Include="cpp\StageCollisionManager.cpp" />
     <ClCompile Include="cpp\StageManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -172,7 +174,9 @@
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\SceneBase.h" />
     <ClInclude Include="h\SceneManager.h" />
+    <ClInclude Include="h\SceneSelect.h" />
     <ClInclude Include="h\SceneTest.h" />
+    <ClInclude Include="h\SceneTitle.h" />
     <ClInclude Include="h\Singleton.h" />
     <ClInclude Include="h\StageCollisionManager.h" />
     <ClInclude Include="h\StageManager.h" />

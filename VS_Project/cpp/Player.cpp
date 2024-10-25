@@ -31,14 +31,13 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<Bull
 	// カプセルの初期化
 	InitCapsule(Position, 3.0f, 12);
 
-
 	// アニメーションの初期処理
 	InitAnimation(_modelHandle, GetConstantInt("ANIM_TPOSE"), GetConstantFloat("BLEND_RATE"));
 
 	ChangeAnimation(_modelHandle, GetConstantInt("ANIM_AIMING_IDLE"), true, GetConstantFloat("BLEND_RATE"));
 
 	// カメラの作成
-	_pCamera = std::make_shared<PlayerCamera>(Position,_padNum);
+	_pCamera = std::make_shared<PlayerCamera>(Position, _padNum);
 }
 
 Player::~Player()
@@ -84,11 +83,19 @@ void Player::Update()
 	WalkRunAnimControl();
 
 	// アニメーションの更新
-	UpdateAnimation(_modelHandle, GetConstantFloat("ANIM_SPEED"));
+	if (_runFlag && _isGround) {
+
+		// 走っているときのアニメーション速度で更新する
+		UpdateAnimation(_modelHandle, GetConstantFloat("ANIM_SPEED_RUN"));
+	}
+	else {
+
+		// 歩き
+		UpdateAnimation(_modelHandle, GetConstantFloat("ANIM_SPEED_WALK"));
+	}
 
 	// モデルの更新
 	UpdateModel(GetTransformInstance());
-
 }
 
 void Player::Draw() const
@@ -103,7 +110,6 @@ void Player::Draw() const
 
 void Player::CameraSet() const
 {
-
 	SetCameraPositionAndTarget_UpVecY(_pCamera->Position.VGet(), _pCamera->GetTarget().VGet());
 }
 
@@ -283,7 +289,6 @@ void Player::RotateAngleToCamera()
 
 void Player::RotateAngleToVec()
 {
-
 	float targetAngle = Angle.y;
 
 	RotateAngleY(targetAngle);
@@ -296,8 +301,6 @@ int Player::ClassifyDirection()
 	float rotatedZ = _moveVec.x * sin(Angle.y) + _moveVec.z * cos(Angle.y);
 
 	float angle = atan2(rotatedX, rotatedZ);
-
-
 
 	// 45度（π/4）ごとに方向を分類
 	if (angle >= -DX_PI / 8 && angle < DX_PI / 8) {
@@ -344,6 +347,8 @@ void Player::WalkRunAnimControl()
 		return;
 	}
 
+	int dir = ClassifyDirection();
+
 	// 走っている
 	if (_runFlag) {
 
@@ -353,7 +358,7 @@ void Player::WalkRunAnimControl()
 	// 歩いている
 	else {
 		// 方向に対応するアニメーションを再生
-		switch (ClassifyDirection()) {
+		switch (dir) {
 		case 0:
 			ChangeAnimation(_modelHandle, GetConstantInt("ANIM_RUN_BACKWARD"), true, GetConstantFloat("BLEND_RATE"));
 			break;

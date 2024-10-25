@@ -5,17 +5,20 @@
 #include "BulletManager.h"
 #include "Input.h"
 #include "MapBulletCollisionManager.h"
+#include "Application.h"
 
-SceneTest::SceneTest()
+SceneTest::SceneTest(int playerNum)
 {
 	// 各クラスのインスタンス作成
 	{
-		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager);	// バレットマネージャー
-		_pStage = std::make_shared<StageManager>();	// ステージマネージャー
-		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);	// バレットコリジョンマネージャー
-		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);	// ステージコリジョンマネージャー
-		_pPlayer = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager,INPUT_PAD_1);		// プレイヤー
-		_pPlayer1 = std::make_shared<Player>(_pStageCollisionManager,_pBulletManager, INPUT_PAD_2);		// プレイヤー
+		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager);				// バレットマネージャー
+		_pStage = std::make_shared<StageManager>();													// ステージマネージャー
+		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
+		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
+
+		for (int a = 0; a < playerNum; a++) {
+			_pPlayer.push_back(std::make_shared<Player>(_pStageCollisionManager, _pBulletCollsionManager, a));
+		}
 	}
 
 	// 関数ポインタの初期化
@@ -24,8 +27,8 @@ SceneTest::SceneTest()
 		_drawFunc = &SceneTest::NormalDraw;
 	}
 
-	// 外部ファイルから定数を取得する
-	ReadCSV("data/constant/PlayerCamera.csv");
+	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
+	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
 }
 
 SceneTest::~SceneTest()
@@ -82,9 +85,9 @@ void SceneTest::DrawGrid() const
 void SceneTest::NormalUpdate()
 {
 	// プレイヤーの更新処理
-	_pPlayer->Update();
-
-	_pPlayer1->Update();
+	for (auto& pl : _pPlayer) {
+		pl->Update();
+	}
 
 	// バレットの更新
 	_pBulletManager->Update();
@@ -92,38 +95,180 @@ void SceneTest::NormalUpdate()
 
 void SceneTest::NormalDraw() const
 {
+	for (auto& pl : _pPlayer) {
 
-	// プレイヤー1のカメラのセット
-	_pPlayer->CameraSet();
+		// カメラのセット
+		pl->CameraSet();
 
-	// 左半分のみ描画
-	SetDrawArea(0, 0, 800, 900);
-	SetCameraScreenCenter(400, 450);
+		// 描画範囲の設定
+		VECTOR4 area = CreateDrawArea(_pPlayer.size());
+		Vec2 center = CreateScreenCenter(_pPlayer.size());
 
-	// バレットの描画
-	_pBulletManager->Draw();
-	
-	// ステージブロックの描画
-	_pStage->DrawStage();
+		// 描画範囲の設定
+		SetDrawArea(area.a, area.b, area.c, area.d);
 
-	// プレイヤーの描画
-	_pPlayer->Draw();
-	_pPlayer1->Draw();
-	
-	// プレイヤー2のカメラのセット
-	_pPlayer1->CameraSet();
+		// 描画先の中心を設定
+		SetCameraScreenCenter(center.intX(), center.intY());
 
-	// 右半分のみ描画
-	SetDrawArea(800, 0, 1600, 900);
-	SetCameraScreenCenter(1200, 450);
+		// バレットの描画
+		_pBulletManager->Draw();
 
-	// バレットの描画
-	_pBulletManager->Draw();
+		// ステージの描画
+		_pStage->DrawStage();
 
-	// ステージブロックの描画
-	_pStage->DrawStage();
+		// プレイヤーの描画
+		for (auto& pll : _pPlayer) {
+			pll->Draw();
+		}
+	}
 
-	// プレイヤーの描画
-	_pPlayer1->Draw();
-	_pPlayer->Draw();
+
+
+
+
+	// 左上画面
+	{
+		// プレイヤー1のカメラのセット
+		_pPlayer->CameraSet();
+
+		// 左半分のみ描画
+		SetDrawArea(0, 0, 800, 900);
+		SetCameraScreenCenter(400, 450);
+
+		// バレットの描画
+		_pBulletManager->Draw();
+
+		// ステージブロックの描画
+		_pStage->DrawStage();
+
+		// プレイヤーの描画
+		_pPlayer->Draw();
+		_pPlayer1->Draw();
+		//_pPlayer2->Draw();
+		//_pPlayer3->Draw();
+	}
+
+	// 右上画面
+	{
+		// プレイヤー2のカメラのセット
+		_pPlayer1->CameraSet();
+
+		// 右半分のみ描画
+		SetDrawArea(800, 0, 1600, 900);
+		SetCameraScreenCenter(1200, 450);
+
+		// バレットの描画
+		_pBulletManager->Draw();
+
+		// ステージブロックの描画
+		_pStage->DrawStage();
+
+		// プレイヤーの描画
+		_pPlayer1->Draw();
+		//_pPlayer2->Draw();
+		//_pPlayer3->Draw();
+		_pPlayer->Draw();
+	}
+
+
+
+
+
+	//// 左上画面
+	//{
+	//	// プレイヤー1のカメラのセット
+	//	_pPlayer->CameraSet();
+
+	//	// 左半分のみ描画
+	//	SetDrawArea(0, 0, 960, 540);
+	//	SetCameraScreenCenter(480, 270);
+
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+
+	//	// ステージブロックの描画
+	//	_pStage->DrawStage();
+
+	//	// プレイヤーの描画
+	//	_pPlayer->Draw();
+	//	_pPlayer1->Draw();
+	//	_pPlayer2->Draw();
+	//	_pPlayer3->Draw();
+	//}
+
+	//// 右上画面
+	//{
+	//	// プレイヤー2のカメラのセット
+	//	_pPlayer1->CameraSet();
+
+	//	// 右半分のみ描画
+	//	SetDrawArea(960, 0, 19920, 540);
+	//	SetCameraScreenCenter(1440, 270);
+
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+
+	//	// ステージブロックの描画
+	//	_pStage->DrawStage();
+
+	//	// プレイヤーの描画
+	//	_pPlayer1->Draw();
+	//	_pPlayer2->Draw();
+	//	_pPlayer3->Draw();
+	//	_pPlayer->Draw();
+	//}
+
+	//// 左下画面
+	//{
+	//	// プレイヤー3のカメラのセット
+	//	_pPlayer2->CameraSet();
+
+	//	// 右半分のみ描画
+	//	SetDrawArea(0, 540, 960, 1080);
+	//	SetCameraScreenCenter(480, 810);
+
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+
+	//	// ステージブロックの描画
+	//	_pStage->DrawStage();
+
+	//	// プレイヤーの描画
+	//	_pPlayer2->Draw();
+	//	_pPlayer1->Draw();
+	//	_pPlayer3->Draw();
+	//	_pPlayer->Draw();
+	//}
+
+	//// 右下画面
+	//{
+	//	// プレイヤー4のカメラのセット
+	//	_pPlayer3->CameraSet();
+
+	//	// 右半分のみ描画
+	//	SetDrawArea(960, 540, 1920, 1080);
+	//	SetCameraScreenCenter(1440, 810);
+
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+
+	//	// ステージブロックの描画
+	//	_pStage->DrawStage();
+
+	//	// プレイヤーの描画
+	//	_pPlayer2->Draw();
+	//	_pPlayer1->Draw();
+	//	_pPlayer3->Draw();
+	//	_pPlayer->Draw();
+	//}
+}
+
+VECTOR4 SceneTest::CreateDrawArea(int num) const
+{
+	return VECTOR4();
+}
+
+Vec2 SceneTest::CreateScreenCenter(int num) const
+{
+	return Vec2();
 }

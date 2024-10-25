@@ -30,7 +30,6 @@ Model::~Model()
 {
 	MV1DeleteModel(_modelHandle);
 	DeleteGraph(m_textureHandle);
-
 }
 
 void Model::InitModel(int modelHandle, int textureHandle)

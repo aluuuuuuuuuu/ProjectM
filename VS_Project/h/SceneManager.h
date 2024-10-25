@@ -12,18 +12,33 @@ class SceneManager : public Singleton<SceneManager>
 
 public:
 	
-	// 実行中の要素を切り替える
+	/// <summary>
+	/// 実行中の要素を切り替える
+	/// </summary>
+	/// <param name="next">切り替えるシーンのポインタ</param>
 	void ChangeScene(std::shared_ptr<SceneBase> next);
 
-	// 実行中の要素を更新処理
+	/// <summary>
+	/// 実行中の要素の更新
+	/// </summary>
 	void SceneUpdate();
 
-	// すべての要素を描画処理
+	/// <summary>
+	/// すべての要素を描画
+	/// </summary>
 	void SceneDraw() const;
 
-	// ゲームを終了させるフラグを管理する
+	/// <summary>
+	/// ゲーム終了フラグを立てる
+	/// </summary>
 	void GameEnd();
+
+	/// <summary>
+	/// ゲーム終了フラグを取得する
+	/// </summary>
+	/// <returns></returns>
 	bool GetGameEnd();
+
 
 private:
 	// プライベートコンストラクタ

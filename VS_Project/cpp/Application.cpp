@@ -4,6 +4,8 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "SceneTest.h"
+#include "SceneTitle.h"
+#include "SceneSelect.h"
 
 bool Application::Init()
 {
@@ -81,7 +83,7 @@ void Application::Run()
 	auto& manager = SceneManager::GetInstance();
 	int a = 0;
 	// 初期シーンを設定
-	manager.ChangeScene(std::make_shared <SceneTest>());
+	manager.ChangeScene(std::make_shared <SceneTitle>());
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
