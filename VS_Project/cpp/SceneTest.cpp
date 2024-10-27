@@ -17,8 +17,20 @@ SceneTest::SceneTest(int playerNum)
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
 
 		for (int a = 0; a < playerNum; a++) {
-			_pPlayer.push_back(std::make_shared<Player>(_pStageCollisionManager, _pBulletCollsionManager, a));
+			_pPlayer.push_back(std::make_shared<Player>(_pStageCollisionManager, _pBulletManager, a));
 		}
+	}
+
+	// ウィンドウの高さと幅を取得しておく
+	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
+	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
+
+	// 描画範囲とカメラセンターの作成
+	int num = 0;
+	for (auto& pl : _pPlayer) {
+		_drawArea[num] = CreateDrawArea(num, _windowWidth, _windowHeight);		// 描画範囲
+		_cameraSenter[num] = CreateScreenCenter(num, _windowWidth, _windowHeight);	// カメラのセンター
+		num++;
 	}
 
 	// 関数ポインタの初期化
@@ -27,8 +39,6 @@ SceneTest::SceneTest(int playerNum)
 		_drawFunc = &SceneTest::NormalDraw;
 	}
 
-	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
-	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
 }
 
 SceneTest::~SceneTest()
@@ -45,43 +55,6 @@ void SceneTest::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneTest::DrawGrid() const
-{
-	for (int x = -100; x <= 100; x += 10)
-	{
-		DrawLine3D(VGet(static_cast<float>(x), 0, -100), VGet(static_cast<float>(x), 0, 100), 0xffff00);
-	}
-	for (int z = -100; z <= 100; z += 10)
-	{
-		DrawLine3D(VGet(-100, 0, static_cast<float>(z)), VGet(100, 0, static_cast<float>(z)), 0xff0000);
-	}
-
-	// X+-,Z+-の方向が分かりやすいように表示を追加する
-	VECTOR dispPos = ConvWorldPosToScreenPos(VGet(50, 0, 0));
-	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
-	{
-		DrawStringF(dispPos.x, dispPos.y, "X+", 0xffffff);
-	}
-
-	dispPos = ConvWorldPosToScreenPos(VGet(-50, 0, 0));
-	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
-	{
-		DrawStringF(dispPos.x, dispPos.y, "X-", 0xffffff);
-	}
-
-	dispPos = ConvWorldPosToScreenPos(VGet(0, 0, 50));
-	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
-	{
-		DrawStringF(dispPos.x, dispPos.y, "Z+", 0xffffff);
-	}
-
-	dispPos = ConvWorldPosToScreenPos(VGet(0, 0, -50));
-	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
-	{
-		DrawStringF(dispPos.x, dispPos.y, "Z-", 0xffffff);
-	}
-}
-
 void SceneTest::NormalUpdate()
 {
 	// プレイヤーの更新処理
@@ -95,20 +68,17 @@ void SceneTest::NormalUpdate()
 
 void SceneTest::NormalDraw() const
 {
+	int num = 0;
 	for (auto& pl : _pPlayer) {
 
 		// カメラのセット
 		pl->CameraSet();
 
 		// 描画範囲の設定
-		VECTOR4 area = CreateDrawArea(_pPlayer.size());
-		Vec2 center = CreateScreenCenter(_pPlayer.size());
-
-		// 描画範囲の設定
-		SetDrawArea(area.a, area.b, area.c, area.d);
+		SetDrawArea(_drawArea[num].a, _drawArea[num].b, _drawArea[num].c, _drawArea[num].d);
 
 		// 描画先の中心を設定
-		SetCameraScreenCenter(center.intX(), center.intY());
+		SetCameraScreenCenter(static_cast<float>(_cameraSenter[num].a), static_cast<float>(_cameraSenter[num].b));
 
 		// バレットの描画
 		_pBulletManager->Draw();
@@ -122,139 +92,135 @@ void SceneTest::NormalDraw() const
 		}
 	}
 
-
-
-
-
-	// 左上画面
-	{
-		// プレイヤー1のカメラのセット
-		_pPlayer->CameraSet();
-
-		// 左半分のみ描画
-		SetDrawArea(0, 0, 800, 900);
-		SetCameraScreenCenter(400, 450);
-
-		// バレットの描画
-		_pBulletManager->Draw();
-
-		// ステージブロックの描画
-		_pStage->DrawStage();
-
-		// プレイヤーの描画
-		_pPlayer->Draw();
-		_pPlayer1->Draw();
-		//_pPlayer2->Draw();
-		//_pPlayer3->Draw();
-	}
-
-	// 右上画面
-	{
-		// プレイヤー2のカメラのセット
-		_pPlayer1->CameraSet();
-
-		// 右半分のみ描画
-		SetDrawArea(800, 0, 1600, 900);
-		SetCameraScreenCenter(1200, 450);
-
-		// バレットの描画
-		_pBulletManager->Draw();
-
-		// ステージブロックの描画
-		_pStage->DrawStage();
-
-		// プレイヤーの描画
-		_pPlayer1->Draw();
-		//_pPlayer2->Draw();
-		//_pPlayer3->Draw();
-		_pPlayer->Draw();
-	}
-
-
-
-
-
 	//// 左上画面
 	//{
 	//	// プレイヤー1のカメラのセット
 	//	_pPlayer->CameraSet();
-
+	//
 	//	// 左半分のみ描画
-	//	SetDrawArea(0, 0, 960, 540);
-	//	SetCameraScreenCenter(480, 270);
-
+	//	SetDrawArea(0, 0, 800, 900);
+	//	SetCameraScreenCenter(400, 450);
+	//
 	//	// バレットの描画
 	//	_pBulletManager->Draw();
-
+	//
 	//	// ステージブロックの描画
 	//	_pStage->DrawStage();
-
+	//
 	//	// プレイヤーの描画
 	//	_pPlayer->Draw();
 	//	_pPlayer1->Draw();
-	//	_pPlayer2->Draw();
-	//	_pPlayer3->Draw();
+	//	//_pPlayer2->Draw();
+	//	//_pPlayer3->Draw();
 	//}
-
+	//
 	//// 右上画面
 	//{
 	//	// プレイヤー2のカメラのセット
 	//	_pPlayer1->CameraSet();
-
+	//
+	//	// 右半分のみ描画
+	//	SetDrawArea(800, 0, 1600, 900);
+	//	SetCameraScreenCenter(1200, 450);
+	//
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+	//
+	//	// ステージブロックの描画
+	//	_pStage->DrawStage();
+	//
+	//	// プレイヤーの描画
+	//	_pPlayer1->Draw();
+	//	//_pPlayer2->Draw();
+	//	//_pPlayer3->Draw();
+	//	_pPlayer->Draw();
+	//}
+	//
+	//
+	//
+	//
+	//
+	//// 左上画面
+	//{
+	//	// プレイヤー1のカメラのセット
+	//	_pPlayer->CameraSet();
+	//
+	//	// 左半分のみ描画
+	//	SetDrawArea(0, 0, 960, 540);
+	//	SetCameraScreenCenter(480, 270);
+	//
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+	//
+	//	// ステージブロックの描画
+	//	_pStage->DrawStage();
+	//
+	//	// プレイヤーの描画
+	//	_pPlayer->Draw();
+	//	_pPlayer1->Draw();
+	//	_pPlayer2->Draw();
+	//	_pPlayer3->Draw();
+	//}
+	//
+	//// 右上画面
+	//{
+	//	// プレイヤー2のカメラのセット
+	//	_pPlayer1->CameraSet();
+	//
 	//	// 右半分のみ描画
 	//	SetDrawArea(960, 0, 19920, 540);
 	//	SetCameraScreenCenter(1440, 270);
-
+	//
 	//	// バレットの描画
 	//	_pBulletManager->Draw();
-
+	//
 	//	// ステージブロックの描画
 	//	_pStage->DrawStage();
-
+	//
 	//	// プレイヤーの描画
 	//	_pPlayer1->Draw();
 	//	_pPlayer2->Draw();
 	//	_pPlayer3->Draw();
 	//	_pPlayer->Draw();
 	//}
-
+	//
 	//// 左下画面
 	//{
 	//	// プレイヤー3のカメラのセット
 	//	_pPlayer2->CameraSet();
-
+//
 	//	// 右半分のみ描画
 	//	SetDrawArea(0, 540, 960, 1080);
 	//	SetCameraScreenCenter(480, 810);
-
+//
 	//	// バレットの描画
 	//	_pBulletManager->Draw();
-
+//
 	//	// ステージブロックの描画
 	//	_pStage->DrawStage();
-
+//
 	//	// プレイヤーの描画
 	//	_pPlayer2->Draw();
 	//	_pPlayer1->Draw();
 	//	_pPlayer3->Draw();
 	//	_pPlayer->Draw();
 	//}
-
+//
 	//// 右下画面
 	//{
 	//	// プレイヤー4のカメラのセット
-	//	_pPlayer3->CameraSet();
-
+	//	/_pPlayer3->CameraSet();
+//
 	//	// 右半分のみ描画
 	//	SetDrawArea(960, 540, 1920, 1080);
-	//	SetCameraScreenCenter(1440, 810);
-
+	//	/SetCameraScreenCenter(1440, 810);
+//
 	//	// バレットの描画
 	//	_pBulletManager->Draw();
-
+//
 	//	// ステージブロックの描画
 	//	_pStage->DrawStage();
-
+//
 	//	// プレイヤーの描画
 	//	_pPlayer2->Draw();
 	//	_pPlayer1->Draw();
@@ -263,12 +229,127 @@ void SceneTest::NormalDraw() const
 	//}
 }
 
-VECTOR4 SceneTest::CreateDrawArea(int num) const
+VECTOR4 SceneTest::CreateDrawArea(int num, int scWidth, int scHeight)
 {
-	return VECTOR4();
+	int size = static_cast<int>(_pPlayer.size());
+
+	int halfWidth = scWidth / 2;
+	int halfHeight = scHeight / 2;
+
+	// プレイヤーの総数で処理を切り替える
+	switch (size)
+	{
+	case 1:
+		return VECTOR4{ 0,0,scWidth,scHeight };
+		break;
+	case 2:
+		if (num == 0) {
+			return VECTOR4{ 0,0,halfWidth , scHeight };
+		}
+		else {
+			return VECTOR4{ halfWidth, 0,scWidth ,
+							scHeight };
+		}
+		break;
+
+	case 3:
+		if (num == 0) {
+			return VECTOR4{ 0,0,halfWidth ,halfHeight };
+		}
+		else if (num == 1) {
+			return VECTOR4{ halfWidth ,0,scWidth ,
+							halfHeight };
+		}
+		else {
+			return VECTOR4{ 0,halfHeight ,halfWidth ,
+							scHeight };
+		}
+		break;
+
+	case 4:
+		if (num == 0) {
+			return VECTOR4{ 0,0,halfWidth ,halfHeight };
+		}
+		else if (num == 1) {
+			return VECTOR4{ halfWidth ,0,scWidth ,
+							halfHeight };
+		}
+		else if (num == 2) {
+			return VECTOR4{ 0,halfHeight ,halfWidth ,
+							scHeight };
+		}
+		else {
+			return VECTOR4{ halfWidth ,halfHeight ,
+							scWidth,scHeight };
+		}
+		break;
+	default:
+		return VECTOR4{};
+		break;
+	}
 }
 
-Vec2 SceneTest::CreateScreenCenter(int num) const
+VECTOR2 SceneTest::CreateScreenCenter(int num, int scWidth, int scHeight)
 {
-	return Vec2();
+	int size = static_cast<int>(_pPlayer.size());
+
+	int width;
+	int height;
+
+	switch (size)
+	{
+	case 1:
+		return VECTOR2{ scWidth / 2,scHeight / 2 };
+		break;
+
+	case 2:
+
+		width = scWidth / 2;
+		height = scHeight / 2;
+
+		if (num == 0) {
+			return VECTOR2{ width, height };
+		}
+		else {
+			return VECTOR2{ width * 3, height };
+		}
+		break;
+
+	case 3:
+
+		width = scWidth / 4;
+		height = scHeight / 4;
+
+		if (num == 0) {
+			return VECTOR2{ width ,height };
+		}
+		else if (num == 1) {
+			return  VECTOR2{ width * 3, height };
+		}
+		else {
+			return VECTOR2{ width, height * 3 };
+		}
+		break;
+
+	case 4:
+
+		width = scWidth / 4;
+		height = scHeight / 4;
+
+		if (num == 0) {
+			return VECTOR2{ width ,height };
+		}
+		else if (num == 1) {
+			return  VECTOR2{ width * 3, height };
+		}
+		else if (num == 2) {
+			return VECTOR2{ width, height * 3 };
+		}
+		else {
+			return VECTOR2{ width * 3, height * 3 };
+		}
+		break;
+	default:
+		break;
+	}
 }

@@ -12,6 +12,12 @@ struct VECTOR4
     int d;
 };
 
+struct VECTOR2
+{
+    int a;
+    int b;
+};
+
 class MapBulletCollisionManager;
 class BulletManager;
 class StageCollisionManager;
@@ -45,10 +51,6 @@ public:
     void Draw() const;
 
 private:
-    /// <summary>
-    /// グリッド表示
-    /// </summary>
-    void DrawGrid() const;
 
     // 関数ポインタ
     using m_updateFunc_t = void (SceneTest::*)();
@@ -66,25 +68,23 @@ private:
     /// </summary>
     void NormalDraw() const;
 
-
     /// <summary>
     /// プレイヤー数から描画範囲を求める
     /// </summary>
-    /// <param name="num">プレイヤーの数-1</param>
+    /// <param name="num">プレイヤーの数-1/param>
+    /// <param name="scWidth">スクリーンの幅</param>
+    /// <param name="scHeight">スクリーンの高さ</param>
     /// <returns>描画範囲</returns>
-    VECTOR4 CreateDrawArea(int num) const;
-
+    VECTOR4 CreateDrawArea(int num, int scWidth, int scHeight);
+    
     /// <summary>
     /// プレイヤー数からスクリーンの中心を求める
     /// </summary>
     /// <param name="num">プレイヤーの数-1</param>
-    /// <returns>スクリーンの中心</returns>
-    Vec2 CreateScreenCenter(int num) const;
-
-
-
-
-
+    /// <param name="scWidth">スクリーンの幅</param>
+    /// <param name="scHeight">スクリーンの高さ</param>
+    /// <returns>カメラの中心</returns>
+    VECTOR2 CreateScreenCenter(int num, int scWidth, int scHeight);
 
     // ステージポインタ
     std::shared_ptr<StageManager> _pStage;
@@ -103,6 +103,9 @@ private:
 
     int _windowWidth;
     int _windowHeight;
+
+    VECTOR4 _drawArea[4];
+    VECTOR2 _cameraSenter[4];
 
 };
 
