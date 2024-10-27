@@ -1,0 +1,102 @@
+#pragma once
+#include <memory>
+#include <vector>
+#include "Constant.h"
+
+struct VECTOR4
+{
+	int a;
+	int b;
+	int c;
+	int d;
+};
+
+struct VECTOR2
+{
+	int a;
+	int b;
+};
+
+class StageCollisionManager;
+class BulletManager;
+class Player;
+class PlayerManager :
+	public Constant
+{
+public:
+	PlayerManager(std::shared_ptr<StageCollisionManager>& stage, std::shared_ptr<BulletManager>& bullet, int plNum);
+	virtual ~PlayerManager();
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw(int num) const;
+
+	/// <summary>
+	/// 描画範囲を取得
+	/// </summary>
+	/// <param name="num">プレイヤーのナンバー</param>
+	/// <returns>プレイヤーのナンバーに対応した描画範囲</returns>
+	VECTOR4 GetArea(int num) const;
+
+	/// <summary>
+	/// カメラのセンターを取得
+	/// </summary>
+	/// <param name="num">プレイヤーのナンバー</param>
+	/// <returns>プレイヤーのナンバーに対応したカメラのセンター</returns>
+	VECTOR2 GetCenter(int num) const;
+
+	/// <summary>
+	/// プレイヤーの総数を取得する
+	/// </summary>
+	/// <returns>プレイヤーの総数</returns>
+	int GetPlayerNum() const;
+
+	/// <summary>
+	/// プレイヤーのモデルハンドルを渡す
+	/// </summary>
+	int GetModelHandle() const;
+private:
+
+	/// <summary>
+	/// プレイヤー数から描画範囲を求める
+	/// </summary>
+	/// <param name="num">プレイヤーの数-1/param>
+	/// <param name="scWidth">スクリーンの幅</param>
+	/// <param name="scHeight">スクリーンの高さ</param>
+	/// <returns>描画範囲</returns>
+	VECTOR4 CreateDrawArea(int num, int scWidth, int scHeight);
+
+	/// <summary>
+	/// プレイヤー数からスクリーンの中心を求める
+	/// </summary>
+	/// <param name="num">プレイヤーの数-1</param>
+	/// <param name="scWidth">スクリーンの幅</param>
+	/// <param name="scHeight">スクリーンの高さ</param>
+	/// <returns>カメラの中心</returns>
+	VECTOR2 CreateScreenCenter(int num, int scWidth, int scHeight);
+
+	// プレイヤーの配列
+	std::vector<std::shared_ptr<Player>> _pPlayer;
+
+	// ウィンドウの高さ
+	int _windowWidth;
+
+	// ウィンドウの幅
+	int _windowHeight;
+
+	// プレイヤーの数に対応した描画範囲
+	VECTOR4 _drawArea[4];
+
+	// プレイヤーの数に対応したカメラのセンター
+	VECTOR2 _cameraSenter[4];
+
+	// プレイヤーのモデルハンドル
+	int _modelHandle;
+};
+

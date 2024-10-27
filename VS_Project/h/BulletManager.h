@@ -2,12 +2,14 @@
 #include "BulletBase.h"
 #include <memory>
 #include <list>
+#include <Constant.h>
 
 #define NORMAL_BULLET 0
 
 class MapBulletCollisionManager;
 class BulletBase;
-class BulletManager
+class BulletManager:
+	public Constant
 {
 public:
 	BulletManager(std::shared_ptr<MapBulletCollisionManager>& col);

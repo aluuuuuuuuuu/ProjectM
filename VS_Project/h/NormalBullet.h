@@ -2,12 +2,13 @@
 #include <memory>
 #include "BulletBase.h"
 
+class BulletManager;
 class MapBulletCollisionManager;
 class NormalBullet:
 	public BulletBase
 {
 public:
-	NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col);
+	NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr);
 	virtual ~NormalBullet();
 
 	/// <summary>
@@ -27,5 +28,6 @@ private:
 
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;
 
+	BulletManager& _bulletManager;
 };
 

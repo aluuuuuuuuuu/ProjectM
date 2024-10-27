@@ -4,24 +4,10 @@
 #include <memory>
 #include <vector>
 
-struct VECTOR4
-{
-    int a;
-    int b;
-    int c;
-    int d;
-};
-
-struct VECTOR2
-{
-    int a;
-    int b;
-};
-
+class PlayerManager;
 class MapBulletCollisionManager;
 class BulletManager;
 class StageCollisionManager;
-class Player;
 class StageManager;
 class SceneTest :
     public SceneBase,
@@ -68,29 +54,8 @@ private:
     /// </summary>
     void NormalDraw() const;
 
-    /// <summary>
-    /// プレイヤー数から描画範囲を求める
-    /// </summary>
-    /// <param name="num">プレイヤーの数-1/param>
-    /// <param name="scWidth">スクリーンの幅</param>
-    /// <param name="scHeight">スクリーンの高さ</param>
-    /// <returns>描画範囲</returns>
-    VECTOR4 CreateDrawArea(int num, int scWidth, int scHeight);
-    
-    /// <summary>
-    /// プレイヤー数からスクリーンの中心を求める
-    /// </summary>
-    /// <param name="num">プレイヤーの数-1</param>
-    /// <param name="scWidth">スクリーンの幅</param>
-    /// <param name="scHeight">スクリーンの高さ</param>
-    /// <returns>カメラの中心</returns>
-    VECTOR2 CreateScreenCenter(int num, int scWidth, int scHeight);
-
     // ステージポインタ
     std::shared_ptr<StageManager> _pStage;
-
-    // プレイヤーポインタ
-    std::vector<std::shared_ptr<Player>> _pPlayer;
 
     // ステージコリジョンマネージャポインタ
     std::shared_ptr<StageCollisionManager> _pStageCollisionManager;
@@ -101,11 +66,7 @@ private:
     // バレットコリジョンマネージャー
     std::shared_ptr<MapBulletCollisionManager> _pBulletCollsionManager;
 
-    int _windowWidth;
-    int _windowHeight;
-
-    VECTOR4 _drawArea[4];
-    VECTOR2 _cameraSenter[4];
-
+    // プレイヤーマネージャー
+    std::shared_ptr<PlayerManager> _pPlayerManager;
 };
 

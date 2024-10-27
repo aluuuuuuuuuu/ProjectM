@@ -36,9 +36,6 @@ void PlayerCamera::Update(Vec3 pos)
 
 	// ƒ‰ƒCƒg‚ÌŠp“x‚ğİ’è
 	SetLightDirectionHandle(_lightHandle, (_target - Position).VGet());
-
-
-	//SetCameraPositionAndTarget_UpVecY(Position.VGet(), _target.VGet());
 }
 
 Vec3 PlayerCamera::GetTarget()

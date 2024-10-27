@@ -6,6 +6,8 @@
 BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col):
 	_collManager(col)
 {
+	// ’è”‚Ì“Ç‚İ‚İ
+	ReadCSV("data/constant/NormalBullet.csv");
 }
 
 BulletManager::~BulletManager()
@@ -42,7 +44,7 @@ void BulletManager::PushBullet(int bul, Vec3 dist, Vec3 pos)
 	switch (bul)
 	{
 	case NORMAL_BULLET:
-		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos,_collManager));
+		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos,_collManager,*this));
 		break;
 	default:
 		break;

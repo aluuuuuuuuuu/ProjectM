@@ -152,6 +152,7 @@
     <ClCompile Include="cpp\NormalBullet.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
     <ClCompile Include="cpp\PlayerCamera.cpp" />
+    <ClCompile Include="cpp\PlayerManager.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
     <ClCompile Include="cpp\SceneSelect.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="h\NormalBullet.h" />
     <ClInclude Include="h\Player.h" />
     <ClInclude Include="h\PlayerCamera.h" />
+    <ClInclude Include="h\PlayerManager.h" />
     <ClInclude Include="h\SceneBase.h" />
     <ClInclude Include="h\SceneManager.h" />
     <ClInclude Include="h\SceneSelect.h" />

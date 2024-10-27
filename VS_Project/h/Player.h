@@ -4,6 +4,7 @@
 #include "Constant.h"
 #include "Vec2.h"
 
+class PlayerManager;
 class BulletManager;
 class PlayerCamera;
 class StageCollisionManager;
@@ -11,7 +12,6 @@ class Player:
 	public Transform,
 	public CapsuleCollision,
 	public Model,
-	public Constant,
 	public Animation
 {
 public:
@@ -19,7 +19,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet, int padNum);
+	Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum);
 
 	/// <summary>
 	/// デストラクタ
@@ -143,5 +143,8 @@ private:
 
 	// 使用するパッドのナンバー
 	int _padNum;
+
+	// プレイヤーマネージャーの参照
+	PlayerManager& _manager;
 };
 
