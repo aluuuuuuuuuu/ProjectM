@@ -59,7 +59,7 @@ bool Application::Init()
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// 背景色の設定
-	SetBackgroundColor(20, 20, 200);
+	SetBackgroundColor(100, 100, 255);
 
 	// カーソルの表示設定
 	SetMouseDispFlag(true);
@@ -83,7 +83,7 @@ void Application::Run()
 	auto& manager = SceneManager::GetInstance();
 	int a = 0;
 	// 初期シーンを設定
-	manager.ChangeScene(std::make_shared <SceneSelect>());
+	manager.ChangeScene(std::make_shared <SceneTitle>());
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();

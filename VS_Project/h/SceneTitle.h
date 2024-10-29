@@ -3,7 +3,9 @@
 #include "Components.h"
 
 class SceneTitle :
-    public SceneBase
+	public SceneBase,
+	public Model,
+	public Transform
 {
 public:
 
@@ -50,7 +52,18 @@ private:
 	// タイトルロゴハンドル
 	int _logoHandle;
 
+	// anybutton画像ハンドル
+	int _guideHandle;
+
 	// フェード用フレームカウンタ
 	int _flame;
+
+	int _modelHandle;
+
+	int _backgroundHandle;
+
+
+	int _windowWidth;
+	int _windowHeight;
 };
 

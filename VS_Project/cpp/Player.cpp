@@ -101,7 +101,7 @@ void Player::Draw() const
 {
 
 #ifdef _DEBUG
-	// カプセルを描画
+	//カプセルを描画
 	DrawCapsule();
 #endif // DEBUG
 	DrawModel();

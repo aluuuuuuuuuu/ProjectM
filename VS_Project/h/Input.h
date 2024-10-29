@@ -80,6 +80,13 @@ public:
 	bool IsRelease(int input, int padNum) const;
 
 	/// <summary>
+	/// いずれかのボタンが押されているかどうか返す
+	/// </summary>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>何かが押されているかどうか</returns>
+	bool AnyPressButton(int padNum) const;
+
+	/// <summary>
 	/// スティック入力のベクトルを返す
 	/// </summary>
 	/// <param name="input">スティック</param>
@@ -127,10 +134,10 @@ public:
 
 private:
 	// 今フレームのインプットステート
-	XINPUT_STATE m_padState[4];
+	XINPUT_STATE _padState[4];
 
 	// 前フレームのインプットステート
-	XINPUT_STATE m_lastPadState[4];
+	XINPUT_STATE _lastPadState[4];
 
 	// プライベートコンストラクタ
 	Input() {};

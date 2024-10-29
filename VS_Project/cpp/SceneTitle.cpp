@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "SceneSelect.h"
+#include "Application.h"
 
 SceneTitle::SceneTitle():
 	_flame(60)
@@ -15,6 +16,22 @@ SceneTitle::SceneTitle():
 
 	// タイトルロゴのロード
 	_logoHandle = LoadGraph("data/image/TitleLogo.png");
+
+	// anybutton画像のロード
+	_guideHandle = LoadGraph("data/image/PressAnyButton.png");
+	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
+	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
+
+	Scale = Vec3{ 0.12f,0.12f,0.12f };
+
+	Position = Vec3{ 0.0f,25.0f,0.0f };
+
+	_backgroundHandle = LoadGraph("data/image/back.jpg");
+
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ 0,0,0 }, VECTOR{ 0.0f,25.0f,0.0f });
+
+	InitModel(MV1LoadModel("data/model/Player1.mv1"));
+
 }
 
 SceneTitle::~SceneTitle()
@@ -34,18 +51,44 @@ void SceneTitle::Draw() const
 
 void SceneTitle::NormalUpdate()
 {
-	// Aボタンで次の画面へ
-	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
+	UpdateModel(GetTransformInstance());
+
+	// いずれかのボタンでシーン移行
+	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
 		// フェードアウトへ移行
 		_updateFunc = &SceneTitle::FadeOutUpdate;
 		_drawFunc = &SceneTitle::FadeDraw;
+	}
+
+	// スタート指示を点滅させる
+	if (_flame == 120) {
+		_flame++;
+	}
+	else if (_flame == 1) {
+		_flame--;
+	}
+	else if (_flame % 2 == 0) {
+		_flame += 2;
+	}
+	else {
+		_flame -= 2;
 	}
 }
 
 void SceneTitle::NormalDraw() const
 {
+	//DrawGraph(0, 0, _backgroundHandle, true);
+
+	DrawModel();
 	// ロゴの描画
-	DrawGraph(200, 100, _logoHandle, true);
+	
+	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
+
+
+	int alpha = (int)(255 * ((float)_flame / 120));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	DrawRotaGraph(_windowWidth / 2, _windowHeight / 8 * 7, 1.0f, 0.0f, _guideHandle, true, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void SceneTitle::FadeInUpdate()
@@ -69,7 +112,8 @@ void SceneTitle::FadeOutUpdate()
 void SceneTitle::FadeDraw() const
 {
 	// ロゴの描画
-	DrawGraph(200, 100, _logoHandle, true);
+	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
+
 
 	//フェード暗幕
 	int alpha = (int)(255 * ((float)_flame / 60));
