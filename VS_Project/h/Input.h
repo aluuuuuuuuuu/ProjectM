@@ -49,34 +49,80 @@ class Input : public Singleton<Input>
 	friend class Singleton<Input>;
 
 public:
-	// 更新処理
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
 
-	// 押した瞬間をとる
+	/// <summary>
+	/// 押した瞬間をとる
+	/// </summary>
+	/// <param name="input">ボタン</param>
+	/// <param name="padNum">パッドナンバー</param>
+	/// <returns>押した瞬間true</returns>
 	bool IsTrigger(int input, int padNum) const;
+	
 
-	// 押している間をとる
+	/// <summary>
+	/// 押している間をとる
+	/// </summary>
+	/// <param name="input">ボタン</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>押し続けている間true</returns>
 	bool IsHold(int input, int padNum) const;
 
-	// 離した瞬間をとる
+	/// <summary>
+	/// 離した瞬間をとる
+	/// </summary>
+	/// <param name="input">ボタン</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>離した瞬間true</returns>
 	bool IsRelease(int input, int padNum) const;
 
-	// スティック入力の方向ベクトルを返す
+	/// <summary>
+	/// スティック入力のベクトルを返す
+	/// </summary>
+	/// <param name="input">スティック</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>スティックを傾けている方向のベクトル</returns>
 	Vec3 GetStickVector(int input, int padNum) const;
 
-	// スティック入力の単位方向ベクトルを返す
+	/// <summary>
+	/// スティック入力の単位ベクトルを返す
+	/// </summary>
+	/// <param name="input">スティック</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>スティックを傾けている方向の単位ベクトル</returns>
 	Vec3 GetStickUnitVector(int input, int padNum) const;
 
-	// スティック入力の長さを返す
+	/// <summary>
+	/// スティックの傾き具合を返す
+	/// </summary>
+	/// <param name="input">スティック</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>スティック入力のベクトルの長さ</returns>
 	float GetStickVectorLength(int input, int padNum) const;
 
-	// スティックを傾けたX値を返す
+	/// <summary>
+	/// スティックを傾けたX値を返す
+	/// </summary>
+	/// <param name="input">スティック</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>スティックを傾けてるベクトルのXの値</returns>
 	float GetStickThumbX(int input, int padNum) const;
 
-	// スティックを傾けたY値を返す
+	/// <summary>
+	/// スティックを傾けたY値を返す
+	/// </summary>
+	/// <param name="input">スティック</param>
+	/// <param name="padNum">パッドナンバー<</param>
+	/// <returns>スティックを傾けてるベクトルのYの値</returns>
 	float GetStickThumbY(int input, int padNum) const;
 
-	// 接続されているコントローラーの数を取得する
+	/// <summary>
+	/// 接続されているコントローラーの数を取得する
+	/// </summary>
+	/// <returns>コントローラーの数</returns>
 	int GetPadNum();
 
 private:

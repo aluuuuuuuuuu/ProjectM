@@ -48,6 +48,7 @@ private:
 	// フェード用フレームカウンタ
 	int _flame;
 
+	// 人数選択
 	int _select;
 };
 

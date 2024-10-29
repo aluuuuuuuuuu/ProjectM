@@ -33,15 +33,13 @@ void SceneSelect::NormalUpdate()
 {
 	// Bボタンでいろいろ切り替え
 	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
-		if (_select == 4) {
+		if (_select == Input::GetInstance().GetPadNum()) {
 			_select = 1;
 		}
 		else {
 			_select++;
 		}
 	}
-
-
 
 	// Aボタンで次の画面へ
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
@@ -71,7 +69,6 @@ void SceneSelect::NormalDraw() const
 		break;
 	}
 
-
 	DrawCircle(800, 400, 200, 0x000000);
 }
 
@@ -90,7 +87,6 @@ void SceneSelect::FadeOutUpdate()
 	if (_flame >= 60) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_select));
 	}
-
 }
 
 void SceneSelect::FadeDraw() const
