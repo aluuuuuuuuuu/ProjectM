@@ -76,6 +76,9 @@ public:
 	// スティックを傾けたY値を返す
 	float GetStickThumbY(int input, int padNum) const;
 
+	// 接続されているコントローラーの数を取得する
+	int GetPadNum();
+
 private:
 	// 今フレームのインプットステート
 	XINPUT_STATE m_padState[4];
@@ -85,5 +88,8 @@ private:
 
 	// プライベートコンストラクタ
 	Input() {};
+
+	// 接続されているコントローラーの数
+	int _padNum;
 };
 

@@ -1,11 +1,15 @@
 #include "Input.h"
+#include <cassert>
 
 void Input::Update()
 {
+	// 接続されているコントローラーの数を取得する
+	_padNum = GetJoypadNum();
+
 	int num = 0x0001;
 
 	// 以前のステートを保存
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < _padNum; i++) {
 
 		// 以前のステートを保存
 		m_lastPadState[i] = m_padState[i];
@@ -20,6 +24,8 @@ void Input::Update()
 // 押した瞬間
 bool Input::IsTrigger(int input, int padNum) const
 {
+	assert(padNum < _padNum);
+
 	if (input == INPUT_A) {
 		return (!m_lastPadState[padNum].Buttons[XINPUT_BUTTON_A] && m_padState[padNum].Buttons[XINPUT_BUTTON_A]);
 	}
@@ -239,4 +245,9 @@ float Input::GetStickThumbY(int input, int padNum) const
 		return static_cast<float>(m_padState[padNum].ThumbRY);
 	}
 	return 0.0f;
+}
+
+int Input::GetPadNum()
+{
+	return _padNum;
 }

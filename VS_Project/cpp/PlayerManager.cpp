@@ -12,7 +12,7 @@ PlayerManager::PlayerManager(std::shared_ptr<StageCollisionManager>& stage, std:
 
 	// モデルのロード
 	_modelHandle = MV1LoadModel("data/model/Player1.mv1");
-
+	
 	// プレイヤーインスタンスの作成
 	for (int a = 0; a < plNum; a++) {
 		_pPlayer.push_back(std::make_shared<Player>(stage, bullet, *this, a));
@@ -47,7 +47,7 @@ void PlayerManager::Update()
 void PlayerManager::Draw(int num) const
 {
 	// カメラのセット
-	_pPlayer[num]->CameraSet();
+	//_pPlayer[num]->CameraSet();
 
 	// プレイヤーの描画
 	for (auto& pll : _pPlayer) {
@@ -73,6 +73,12 @@ int PlayerManager::GetPlayerNum() const
 int PlayerManager::GetModelHandle() const
 {
 	return MV1DuplicateModel(_modelHandle);
+}
+
+void PlayerManager::CameraSet(int num) const
+{
+	// カメラのセット
+	_pPlayer[num]->CameraSet();
 }
 
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)

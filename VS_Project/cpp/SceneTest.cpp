@@ -53,6 +53,9 @@ void SceneTest::NormalDraw() const
 {
 	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
 
+		// ƒJƒƒ‰‚ÌÝ’è
+		_pPlayerManager->CameraSet(i);
+
 		// •`‰æ”ÍˆÍ‚ÌÝ’è
 		SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
 

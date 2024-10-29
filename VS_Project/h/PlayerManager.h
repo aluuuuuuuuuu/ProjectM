@@ -61,6 +61,12 @@ public:
 	/// プレイヤーのモデルハンドルを渡す
 	/// </summary>
 	int GetModelHandle() const;
+
+	/// <summary>
+	/// 引数に対応するプレイヤーのカメラの設定
+	/// </summary>
+	/// <param name="num">プレイヤーのナンバー</param>
+	void CameraSet(int num) const;
 private:
 
 	/// <summary>
