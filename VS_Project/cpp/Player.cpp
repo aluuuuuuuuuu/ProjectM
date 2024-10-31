@@ -1,17 +1,15 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "Input.h"
-#include "StageCollisionManager.h"
 #include "PlayerCamera.h"
 #include "NormalBullet.h"
 #include "BulletManager.h"
 #include "BulletBase.h"
 #include "PlayerManager.h"
 
-Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum) :
+Player::Player( std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum) :
 	_moveScaleY(0),
 	_isGround(false),
-	_collManager(col),
 	_bulletManager(bullet),
 	_groundCount(0),
 	_runFlag(false),
@@ -23,7 +21,8 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<Bull
 
 	// モデルの初期処理
 	InitModel(_manager.GetModelHandle());
-
+	//InitModel(_manager.GetModelHandle(), _manager.GetTextureHandle());
+	//InitModel(_manager.GetModelHandle(), LoadGraph("data/model/Ch03_nonPBR.fbm/Ch03_1001_Diffuse.png"));
 	// 座標の設定
 	Position = Vec3{ 0.0f,25.0f,0.0f };
 
@@ -31,9 +30,7 @@ Player::Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<Bull
 	InitCapsule(Position, 3.0f, 12);
 
 	// アニメーションの初期処理
-	InitAnimation(_modelHandle, _manager.GetConstantInt("ANIM_TPOSE"), _manager.GetConstantFloat("BLEND_RATE"));
-
-	ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_AIMING_IDLE"), true, _manager.GetConstantFloat("BLEND_RATE"));
+	InitAnimation(_modelHandle, _manager.GetConstantInt("ANIM_AIMING_IDLE"), _manager.GetConstantFloat("BLEND_RATE"));
 
 	// カメラの作成
 	_pCamera = std::make_shared<PlayerCamera>(Position, _padNum);
@@ -43,9 +40,8 @@ Player::~Player()
 {
 }
 
-void Player::Update()
+void Player::Control()
 {
-
 	if (Input::GetInstance().IsTrigger(INPUT_B, _padNum)) {
 		Vec3 vec = { 0.0f,0.0f,1.0f };
 		Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
@@ -66,9 +62,15 @@ void Player::Update()
 
 	// 自身の回転値を更新する
 	Rotate();
+	
+	// カプセルに座標を渡す
+	Set(Position);
+}
 
-	// 当たり判定
-	Collision();
+void Player::Update()
+{
+	// カプセルに座標を渡す
+	Set(Position);
 
 	// 地上にいるか判定する
 	_isGround = OnGround();
@@ -110,6 +112,11 @@ void Player::Draw() const
 void Player::CameraSet() const
 {
 	SetCameraPositionAndTarget_UpVecY(_pCamera->Position.VGet(), _pCamera->GetTarget().VGet());
+}
+
+bool Player::GetGroundFlag() const
+{
+	return _isGround;
 }
 
 void Player::Rotate()
@@ -169,18 +176,6 @@ Vec3 Player::RotateMoveVec(Vec3 vec, float angle)
 	ret = VTransform(ret.VGet(), rotaMtx);
 
 	return ret;
-}
-
-void Player::Collision()
-{
-	// カプセルに座標を渡す
-	Set(Position);
-
-	// コリジョンの判定をする
-	Position += _collManager->CapsuleCollision(_data);
-
-	// カプセルに座標を渡す
-	Set(Position);
 }
 
 void Player::CreateMoveVec()

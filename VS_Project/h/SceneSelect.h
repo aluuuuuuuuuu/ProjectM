@@ -21,14 +21,24 @@ private:
     _DrawFunc_t  _drawFunc = nullptr;
 
 	/// <summary>
-	/// 通常の更新処理
+	/// プレイヤー数選択時の更新処理
 	/// </summary>
-	void NormalUpdate();
+	void PlayerNumSelectUpdate();
 
 	/// <summary>
-	/// 通常の描画処理
+	/// プレイヤー数選択時の描画処理
 	/// </summary>
-	void NormalDraw() const;
+	void PlayerNumSelectDraw() const;
+
+	/// <summary>
+	/// キャラクター選択時の更新処理
+	/// </summary>
+	void CharactorSelectUpdate();
+
+	/// <summary>
+	/// キャラクター選択時の描画処理
+	/// </summary>
+	void CharactorSelectDraw() const;
 
 	/// <summary>
 	/// フェードイン更新処理
@@ -49,6 +59,9 @@ private:
 	int _flame;
 
 	// 人数選択
-	int _select;
+	int _playerNum;
+
+	// キャラ選択
+	int _
 };
 

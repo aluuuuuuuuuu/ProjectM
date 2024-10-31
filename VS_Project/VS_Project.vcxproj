@@ -145,6 +145,7 @@
     <ClCompile Include="cpp\Application.cpp" />
     <ClCompile Include="cpp\BulletBase.cpp" />
     <ClCompile Include="cpp\BulletManager.cpp" />
+    <ClCompile Include="cpp\CollisionManager.cpp" />
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="h\Application.h" />
     <ClInclude Include="h\BulletBase.h" />
     <ClInclude Include="h\BulletManager.h" />
+    <ClInclude Include="h\CollisionManager.h" />
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Input.h" />

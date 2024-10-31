@@ -65,5 +65,8 @@ private:
 
 	int _windowWidth;
 	int _windowHeight;
+
+	// BGMƒnƒ“ƒhƒ‹
+	int _bgmHandle;
 };
 

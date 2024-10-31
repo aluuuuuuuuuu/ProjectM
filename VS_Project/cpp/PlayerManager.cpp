@@ -1,22 +1,31 @@
 #include "PlayerManager.h"
-#include "StageCollisionManager.h"
 #include "BulletManager.h"
 #include "Player.h"
 #include "Application.h"
 #include "DxLib.h"
+#include "CollisionManager.h"
 
-PlayerManager::PlayerManager(std::shared_ptr<StageCollisionManager>& stage, std::shared_ptr<BulletManager>& bullet, int plNum)
+PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, int plNum)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
 
 	// モデルのロード
-	_modelHandle = MV1LoadModel("data/model/Player1.mv1");
+	_modelHandle = MV1LoadModel("data/model/Player3.mv1");
+
+	// テクスチャのロード
+	_textureHandle = LoadGraph("data/model/Ch03_nonPBR.fbm/Ch03_1001_Diffuse.png");
+	//_textureHandle = LoadGraph("data/model/Ch39_nonPBR.fbm/Ch39_1001_Diffuse.png");
+	//_textureHandle = LoadGraph("data/model/Ch43_nonPBR.fbm/Ch43_1001_Diffuse.png");
 	
 	// プレイヤーインスタンスの作成
 	for (int a = 0; a < plNum; a++) {
-		_pPlayer.push_back(std::make_shared<Player>(stage, bullet, *this, a));
+		_pPlayer.push_back(std::make_shared<Player>( bullet, *this, a));
+		_pPlayer[a]->Position = Vec3{ a * 10.0f,0.0f,0.0f };
 	}
+
+	_pCollision = std::make_shared<CollisionManager>(stageManager);
+
 
 	// ウィンドウの幅と高さを取得
 	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
@@ -38,6 +47,18 @@ PlayerManager::~PlayerManager()
 
 void PlayerManager::Update()
 {
+	// プレイヤーの移動など
+	for (auto& pl : _pPlayer) {
+		pl->Control();
+	}
+
+	ColResult result = _pCollision->PlayerCollision(_pPlayer);
+
+	// プレイヤーの当たり判定
+	for (int i = 0; i < _pPlayer.size(); i++) {
+		_pPlayer[i]->Position += result.vec[i];
+	}
+
 	// プレイヤーの更新
 	for (auto& pl : _pPlayer) {
 		pl->Update();
@@ -73,6 +94,11 @@ int PlayerManager::GetPlayerNum() const
 int PlayerManager::GetModelHandle() const
 {
 	return MV1DuplicateModel(_modelHandle);
+}
+
+int PlayerManager::GetTextureHandle() const
+{
+	return _textureHandle;
 }
 
 void PlayerManager::CameraSet(int num) const

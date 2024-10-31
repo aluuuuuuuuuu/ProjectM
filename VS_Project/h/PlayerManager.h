@@ -17,14 +17,15 @@ struct VECTOR2
 	int b;
 };
 
-class StageCollisionManager;
+class StageManager;
+class CollisionManager;
 class BulletManager;
 class Player;
 class PlayerManager :
 	public Constant
 {
 public:
-	PlayerManager(std::shared_ptr<StageCollisionManager>& stage, std::shared_ptr<BulletManager>& bullet, int plNum);
+	PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, int plNum);
 	virtual ~PlayerManager();
 
 	/// <summary>
@@ -60,7 +61,14 @@ public:
 	/// <summary>
 	/// プレイヤーのモデルハンドルを渡す
 	/// </summary>
+	/// <returns>モデルハンドル</returns>
 	int GetModelHandle() const;
+
+	/// <summary>
+	/// プレイヤーのテクスチャのハンドルを渡す
+	/// </summary>
+	/// <returns>テクスチャハンドル</returns>
+	int GetTextureHandle() const;
 
 	/// <summary>
 	/// 引数に対応するプレイヤーのカメラの設定
@@ -104,5 +112,10 @@ private:
 
 	// プレイヤーのモデルハンドル
 	int _modelHandle;
+
+	// プレイヤーのテクスチャハンドル
+	int _textureHandle;
+
+	std::shared_ptr<CollisionManager> _pCollision;
 };
 

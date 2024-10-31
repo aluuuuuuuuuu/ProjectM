@@ -70,6 +70,8 @@ public:
 	}
 
 	////*演算子のオーバーロード*////
+
+
 	Vec3 operator =(float num) {
 		x = num;
 		y = num;

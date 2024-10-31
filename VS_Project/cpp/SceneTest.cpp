@@ -16,7 +16,7 @@ SceneTest::SceneTest(int playerNum)
 		_pStage = std::make_shared<StageManager>();													// ステージマネージャー
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
-		_pPlayerManager = std::make_shared<PlayerManager>(_pStageCollisionManager, _pBulletManager, playerNum);	// プレイヤーマネージャー
+		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, playerNum);	// プレイヤーマネージャー
 	}
 
 	// 関数ポインタの初期化

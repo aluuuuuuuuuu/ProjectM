@@ -5,7 +5,7 @@
 
 SceneSelect::SceneSelect():
 	_flame(60),
-	_select(1)
+	_playerNum(1)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelect::FadeInUpdate;
@@ -29,29 +29,29 @@ void SceneSelect::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneSelect::NormalUpdate()
+void SceneSelect::PlayerNumSelectUpdate()
 {
 	// Bボタンでいろいろ切り替え
 	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
-		if (_select == Input::GetInstance().GetPadNum()) {
-			_select = 1;
+		if (_playerNum == Input::GetInstance().GetPadNum()) {
+			_playerNum = 1;
 		}
 		else {
-			_select++;
+			_playerNum++;
 		}
 	}
 
 	// Aボタンで次の画面へ
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 		// フェードアウトへ移行
-		_updateFunc = &SceneSelect::FadeOutUpdate;
-		_drawFunc = &SceneSelect::FadeDraw;
+		_updateFunc = &SceneSelect::CharactorSelectUpdate;
+		_drawFunc = &SceneSelect::CharactorSelectDraw;
 	}
 }
 
-void SceneSelect::NormalDraw() const
+void SceneSelect::PlayerNumSelectDraw() const
 {
-	switch (_select)
+	switch (_playerNum)
 	{
 	case 1:
 		DrawFormatString(10, 10, 0xffffff, "1人");
@@ -72,12 +72,20 @@ void SceneSelect::NormalDraw() const
 	DrawCircle(800, 400, 200, 0x000000);
 }
 
+void SceneSelect::CharactorSelectUpdate()
+{
+}
+
+void SceneSelect::CharactorSelectDraw() const
+{
+}
+
 void SceneSelect::FadeInUpdate()
 {
 	_flame--;
 	if (_flame <= 0) {
-		_updateFunc = &SceneSelect::NormalUpdate;
-		_drawFunc = &SceneSelect::NormalDraw;
+		_updateFunc = &SceneSelect::PlayerNumSelectUpdate;
+		_drawFunc = &SceneSelect::PlayerNumSelectDraw;
 	}
 }
 
@@ -85,7 +93,7 @@ void SceneSelect::FadeOutUpdate()
 {
 	_flame++;
 	if (_flame >= 60) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_select));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_playerNum));
 	}
 }
 

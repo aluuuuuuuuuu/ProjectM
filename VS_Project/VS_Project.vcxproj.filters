@@ -84,6 +84,9 @@
     <ClCompile Include="cpp\StageManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\CollisionManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\SceneBase.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="h\StageManager.h">
       <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\CollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

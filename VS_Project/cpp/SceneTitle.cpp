@@ -32,11 +32,16 @@ SceneTitle::SceneTitle():
 
 	InitModel(MV1LoadModel("data/model/Player1.mv1"));
 
+	_bgmHandle = LoadSoundMem("data/BGM/Title_BGM.mp3");
+
+	PlaySoundMem(_bgmHandle, DX_PLAYTYPE_LOOP);
+
 }
 
 SceneTitle::~SceneTitle()
 {
 	DeleteGraph(_logoHandle);
+	DeleteSoundMem(_bgmHandle);
 }
 
 void SceneTitle::Update()
@@ -105,6 +110,7 @@ void SceneTitle::FadeOutUpdate()
 
 	_flame++;
 	if (_flame >= 60) {
+		StopSoundMem(_bgmHandle);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>());
 	}
 }

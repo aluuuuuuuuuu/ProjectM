@@ -7,7 +7,6 @@
 class PlayerManager;
 class BulletManager;
 class PlayerCamera;
-class StageCollisionManager;
 class Player:
 	public Transform,
 	public CapsuleCollision,
@@ -19,12 +18,17 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Player(std::shared_ptr<StageCollisionManager>& col, std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum);
+	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
 	virtual ~Player();
+
+	/// <summary>
+	/// 移動などの処理
+	/// </summary>
+	void Control();
 
 	/// <summary>
 	/// 更新処理
@@ -41,9 +45,13 @@ public:
 	/// </summary>
 	void CameraSet() const;
 
+	/// <summary>
+	/// 地上フラグを入手する
+	/// </summary>
+	/// <returns>グラウンドフラグ<returns>
+	bool GetGroundFlag() const;
+
 private:
-
-
 
 	/// <summary>
 	/// 自身の回転
@@ -66,11 +74,6 @@ private:
 	/// <param name="angle">ラジアン</param>
 	/// <returns>回転後のベクトル</returns>
 	Vec3 RotateMoveVec(Vec3 vec,float angle);
-
-	/// <summary>
-	/// 当たり判定系関数をまとめた関数
-	/// </summary>
-	void Collision();
 
 	/// <summary>
 	/// コントローラー入力で移動ベクトルを作成する
@@ -128,9 +131,6 @@ private:
 
 	// Y軸が一定になったカウント
 	int _groundCount;
-
-	//  ステージコリジョンマネージャーの参照
-	std::shared_ptr<StageCollisionManager>& _collManager;
 
 	// バレットマネージャーの参照
 	std::shared_ptr<BulletManager>& _bulletManager;
