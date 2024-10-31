@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{2dc8f0bd-f682-4fa8-9f8b-b0cd2969bfce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{4d231b4d-dae8-402e-9582-eec57f50a43e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{65641156-4b13-4c64-8ca2-3bb239f65584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{78252625-8d39-43c0-a4b7-3114097cb089}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneBase.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneSelect.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneTest.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Application.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Components.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Constant.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Input.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\BulletBase.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\NormalBullet.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Player.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\PlayerCamera.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\BulletManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\MapBulletCollisionManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\PlayerManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\StageCollisionManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\StageManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\CollisionManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="h\SceneBase.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SceneSelect.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SceneTest.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SceneTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Application.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Components.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Constant.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Input.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Singleton.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Vec3.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Vec2.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\BulletBase.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\NormalBullet.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Player.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\PlayerCamera.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\BulletManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\MapBulletCollisionManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\PlayerManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\StageCollisionManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\StageManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\CollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\constant\Application.csv" />
+    <None Include="data\constant\Collision.csv" />
+    <None Include="data\constant\Direction.csv" />
+    <None Include="data\constant\Enemy.csv" />
+    <None Include="data\constant\Input.csv" />
+    <None Include="data\constant\PlayerCamera.csv" />
+    <None Include="data\constant\SceneSelect.csv" />
+    <None Include="data\constant\SubActor.csv" />
+    <None Include="data\constant\Tama.csv" />
+    <None Include="data\constant\Player.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\NormalBullet.csv" />
+    <None Include="data\constant\Stage.csv" />
+  </ItemGroup>
+</Project>
