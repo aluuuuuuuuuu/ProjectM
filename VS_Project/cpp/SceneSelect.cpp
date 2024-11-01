@@ -74,10 +74,18 @@ void SceneSelect::PlayerNumSelectDraw() const
 
 void SceneSelect::CharactorSelectUpdate()
 {
+	for (int i = 0; i < _playerNum; i++) {
+
+	}
+
 }
 
 void SceneSelect::CharactorSelectDraw() const
 {
+	DrawCircle(100, 100, 100, 0xffffff, true);
+	DrawCircle(100, 500, 100, 0xffffff, true);
+	DrawCircle(500, 100, 100, 0xffffff, true);
+	DrawCircle(500, 500, 100, 0xffffff, true);
 }
 
 void SceneSelect::FadeInUpdate()

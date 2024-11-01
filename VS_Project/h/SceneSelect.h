@@ -1,6 +1,21 @@
 #pragma once
 #include "SceneBase.h"
 
+constexpr int CHARACTOR_1 = 1;
+constexpr int CHARACTOR_2 = 2;
+constexpr int CHARACTOR_3 = 3;
+constexpr int CHARACTOR_4 = 4;
+
+struct Player
+{
+	// キャラ選択フラグ
+	bool selectFlag = false;
+
+	// 選択キャラクター種
+	int selectCharactor = 0;
+
+};
+
 class SceneSelect :
     public SceneBase
 {
@@ -61,7 +76,10 @@ private:
 	// 人数選択
 	int _playerNum;
 
-	// キャラ選択
-	int _
+	// 最大人数分のプレイヤー構造体
+	Player _player[4];
+
+	// キャラクター数に応じた選択フラグ
+	bool _finishSelect[4];
 };
 
