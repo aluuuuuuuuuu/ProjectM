@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -159,6 +159,8 @@
     <ClCompile Include="cpp\SceneSelect.cpp" />
     <ClCompile Include="cpp\SceneTest.cpp" />
     <ClCompile Include="cpp\SceneTitle.cpp" />
+    <ClCompile Include="cpp\SkyDome.cpp" />
+    <ClCompile Include="cpp\SoundManager.cpp" />
     <ClCompile Include="cpp\StageCollisionManager.cpp" />
     <ClCompile Include="cpp\StageManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="h\SceneTest.h" />
     <ClInclude Include="h\SceneTitle.h" />
     <ClInclude Include="h\Singleton.h" />
+    <ClInclude Include="h\SkyDome.h" />
+    <ClInclude Include="h\SoundManager.h" />
     <ClInclude Include="h\StageCollisionManager.h" />
     <ClInclude Include="h\StageManager.h" />
     <ClInclude Include="h\Vec2.h" />

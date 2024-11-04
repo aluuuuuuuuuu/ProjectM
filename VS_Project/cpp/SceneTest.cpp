@@ -7,6 +7,8 @@
 #include "Input.h"
 #include "MapBulletCollisionManager.h"
 #include "Application.h"
+#include "Vec3.h"
+#include "SkyDome.h"
 
 SceneTest::SceneTest(int playerNum)
 {
@@ -17,6 +19,7 @@ SceneTest::SceneTest(int playerNum)
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, playerNum);	// プレイヤーマネージャー
+		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 	}
 
 	// 関数ポインタの初期化
@@ -42,6 +45,9 @@ void SceneTest::Draw() const
 
 void SceneTest::NormalUpdate()
 {
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
 	// プレイヤーの更新処理
 	_pPlayerManager->Update();
 
@@ -61,6 +67,9 @@ void SceneTest::NormalDraw() const
 
 		// 描画先の中心を設定
 		SetCameraScreenCenter(_pPlayerManager->GetCenter(i).a, _pPlayerManager->GetCenter(i).b);
+
+		//スカイドームの描画
+		_pSkyDome->Draw();
 
 		// バレットの描画
 		_pBulletManager->Draw();

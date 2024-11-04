@@ -3,9 +3,10 @@
 #include "Input.h"
 #include "SceneSelect.h"
 #include "Application.h"
+#include "SoundManager.h"
 
 SceneTitle::SceneTitle():
-	_flame(60)
+	_flame(110)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneTitle::FadeInUpdate;
@@ -32,16 +33,13 @@ SceneTitle::SceneTitle():
 
 	InitModel(MV1LoadModel("data/model/Player1.mv1"));
 
-	_bgmHandle = LoadSoundMem("data/BGM/Title_BGM.mp3");
-
-	PlaySoundMem(_bgmHandle, DX_PLAYTYPE_LOOP);
-
+	// オープニングのテーマを再生する
+	SoundManager::GetInstance().StartOp();
 }
 
 SceneTitle::~SceneTitle()
 {
 	DeleteGraph(_logoHandle);
-	DeleteSoundMem(_bgmHandle);
 }
 
 void SceneTitle::Update()
@@ -60,6 +58,10 @@ void SceneTitle::NormalUpdate()
 
 	// いずれかのボタンでシーン移行
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
+
+		// 決定音を鳴らす
+		SoundManager::GetInstance().RingStartSE();
+		
 		// フェードアウトへ移行
 		_updateFunc = &SceneTitle::FadeOutUpdate;
 		_drawFunc = &SceneTitle::FadeDraw;
@@ -82,7 +84,7 @@ void SceneTitle::NormalUpdate()
 
 void SceneTitle::NormalDraw() const
 {
-	//DrawGraph(0, 0, _backgroundHandle, true);
+	DrawGraph(0, 0, _backgroundHandle, true);
 
 	DrawModel();
 	// ロゴの描画
@@ -90,7 +92,7 @@ void SceneTitle::NormalDraw() const
 	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
 
 
-	int alpha = (int)(255 * ((float)_flame / 120));
+	int alpha = (int)(255 * ((float)_flame / 110));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRotaGraph(_windowWidth / 2, _windowHeight / 8 * 7, 1.0f, 0.0f, _guideHandle, true, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -110,19 +112,18 @@ void SceneTitle::FadeOutUpdate()
 
 	_flame++;
 	if (_flame >= 60) {
-		StopSoundMem(_bgmHandle);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>());
 	}
 }
 
 void SceneTitle::FadeDraw() const
 {
+	DrawGraph(0, 0, _backgroundHandle, true);
 	// ロゴの描画
 	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
 
-
 	//フェード暗幕
-	int alpha = (int)(255 * ((float)_flame / 60));
+	int alpha = (int)(255 * ((float)_flame / 110));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

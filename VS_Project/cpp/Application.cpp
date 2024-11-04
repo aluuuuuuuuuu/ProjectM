@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "SceneTest.h"
 #include "SceneTitle.h"
+#include "SoundManager.h"
 #include "SceneSelect.h"
 
 bool Application::Init()
@@ -46,11 +47,11 @@ bool Application::Init()
 	// Effekseerを使用するには必ず設定する。
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
+	// バックグラウンドでも動作するようにする
+	SetAlwaysRunFlag(true);
+
 	// Dxlibの初期化
 	if (DxLib_Init() == -1) return false;
-
-	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
-	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
 
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
@@ -59,7 +60,7 @@ bool Application::Init()
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// 背景色の設定
-	SetBackgroundColor(100, 100, 255);
+	SetBackgroundColor(220, 220, 220);
 
 	// カーソルの表示設定
 	SetMouseDispFlag(true);
@@ -72,7 +73,8 @@ bool Application::Init()
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
 
-	
+	// サウンドマネージャーの初期処理
+	SoundManager::GetInstance().Init();
 
 	return true;
 }
@@ -83,7 +85,9 @@ void Application::Run()
 	auto& manager = SceneManager::GetInstance();
 	int a = 0;
 	// 初期シーンを設定
-	manager.ChangeScene(std::make_shared <SceneSelect>());
+	//manager.ChangeScene(std::make_shared <SceneTest>(1));
+	manager.ChangeScene(std::make_shared <SceneTitle>());
+	//manager.ChangeScene(std::make_shared <SceneSelect>());
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();

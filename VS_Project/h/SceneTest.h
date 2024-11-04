@@ -2,8 +2,10 @@
 #include "SceneBase.h"
 #include "Constant.h"
 #include <memory>
+#include "Components.h"
 #include <vector>
 
+class SkyDome;
 class PlayerManager;
 class MapBulletCollisionManager;
 class BulletManager;
@@ -68,5 +70,9 @@ private:
 
     // プレイヤーマネージャー
     std::shared_ptr<PlayerManager> _pPlayerManager;
+
+    // スカイドームポインタ
+    std::shared_ptr<SkyDome> _pSkyDome;
+
 };
 
