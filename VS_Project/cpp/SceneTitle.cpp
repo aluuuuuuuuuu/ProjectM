@@ -4,13 +4,17 @@
 #include "SceneSelect.h"
 #include "Application.h"
 #include "SoundManager.h"
+#include "Crown.h"
 
-SceneTitle::SceneTitle():
+SceneTitle::SceneTitle() :
 	_flame(110)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneTitle::FadeInUpdate;
 	_drawFunc = &SceneTitle::FadeDraw;
+
+	// 王冠インスタンスの作成
+	_pCrown = std::make_shared<Crown>();
 
 	// カメラのニアファーの設定
 	SetCameraNearFar(1, 512);
@@ -20,18 +24,13 @@ SceneTitle::SceneTitle():
 
 	// anybutton画像のロード
 	_guideHandle = LoadGraph("data/image/PressAnyButton.png");
+
+	// 画面サイズを取得
 	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
 	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
 
-	Scale = Vec3{ 0.12f,0.12f,0.12f };
-
-	Position = Vec3{ 0.0f,25.0f,0.0f };
-
+	// 背景画像のロード
 	_backgroundHandle = LoadGraph("data/image/back.jpg");
-
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 0,0,0 }, VECTOR{ 0.0f,25.0f,0.0f });
-
-	InitModel(MV1LoadModel("data/model/Player1.mv1"));
 
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StartOp();
@@ -40,6 +39,7 @@ SceneTitle::SceneTitle():
 SceneTitle::~SceneTitle()
 {
 	DeleteGraph(_logoHandle);
+	DeleteGraph(_backgroundHandle);
 }
 
 void SceneTitle::Update()
@@ -54,14 +54,15 @@ void SceneTitle::Draw() const
 
 void SceneTitle::NormalUpdate()
 {
-	UpdateModel(GetTransformInstance());
+	// 王冠の更新処理
+	_pCrown->Update();
 
 	// いずれかのボタンでシーン移行
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
 
 		// 決定音を鳴らす
 		SoundManager::GetInstance().RingStartSE();
-		
+
 		// フェードアウトへ移行
 		_updateFunc = &SceneTitle::FadeOutUpdate;
 		_drawFunc = &SceneTitle::FadeDraw;
@@ -84,15 +85,16 @@ void SceneTitle::NormalUpdate()
 
 void SceneTitle::NormalDraw() const
 {
+	// 背景画像の描画
 	DrawGraph(0, 0, _backgroundHandle, true);
 
-	DrawModel();
 	// ロゴの描画
-	
 	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
 
+	// 王冠画像の描画
+	_pCrown->Draw();
 
-	int alpha = (int)(255 * ((float)_flame / 110));
+	int alpha = (int)(255 * ((float)_flame / 120));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawRotaGraph(_windowWidth / 2, _windowHeight / 8 * 7, 1.0f, 0.0f, _guideHandle, true, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -109,7 +111,6 @@ void SceneTitle::FadeInUpdate()
 
 void SceneTitle::FadeOutUpdate()
 {
-
 	_flame++;
 	if (_flame >= 60) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>());
@@ -118,9 +119,7 @@ void SceneTitle::FadeOutUpdate()
 
 void SceneTitle::FadeDraw() const
 {
-	DrawGraph(0, 0, _backgroundHandle, true);
-	// ロゴの描画
-	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
+	NormalDraw();
 
 	//フェード暗幕
 	int alpha = (int)(255 * ((float)_flame / 110));

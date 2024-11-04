@@ -1,11 +1,11 @@
 #pragma once
 #include "SceneBase.h"
 #include "Components.h"
+#include <memory>
 
+class Crown;
 class SceneTitle :
-	public SceneBase,
-	public Model,
-	public Transform
+	public SceneBase
 {
 public:
 
@@ -58,12 +58,14 @@ private:
 	// フェード用フレームカウンタ
 	int _flame;
 
-	int _modelHandle;
-
+	// 背景画像
 	int _backgroundHandle;
 
+	// 画面サイズ
+	int _windowWidth;	// 画面幅
+	int _windowHeight;	// 画面高さ
 
-	int _windowWidth;
-	int _windowHeight;
+	// 王冠ポインタ
+	std::shared_ptr<Crown> _pCrown;
 };
 

@@ -93,6 +93,9 @@
     <ClCompile Include="cpp\SoundManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\Crown.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\SceneBase.h">
@@ -167,6 +170,9 @@
     <ClInclude Include="h\SoundManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="h\Crown.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
@@ -183,5 +189,6 @@
     </None>
     <None Include="data\constant\NormalBullet.csv" />
     <None Include="data\constant\Stage.csv" />
+    <None Include="data\constant\Crown.csv" />
   </ItemGroup>
 </Project>
