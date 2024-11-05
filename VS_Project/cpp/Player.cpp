@@ -14,7 +14,8 @@ Player::Player( std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, 
 	_groundCount(0),
 	_runFlag(false),
 	_padNum(padNum),
-	_manager(manager)
+	_manager(manager),
+	_bulletNum(15)
 {
 	// 拡大の設定
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
@@ -42,7 +43,7 @@ Player::~Player()
 void Player::Control()
 {
 	// 弾を発射する
-	if (Input::GetInstance().IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
+	if (Input::GetInstance().IsTrigger(INPUT_RIGHT_SHOULDER, _padNum) && _bulletNum > 0) {
 
 		// 撃つときに走っていたら歩きにする
 		if (_runFlag) {
@@ -54,9 +55,14 @@ void Player::Control()
 
 		// 弾を生成
 		_bulletManager->PushBullet(NORMAL_BULLET, RotateBulletVec(Position,_pCamera->Position), pos);
+
+		_bulletNum--;
 	}
 
-
+	// リロード
+	if (Input::GetInstance().IsTrigger(INPUT_Y, _padNum)) {
+		_bulletNum = 15;
+	}
 	DrawFormatString(10, 10, 0xffffff, "x:%f y:%f z:%f angleY:%f", Position.x, Position.y, Position.z, Angle.y);
 
 	// 移動ベクトルの初期化

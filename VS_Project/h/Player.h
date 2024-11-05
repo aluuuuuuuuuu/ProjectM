@@ -151,5 +151,8 @@ private:
 
 	// プレイヤーマネージャーの参照
 	PlayerManager& _manager;
+
+	// 残段数
+	int _bulletNum;
 };
 
