@@ -57,18 +57,13 @@ public:
 	/// </summary>
 	/// <returns>プレイヤーの総数</returns>
 	int GetPlayerNum() const;
-
+	
 	/// <summary>
 	/// プレイヤーのモデルハンドルを渡す
 	/// </summary>
+	/// <param name="num">プレイヤーナンバー</param>
 	/// <returns>モデルハンドル</returns>
-	int GetModelHandle() const;
-
-	/// <summary>
-	/// プレイヤーのテクスチャのハンドルを渡す
-	/// </summary>
-	/// <returns>テクスチャハンドル</returns>
-	int GetTextureHandle() const;
+	int GetModelHandle(int num) const;
 
 	/// <summary>
 	/// 引数に対応するプレイヤーのカメラの設定
@@ -110,12 +105,10 @@ private:
 	// プレイヤーの数に対応したカメラのセンター
 	VECTOR2 _cameraSenter[4];
 
-	// プレイヤーのモデルハンドル
-	int _modelHandle;
+	// プレイヤーの数の対応したモデルハンドル
+	int _modelHandle[4];
 
-	// プレイヤーのテクスチャハンドル
-	int _textureHandle;
-
+	// コリジョンマネージャーのポインタ
 	std::shared_ptr<CollisionManager> _pCollision;
 };
 

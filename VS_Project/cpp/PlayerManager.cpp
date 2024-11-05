@@ -11,21 +11,37 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	ReadCSV("data/constant/Player.csv");
 
 	// モデルのロード
-	_modelHandle = MV1LoadModel("data/model/Player3.mv1");
-
-	// テクスチャのロード
-	_textureHandle = LoadGraph("data/model/Ch03_nonPBR.fbm/Ch03_1001_Diffuse.png");
-	//_textureHandle = LoadGraph("data/model/Ch39_nonPBR.fbm/Ch39_1001_Diffuse.png");
-	//_textureHandle = LoadGraph("data/model/Ch43_nonPBR.fbm/Ch43_1001_Diffuse.png");
-	
-	// プレイヤーインスタンスの作成
-	for (int a = 0; a < plNum; a++) {
-		_pPlayer.push_back(std::make_shared<Player>( bullet, *this, a));
-		_pPlayer[a]->Position = Vec3{ a * 10.0f,0.0f,0.0f };
+	for (int num = 0; num < plNum; num++) {
+		switch (num)
+		{
+		case 0:
+			_modelHandle[num] = MV1LoadModel("data/model/Player1.mv1");
+			break;
+		case 1:
+			_modelHandle[num] = MV1LoadModel("data/model/Player2.mv1");
+			break;
+		case 2:
+			_modelHandle[num] = MV1LoadModel("data/model/Player3.mv1");
+			break;
+		case 3:
+			_modelHandle[num] = MV1LoadModel("data/model/Player4.mv1");
+			break;
+		default:
+			break;
+		}
 	}
 
-	_pCollision = std::make_shared<CollisionManager>(stageManager);
+	// 各インスタンスの作成
+	{
+		// プレイヤーインスタンスの作成
+		for (int num = 0; num < plNum; num++) {
+			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num));
+			_pPlayer[num]->Position = Vec3{ num * 10.0f,0.0f,0.0f };
+		}
 
+		// コリジョンマネージャーの作成
+		_pCollision = std::make_shared<CollisionManager>(stageManager);
+	}
 
 	// ウィンドウの幅と高さを取得
 	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
@@ -42,7 +58,10 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 
 PlayerManager::~PlayerManager()
 {
-	MV1DeleteModel(_modelHandle);
+	// モデルのデリート
+	for (int num = 0; num < GetConstantInt("MAX_NUM"); num++) {
+		MV1DeleteModel(_modelHandle[num]);
+	}
 }
 
 void PlayerManager::Update()
@@ -91,14 +110,22 @@ int PlayerManager::GetPlayerNum() const
 	return static_cast<int>(_pPlayer.size());
 }
 
-int PlayerManager::GetModelHandle() const
+int PlayerManager::GetModelHandle(int num) const
 {
-	return MV1DuplicateModel(_modelHandle);
-}
-
-int PlayerManager::GetTextureHandle() const
-{
-	return _textureHandle;
+	// プレイヤーナンバーに対応したモデルハンドルを返す
+	switch (num)
+	{
+	case 0:
+		return _modelHandle[num];
+	case 1:
+		return _modelHandle[num];
+	case 2:
+		return _modelHandle[num];
+	case 3:
+		return _modelHandle[num];
+	default:
+		break;
+	}
 }
 
 void PlayerManager::CameraSet(int num) const

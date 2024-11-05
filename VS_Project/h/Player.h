@@ -115,7 +115,12 @@ private:
 	/// <returns>分類先</returns>
 	int ClassifyDirection();
 
-	void WalkRunAnimControl();
+	/// <summary>
+	/// アニメーション制御関数
+	/// </summary>
+	void AnimationContorol();
+
+	Vec3 RotateBulletVec(Vec3 plPos, Vec3 cameraPos);
 
 	// Y軸の移動量
 	float _moveScaleY;

@@ -84,23 +84,23 @@
     <ClCompile Include="cpp\StageManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\CollisionManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\SkyDome.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\SoundManager.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="cpp\AnyPushButton.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="cpp\Crown.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="cpp\Logo.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\AnyPushButton.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="cpp\SkyDome.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\CollisionManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SoundManager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,23 +167,23 @@
     <ClInclude Include="h\StageManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\CollisionManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\SkyDome.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\SoundManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="h\AnyPushButton.h">
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="h\Crown.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="h\Logo.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="h\AnyPushButton.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="h\SkyDome.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\CollisionManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SoundManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

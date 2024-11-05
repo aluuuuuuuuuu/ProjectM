@@ -95,7 +95,7 @@ void SceneTitle::FadeInUpdate()
 void SceneTitle::FadeOutUpdate()
 {
 	_flame++;
-	if (_flame >= 60) {
+	if (_flame >= 110) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>());
 	}
 }

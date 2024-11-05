@@ -20,9 +20,8 @@ Player::Player( std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, 
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
 
 	// モデルの初期処理
-	InitModel(_manager.GetModelHandle());
-	//InitModel(_manager.GetModelHandle(), _manager.GetTextureHandle());
-	//InitModel(_manager.GetModelHandle(), LoadGraph("data/model/Ch03_nonPBR.fbm/Ch03_1001_Diffuse.png"));
+	InitModel(_manager.GetModelHandle(padNum));
+
 	// 座標の設定
 	Position = Vec3{ 0.0f,25.0f,0.0f };
 
@@ -42,11 +41,19 @@ Player::~Player()
 
 void Player::Control()
 {
-	if (Input::GetInstance().IsTrigger(INPUT_B, _padNum)) {
-		Vec3 vec = { 0.0f,0.0f,1.0f };
+	// 弾を発射する
+	if (Input::GetInstance().IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
+
+		// 撃つときに走っていたら歩きにする
+		if (_runFlag) {
+			_runFlag = false;
+		}
+
+		// 発射する座標
 		Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
 
-		_bulletManager->PushBullet(NORMAL_BULLET, RotateMoveVec(vec, Angle.y), pos);
+		// 弾を生成
+		_bulletManager->PushBullet(NORMAL_BULLET, RotateBulletVec(Position,_pCamera->Position), pos);
 	}
 
 
@@ -81,7 +88,7 @@ void Player::Update()
 	_pCamera->Update(Position);
 
 	// アニメーションコントロール
-	WalkRunAnimControl();
+	AnimationContorol();
 
 	// アニメーションの更新
 	if (_runFlag && _isGround) {
@@ -325,7 +332,7 @@ int Player::ClassifyDirection()
 	return 0;  // デフォルトは前
 }
 
-void Player::WalkRunAnimControl()
+void Player::AnimationContorol()
 {
 	// 地面についていないとき
 	if (!_isGround) {
@@ -378,4 +385,13 @@ void Player::WalkRunAnimControl()
 			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));			break;
 		}
 	}
+}
+
+Vec3 Player::RotateBulletVec(Vec3 plPos, Vec3 cameraPos)
+{
+
+	Vec3 pos = Vec3{ plPos.x,plPos.y + 20,plPos.z };
+	Vec3 ret = pos - cameraPos;
+
+	return ret.GetNormalized();
 }
