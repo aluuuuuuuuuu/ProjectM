@@ -2,17 +2,34 @@
 #include "SceneBase.h"
 #include "Components.h"
 #include <memory>
+#include "Constant.h"
 
+class AnyPushButton;
+class Logo;
 class Crown;
 class SceneTitle :
-	public SceneBase
+	public SceneBase,
+	public Constant
 {
 public:
-
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
     SceneTitle();
+
+    /// <summary>
+    /// デストラクタ
+    /// </summary>
     virtual ~SceneTitle();
 
+    /// <summary>
+    /// 更新処理
+    /// </summary>
     void Update();
+
+    /// <summary>
+    /// 描画処理
+    /// </summary>
     void Draw() const;
 private:
 
@@ -49,23 +66,19 @@ private:
 	/// </summary>
 	void FadeDraw() const;
 
-	// タイトルロゴハンドル
-	int _logoHandle;
+	// 王冠ポインタ
+	std::shared_ptr<Crown> _pCrown;
 
-	// anybutton画像ハンドル
-	int _guideHandle;
+	// ロゴポインタ
+	std::shared_ptr<Logo> _pLogo;
+
+	// 文章ポインタ
+	std::shared_ptr<AnyPushButton> _pText;
 
 	// フェード用フレームカウンタ
 	int _flame;
 
 	// 背景画像
 	int _backgroundHandle;
-
-	// 画面サイズ
-	int _windowWidth;	// 画面幅
-	int _windowHeight;	// 画面高さ
-
-	// 王冠ポインタ
-	std::shared_ptr<Crown> _pCrown;
 };
 

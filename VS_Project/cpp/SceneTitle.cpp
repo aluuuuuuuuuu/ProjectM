@@ -2,32 +2,29 @@
 #include "SceneManager.h"
 #include "Input.h"
 #include "SceneSelect.h"
-#include "Application.h"
 #include "SoundManager.h"
 #include "Crown.h"
+#include "Logo.h"
+#include "AnyPushButton.h"
 
 SceneTitle::SceneTitle() :
 	_flame(110)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/SceneTitle.csv");
+
 	// 関数ポインタの初期化
-	_updateFunc = &SceneTitle::FadeInUpdate;
-	_drawFunc = &SceneTitle::FadeDraw;
+	{
+		_updateFunc = &SceneTitle::FadeInUpdate;
+		_drawFunc = &SceneTitle::FadeDraw;
+	}
 
-	// 王冠インスタンスの作成
-	_pCrown = std::make_shared<Crown>();
-
-	// カメラのニアファーの設定
-	SetCameraNearFar(1, 512);
-
-	// タイトルロゴのロード
-	_logoHandle = LoadGraph("data/image/TitleLogo.png");
-
-	// anybutton画像のロード
-	_guideHandle = LoadGraph("data/image/PressAnyButton.png");
-
-	// 画面サイズを取得
-	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
-	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
+	// 各インスタンスの作成
+	{
+		_pCrown = std::make_shared<Crown>(*this);	// 王冠
+		_pLogo = std::make_shared <Logo>(*this);	// ロゴ
+		_pText = std::make_shared<AnyPushButton>(*this);	// 文章
+	}
 
 	// 背景画像のロード
 	_backgroundHandle = LoadGraph("data/image/back.jpg");
@@ -38,7 +35,6 @@ SceneTitle::SceneTitle() :
 
 SceneTitle::~SceneTitle()
 {
-	DeleteGraph(_logoHandle);
 	DeleteGraph(_backgroundHandle);
 }
 
@@ -57,6 +53,9 @@ void SceneTitle::NormalUpdate()
 	// 王冠の更新処理
 	_pCrown->Update();
 
+	// 文章の更新処理
+	_pText->Update();
+
 	// いずれかのボタンでシーン移行
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
 
@@ -67,20 +66,6 @@ void SceneTitle::NormalUpdate()
 		_updateFunc = &SceneTitle::FadeOutUpdate;
 		_drawFunc = &SceneTitle::FadeDraw;
 	}
-
-	// スタート指示を点滅させる
-	if (_flame == 120) {
-		_flame++;
-	}
-	else if (_flame == 1) {
-		_flame--;
-	}
-	else if (_flame % 2 == 0) {
-		_flame += 2;
-	}
-	else {
-		_flame -= 2;
-	}
 }
 
 void SceneTitle::NormalDraw() const
@@ -89,15 +74,13 @@ void SceneTitle::NormalDraw() const
 	DrawGraph(0, 0, _backgroundHandle, true);
 
 	// ロゴの描画
-	DrawRotaGraph(_windowWidth / 2, _windowHeight / 5 * 2, 1.0f, 0.0f, _logoHandle, true, false);
+	_pLogo->Draw();
 
 	// 王冠画像の描画
 	_pCrown->Draw();
 
-	int alpha = (int)(255 * ((float)_flame / 120));
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-	DrawRotaGraph(_windowWidth / 2, _windowHeight / 8 * 7, 1.0f, 0.0f, _guideHandle, true, false);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// 文章画像の描画
+	_pText->Draw();
 }
 
 void SceneTitle::FadeInUpdate()
@@ -122,7 +105,7 @@ void SceneTitle::FadeDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = (int)(255 * ((float)_flame / 110));
+	int alpha = static_cast<int>(255 * ((float)_flame / 110));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

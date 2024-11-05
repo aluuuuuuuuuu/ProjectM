@@ -96,6 +96,12 @@
     <ClCompile Include="cpp\Crown.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\Logo.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\AnyPushButton.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="h\SceneBase.h">
@@ -173,6 +179,12 @@
     <ClInclude Include="h\Crown.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="h\Logo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="h\AnyPushButton.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
@@ -189,6 +201,6 @@
     </None>
     <None Include="data\constant\NormalBullet.csv" />
     <None Include="data\constant\Stage.csv" />
-    <None Include="data\constant\Crown.csv" />
+    <None Include="data\constant\SceneTitle.csv" />
   </ItemGroup>
 </Project>

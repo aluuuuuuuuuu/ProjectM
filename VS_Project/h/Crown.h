@@ -1,16 +1,16 @@
 #pragma once
 #include <Crown.h>
-#include "Constant.h"
+#include "Vec2.h"
 
-class Crown:
-	public Constant
+class SceneTitle;
+class Crown
 {
 public:
 
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Crown();
+	Crown(SceneTitle& scene);
 
 	/// <summary>
 	/// デストラクタ
@@ -46,5 +46,7 @@ private:
 	bool _flame1Flag;
 
 	bool _blinkingFlag;
+	
+	Vec2 _dispPos;
 };
 

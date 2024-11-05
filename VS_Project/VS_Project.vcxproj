@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cpp\AnyPushButton.cpp" />
     <ClCompile Include="cpp\Application.cpp" />
     <ClCompile Include="cpp\BulletBase.cpp" />
     <ClCompile Include="cpp\BulletManager.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Crown.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
+    <ClCompile Include="cpp\Logo.cpp" />
     <ClCompile Include="cpp\MapBulletCollisionManager.cpp" />
     <ClCompile Include="cpp\NormalBullet.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
@@ -167,6 +169,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="h\AnyPushButton.h" />
     <ClInclude Include="h\Application.h" />
     <ClInclude Include="h\BulletBase.h" />
     <ClInclude Include="h\BulletManager.h" />
@@ -175,6 +178,7 @@
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Crown.h" />
     <ClInclude Include="h\Input.h" />
+    <ClInclude Include="h\Logo.h" />
     <ClInclude Include="h\MapBulletCollisionManager.h" />
     <ClInclude Include="h\NormalBullet.h" />
     <ClInclude Include="h\Player.h" />
@@ -196,7 +200,6 @@
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
     <None Include="data\constant\Collision.csv" />
-    <None Include="data\constant\Crown.csv" />
     <None Include="data\constant\Direction.csv" />
     <None Include="data\constant\Enemy.csv" />
     <None Include="data\constant\Input.csv" />
@@ -204,6 +207,7 @@
     <None Include="data\constant\Player.csv" />
     <None Include="data\constant\PlayerCamera.csv" />
     <None Include="data\constant\SceneSelect.csv" />
+    <None Include="data\constant\SceneTitle.csv" />
     <None Include="data\constant\Stage.csv" />
     <None Include="data\constant\SubActor.csv" />
     <None Include="data\constant\Tama.csv" />

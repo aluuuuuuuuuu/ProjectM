@@ -66,7 +66,7 @@ void SceneTest::NormalDraw() const
 		SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
 
 		// 描画先の中心を設定
-		SetCameraScreenCenter(_pPlayerManager->GetCenter(i).a, _pPlayerManager->GetCenter(i).b);
+		SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(i).a), static_cast<float>(_pPlayerManager->GetCenter(i).b));
 
 		//スカイドームの描画
 		_pSkyDome->Draw();

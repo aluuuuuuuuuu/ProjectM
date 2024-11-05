@@ -1,26 +1,34 @@
 #include "Crown.h"
 #include "DxLib.h"
+#include "SceneTitle.h"
 
-Crown::Crown() :
+Crown::Crown(SceneTitle& scene) :
 	_flame1(0),
 	_flame2(0),
 	_flame1Flag(true),
 	_blinkingFlag(false)
 {
-	// 定数の読み込み
-	ReadCSV("data/constant/Crown.csv");
+	// 表示位置の設定
+	_dispPos = Vec2{ scene.GetConstantInt("CROWN_POS_X"),scene.GetConstantInt("CROWN_POS_Y") };
 
-	// 王冠画像のロード
-	_crownHandle = LoadGraph("data/image/Crown.png");
+	// 画像のロード
+	{
+		_crownHandle = LoadGraph("data/image/Crown.png");	// 王冠画像のロード
+		_crownParticleHandle1 = LoadGraph("data/image/CrownParticle1.png");	// 王冠パーティクル1画像のロード
+		_crownParticleHandle2 = LoadGraph("data/image/CrownParticle2.png");	// 王冠パーティクル2画像のロード
+		_crownParticleHandle3 = LoadGraph("data/image/CrownParticle3.png");	// 王冠パーティクル3画像のロード
+	}
 
-	// 王冠パーティクル画像のロード
-	_crownParticleHandle1 = LoadGraph("data/image/CrownParticle1.png");
-	_crownParticleHandle2 = LoadGraph("data/image/CrownParticle2.png");
-	_crownParticleHandle3 = LoadGraph("data/image/CrownParticle3.png");
+	// 表示するパーティクルの初期設定
+	_crownParticle = _crownParticleHandle1;
 }
 
 Crown::~Crown()
 {
+	DeleteGraph(_crownHandle);
+	DeleteGraph(_crownParticleHandle1);
+	DeleteGraph(_crownParticleHandle2);
+	DeleteGraph(_crownParticleHandle3);
 }
 
 void Crown::Update()
@@ -65,14 +73,14 @@ void Crown::Update()
 
 void Crown::Draw()
 {
-	int alpha = (int)(255 * ((float)_flame1 / 120));
+	int alpha = static_cast<int>(255 * ((float)_flame1 / 120));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	// 王冠画像の描画
-	DrawRotaGraph(GetConstantInt("DRAW_POS_X"), GetConstantInt("DRAW_POS_Y"), 0.2f, -0.5f, _crownHandle, true);
+	DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), 0.2f, -0.5f, _crownHandle, true);
 
 	// 王冠パーティクル画像の描画
 	if (_blinkingFlag) {
-		DrawRotaGraph(GetConstantInt("DRAW_POS_X"), GetConstantInt("DRAW_POS_Y"), 0.2f, -0.5f, _crownParticle, true);
+		DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), 0.2f, -0.5f, _crownParticle, true);
 
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
