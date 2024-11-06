@@ -1,7 +1,6 @@
 #include "SceneTest.h"
 #include "StageManager.h"
 #include "Player.h"
-#include "PlayerManager.h"
 #include "StageCollisionManager.h"
 #include "BulletManager.h"
 #include "Input.h"
@@ -10,7 +9,7 @@
 #include "Vec3.h"
 #include "SkyDome.h"
 
-SceneTest::SceneTest(int playerNum)
+SceneTest::SceneTest(PlayerData& data)
 {
 	// 各クラスのインスタンス作成
 	{
@@ -18,7 +17,7 @@ SceneTest::SceneTest(int playerNum)
 		_pStage = std::make_shared<StageManager>();													// ステージマネージャー
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
-		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, playerNum);	// プレイヤーマネージャー
+		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 	}
 

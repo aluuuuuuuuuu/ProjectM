@@ -2,10 +2,11 @@
 #include "SceneTest.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include "SelectFinger.h"
+#include "CharactorCard.h"
 
 SceneSelect::SceneSelect():
-	_flame(60),
-	_playerNum(1)
+	_flame(60)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelect::FadeInUpdate;
@@ -13,6 +14,16 @@ SceneSelect::SceneSelect():
 
 	// カメラのニアファーの設定
 	SetCameraNearFar(1, 512);
+
+	for (auto& select : _finishSelect) {
+		select = false;
+	}
+
+	// 最初の人数はかならず一人
+	_plData.playerNum = 1;
+
+
+	back = LoadGraph("data/image/back.jpg");
 }
 
 SceneSelect::~SceneSelect()
@@ -31,19 +42,30 @@ void SceneSelect::Draw() const
 
 void SceneSelect::PlayerNumSelectUpdate()
 {
-	// Bボタンでいろいろ切り替え
+	// Bボタンで人数の切り替え
 	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
-		if (_playerNum == Input::GetInstance().GetPadNum()) {
-			_playerNum = 1;
+		if (_plData.playerNum == Input::GetInstance().GetPadNum()) {
+			_plData.playerNum = 1;
 		}
 		else {
-			_playerNum++;
+			_plData.playerNum++;
 		}
 	}
 
 	// Aボタンで次の画面へ
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
-		// フェードアウトへ移行
+
+		// 指のインスタンスを人数分作成する
+		for (int i = 0; i < _plData.playerNum; i++) {
+			_pFinger[i] = std::make_shared<SelectFinger>(i);
+		} 
+		
+		// カードのインスタンスをキャラクター分作成する
+		for (int i = 0; i < 4; i++) {
+			_pCard[i] = std::make_shared<CharactorCard>(i + 1);
+		}
+
+		// キャラクター選択に移行
 		_updateFunc = &SceneSelect::CharactorSelectUpdate;
 		_drawFunc = &SceneSelect::CharactorSelectDraw;
 	}
@@ -51,7 +73,7 @@ void SceneSelect::PlayerNumSelectUpdate()
 
 void SceneSelect::PlayerNumSelectDraw() const
 {
-	switch (_playerNum)
+	switch (_plData.playerNum)
 	{
 	case 1:
 		DrawFormatString(10, 10, 0xffffff, "1人");
@@ -74,18 +96,26 @@ void SceneSelect::PlayerNumSelectDraw() const
 
 void SceneSelect::CharactorSelectUpdate()
 {
-	for (int i = 0; i < _playerNum; i++) {
-
+	// 全指の更新処理
+	for (int num = 0; num < _plData.playerNum; num++) {
+		_pFinger[num]->Update();
 	}
-
 }
 
 void SceneSelect::CharactorSelectDraw() const
 {
-	DrawCircle(100, 100, 100, 0xffffff, true);
-	DrawCircle(100, 500, 100, 0xffffff, true);
-	DrawCircle(500, 100, 100, 0xffffff, true);
-	DrawCircle(500, 500, 100, 0xffffff, true);
+	// 背景画像の描画
+	DrawGraph(0, 0, back,true);
+
+	// 全カードの描画
+	for (auto& card : _pCard) {
+		card->Draw();
+	}
+
+	// 全指の描画
+	for (int num = 0; num < _plData.playerNum; num++) {
+		_pFinger[num]->Draw();
+	}
 }
 
 void SceneSelect::FadeInUpdate()
@@ -101,7 +131,7 @@ void SceneSelect::FadeOutUpdate()
 {
 	_flame++;
 	if (_flame >= 60) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_playerNum));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_plData));
 	}
 }
 

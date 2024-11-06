@@ -1,29 +1,38 @@
 #pragma once
 #include "SceneBase.h"
+#include "PlayerManager.h"
+#include <memory>
 
 constexpr int CHARACTOR_1 = 1;
 constexpr int CHARACTOR_2 = 2;
 constexpr int CHARACTOR_3 = 3;
 constexpr int CHARACTOR_4 = 4;
 
-struct Player
-{
-	// キャラ選択フラグ
-	bool selectFlag = false;
-
-	// 選択キャラクター種
-	int selectCharactor = 0;
-
-};
-
+class CharactorCard;
+class SelectFinger;
 class SceneSelect :
     public SceneBase
 {
 public:
+
+    /// <summary>
+    /// コンストラクタ
+    /// </summary>
     SceneSelect();
+
+    /// <summary>
+    /// デストラクタ
+    /// </summary>
     virtual ~SceneSelect();
 
+    /// <summary>
+    /// 更新処理
+    /// </summary>
     void Update();
+
+    /// <summary>
+    /// 描画処理
+    /// </summary>
     void Draw() const;
 private:
 
@@ -73,13 +82,18 @@ private:
 	// フェード用フレームカウンタ
 	int _flame;
 
-	// 人数選択
-	int _playerNum;
-
-	// 最大人数分のプレイヤー構造体
-	Player _player[4];
-
 	// キャラクター数に応じた選択フラグ
 	bool _finishSelect[4];
+
+	// ゲームシーンに渡すプレイヤーのデータ
+	PlayerData _plData;
+
+	// 指ポインタ
+	std::shared_ptr<SelectFinger>_pFinger[4];
+
+	// カードポインタ
+	std::shared_ptr<CharactorCard> _pCard[4];
+
+	int back;
 };
 

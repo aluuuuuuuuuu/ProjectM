@@ -4,6 +4,7 @@
 #include <memory>
 #include "Components.h"
 #include <vector>
+#include "PlayerManager.h"
 
 class SkyDome;
 class PlayerManager;
@@ -20,8 +21,8 @@ public:
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    /// <param name="playerNum">プレイヤーの数</param>
-    SceneTest(int playerNum);
+    /// <param name="data">プレイヤーデータ</param>
+    SceneTest(PlayerData& data);
 
     /// <summary>
     /// デストラクタ

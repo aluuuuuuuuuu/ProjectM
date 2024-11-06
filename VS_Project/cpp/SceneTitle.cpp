@@ -85,6 +85,12 @@ void SceneTitle::NormalDraw() const
 
 void SceneTitle::FadeInUpdate()
 {
+	// 王冠の更新処理
+	_pCrown->Update();
+
+	// 文章の更新処理
+	_pText->Update();
+
 	_flame--;
 	if (_flame <= 0) {
 		_updateFunc = &SceneTitle::NormalUpdate;

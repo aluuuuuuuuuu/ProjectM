@@ -17,6 +17,19 @@ struct VECTOR2
 	int b;
 };
 
+// プレイヤーのデータ構造体 
+struct PlayerData
+{
+	// パッド基準でどのモデルを使用するか
+	int player1 = -1;
+	int player2 = -1;
+	int player3 = -1;
+	int player4 = -1;
+
+	// プレイヤーの総数
+	int playerNum = 0;
+};
+
 class StageManager;
 class CollisionManager;
 class BulletManager;
@@ -25,7 +38,7 @@ class PlayerManager :
 	public Constant
 {
 public:
-	PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, int plNum);
+	PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data);
 	virtual ~PlayerManager();
 
 	/// <summary>
