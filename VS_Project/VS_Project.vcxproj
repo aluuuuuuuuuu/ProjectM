@@ -164,6 +164,7 @@
     <ClCompile Include="cpp\SceneTest.cpp" />
     <ClCompile Include="cpp\SceneTitle.cpp" />
     <ClCompile Include="cpp\SelectFinger.cpp" />
+    <ClCompile Include="cpp\CharactorSelectManager.cpp" />
     <ClCompile Include="cpp\SkyDome.cpp" />
     <ClCompile Include="cpp\SoundManager.cpp" />
     <ClCompile Include="cpp\StageCollisionManager.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="h\SceneTest.h" />
     <ClInclude Include="h\SceneTitle.h" />
     <ClInclude Include="h\SelectFinger.h" />
+    <ClInclude Include="h\CharactorSelectManager.h" />
     <ClInclude Include="h\Singleton.h" />
     <ClInclude Include="h\SkyDome.h" />
     <ClInclude Include="h\SoundManager.h" />
@@ -203,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
+    <None Include="data\constant\CharactorCard.csv" />
     <None Include="data\constant\Collision.csv" />
     <None Include="data\constant\Direction.csv" />
     <None Include="data\constant\Enemy.csv" />

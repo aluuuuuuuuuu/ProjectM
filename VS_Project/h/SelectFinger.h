@@ -26,18 +26,50 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() const;
-
+	
 	/// <summary>
-	/// 今フレームでAボタンが押されたかどうか
+	/// 今フレームでいずれかのボタンが押されたかどうか
 	/// </summary>
+	/// <param name="button">ボタン定数</param>
 	/// <returns>押されていたらtrue</returns>
-	bool IsPushButton() const;
+	bool IsPushButton(int button) const;
 
 	/// <summary>
 	/// 座標を返す
 	/// </summary>
 	/// <returns>二次元座標</returns>
 	Vec2 GetPos() const;
+
+	/// <summary>
+	/// パッドナンバーを返す
+	/// </summary>
+	/// <returns>パッドナンバー</returns>
+	int GetPadNum() const;
+
+	/// <summary>
+	/// 選択フラグを変更する
+	/// </summary>
+	/// <param name="flag">選択したかどうか</param>
+	void SetSelectFlag(bool flag);
+
+	/// <summary>
+	/// 選択しているかどうか返す
+	/// </summary>
+	/// <returns>選択していたらtrue</returns>
+	bool IsSelected()const;
+
+	/// <summary>
+	/// 選択するキャラをセットする
+	/// </summary>
+	/// <param name="charaNum">選択するキャラのナンバー</param>
+	void SetSelectChara(int charaNum);
+
+	/// <summary>
+	/// 選択したキャラナンバーを返す
+	/// </summary>
+	/// <returns>キャラナンバー</returns>
+	int GetSelectChara()const;
+
 private:
 
 	// パッドナンバー
@@ -49,7 +81,10 @@ private:
 	// 表示座標
 	Vec2 _pos;
 
-	// 決定ボタンフラグ
-	bool _pushButtonFlag;
+	// 選択したフラグ
+	bool _selectFlag;
+
+	// どのキャラクターを選択したか
+	int _chara;
 };
 

@@ -134,15 +134,15 @@ public:
 
 private:
 	// 今フレームのインプットステート
-	XINPUT_STATE _padState[4];
+	XINPUT_STATE _padState[4] = {};
 
 	// 前フレームのインプットステート
-	XINPUT_STATE _lastPadState[4];
+	XINPUT_STATE _lastPadState[4] = {};
 
 	// プライベートコンストラクタ
 	Input() {};
 
 	// 接続されているコントローラーの数
-	int _padNum;
+	int _padNum = 0;
 };
 

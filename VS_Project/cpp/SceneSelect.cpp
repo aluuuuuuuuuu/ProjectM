@@ -4,19 +4,18 @@
 #include "SceneManager.h"
 #include "SelectFinger.h"
 #include "CharactorCard.h"
+#include "CharactorSelectManager.h"
 
 SceneSelect::SceneSelect():
 	_flame(60)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelect::FadeInUpdate;
-	_drawFunc = &SceneSelect::FadeDraw;
+	_drawFunc = &SceneSelect::FadeInDraw;
 
-	// カメラのニアファーの設定
-	SetCameraNearFar(1, 512);
-
-	for (auto& select : _finishSelect) {
-		select = false;
+	// プレイヤーデータの初期化
+	for (auto& pl : _plData.player) {
+		pl = -1;
 	}
 
 	// 最初の人数はかならず一人
@@ -55,15 +54,8 @@ void SceneSelect::PlayerNumSelectUpdate()
 	// Aボタンで次の画面へ
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 
-		// 指のインスタンスを人数分作成する
-		for (int i = 0; i < _plData.playerNum; i++) {
-			_pFinger[i] = std::make_shared<SelectFinger>(i);
-		} 
-		
-		// カードのインスタンスをキャラクター分作成する
-		for (int i = 0; i < 4; i++) {
-			_pCard[i] = std::make_shared<CharactorCard>(i + 1);
-		}
+		// セレクトマネージャーの作成
+		_pSelectManager = std::make_shared<CharactorSelectManager>(_plData);
 
 		// キャラクター選択に移行
 		_updateFunc = &SceneSelect::CharactorSelectUpdate;
@@ -96,9 +88,18 @@ void SceneSelect::PlayerNumSelectDraw() const
 
 void SceneSelect::CharactorSelectUpdate()
 {
-	// 全指の更新処理
-	for (int num = 0; num < _plData.playerNum; num++) {
-		_pFinger[num]->Update();
+	// セレクトマネージャーの更新
+	_pSelectManager->Update();
+
+	// スタートボタンが押されたらゲームシーンに移行する
+	if (_pSelectManager->GetStart()) {
+
+		// プレイヤーデータを作成する
+		_pSelectManager->CreateData();
+
+		// フェードアウトに移行
+		_updateFunc = &SceneSelect::FadeOutUpdate;
+		_drawFunc = &SceneSelect::FadeOutDraw;
 	}
 }
 
@@ -107,15 +108,8 @@ void SceneSelect::CharactorSelectDraw() const
 	// 背景画像の描画
 	DrawGraph(0, 0, back,true);
 
-	// 全カードの描画
-	for (auto& card : _pCard) {
-		card->Draw();
-	}
-
-	// 全指の描画
-	for (int num = 0; num < _plData.playerNum; num++) {
-		_pFinger[num]->Draw();
-	}
+	// セレクトマネージャーの描画処理
+	_pSelectManager->Draw();
 }
 
 void SceneSelect::FadeInUpdate()
@@ -135,9 +129,20 @@ void SceneSelect::FadeOutUpdate()
 	}
 }
 
-void SceneSelect::FadeDraw() const
+void SceneSelect::FadeInDraw() const
 {
-	DrawCircle(800, 400, 200, 0x000000);
+	PlayerNumSelectDraw();
+
+	//フェード暗幕
+	int alpha = (int)(255 * ((float)_flame / 60));
+	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+void SceneSelect::FadeOutDraw() const
+{
+	CharactorSelectDraw();
 
 	//フェード暗幕
 	int alpha = (int)(255 * ((float)_flame / 60));

@@ -29,10 +29,10 @@ public:
 private:
 
 	// オープニングのテーマ
-	int _opBGM;
+	int _opBGM = 0;
 
 	// タイトル画面でボタンを押したときの音
-	int _startSE;
+	int _startSE = 0;
 
 };
 

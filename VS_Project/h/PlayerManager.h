@@ -21,10 +21,7 @@ struct VECTOR2
 struct PlayerData
 {
 	// パッド基準でどのモデルを使用するか
-	int player1 = -1;
-	int player2 = -1;
-	int player3 = -1;
-	int player4 = -1;
+	int player[4];
 
 	// プレイヤーの総数
 	int playerNum = 0;

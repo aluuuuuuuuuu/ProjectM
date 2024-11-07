@@ -8,6 +8,12 @@ constexpr int CHARACTOR_2 = 2;
 constexpr int CHARACTOR_3 = 3;
 constexpr int CHARACTOR_4 = 4;
 
+constexpr int PLAYER_1 = 1;
+constexpr int PLAYER_2 = 2;
+constexpr int PLAYER_3 = 3;
+constexpr int PLAYER_4 = 4;
+
+class CharactorSelectManager;
 class CharactorCard;
 class SelectFinger;
 class SceneSelect :
@@ -75,24 +81,23 @@ private:
 	void FadeOutUpdate();
 
 	/// <summary>
-	/// フェード共通の描画処理
+	/// フェードイン描画処理
 	/// </summary>
-	void FadeDraw() const;
+	void FadeInDraw	() const;
+
+	/// <summary>
+	/// フェードアウト描画処理
+	/// </summary>
+	void FadeOutDraw() const;
+
+	// キャラセレクトマネージャー
+	std::shared_ptr<CharactorSelectManager> _pSelectManager;
 
 	// フェード用フレームカウンタ
 	int _flame;
 
-	// キャラクター数に応じた選択フラグ
-	bool _finishSelect[4];
-
 	// ゲームシーンに渡すプレイヤーのデータ
 	PlayerData _plData;
-
-	// 指ポインタ
-	std::shared_ptr<SelectFinger>_pFinger[4];
-
-	// カードポインタ
-	std::shared_ptr<CharactorCard> _pCard[4];
 
 	int back;
 };

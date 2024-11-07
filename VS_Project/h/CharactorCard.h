@@ -1,32 +1,79 @@
 #pragma once
 #include "Vec2.h"
+#include <memory>
+#include "Constant.h"
 
-class CharactorCard
+class SelectFinger;
+class CharactorCard:
+	public Constant
 {
 public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="charNum">キャラクターナンバー</param>
 	CharactorCard(int charNum);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~CharactorCard();
 
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(std::shared_ptr<SelectFinger>& fing);
 	
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw() const;
+
+	/// <summary>
+	/// 自身の選択フラグを立てる
+	/// </summary>
+	/// <param name="plNum">どのプレイヤーに選択されたか</param>
+	void SelectCharactor(int plNum);
+
+	/// <summary>
+	/// 自身の選択フラグを下げる
+	/// </summary>
+	/// <param name="plNum">どのプレイヤーに選択解除されたか</param>
+	void RejectCharactor(int plNum);
+
+	bool GetSelectFlag();
+
+	bool GetSelectFlag(int plNum);
+
+	/// <summary>
+	/// 表示座標を取得する
+	/// </summary>
+	/// <returns>座標</returns>
+	Vec2 GetPos() const;
+
+
+	/// <summary>
+	/// 自身のキャラクターナンバーを返す
+	/// </summary>
+	/// <returns>キャラクターナンバー</returns>
+	int GetCharactorNum()const;
+
 private:
 
 	// カード画像ハンドル
 	int _cardHandle;
 
-	int _cardSelectedRed;
-	int _cardSelectedBlue;
-	int _cardSelectedGreen;
-	int _cardSelectedYellow;
+	// 選択後のイメージ画像ハンドル
+	int _cardSelectHandle[4];
+
+	// どのプレイヤーに選ばれたかフラグ
+	bool _selectFlag[4];
 
 	// カード描画座標
 	Vec2 _pos;
+
+	// 自身のキャラクターナンバー
+	int _charactorNum;
 };
 
