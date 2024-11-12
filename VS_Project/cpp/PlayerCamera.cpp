@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "Input.h"
 
-PlayerCamera::PlayerCamera(Vec3 pos, int padNum):
+PlayerCamera::PlayerCamera(Vec3 pos, int padNum, Vec3 forward):
 	_lightHandle(0),
 	_padNum(padNum)
 {
@@ -12,10 +12,9 @@ PlayerCamera::PlayerCamera(Vec3 pos, int padNum):
 	// カメラのニアファーの設定
 	SetCameraNearFar(GetConstantFloat("CAMERA_NEAR"), GetConstantFloat("CAMERA_FAR"));
 
-	// 初期位置に設定する
-	Position = Vec3{ pos.x + GetConstantFloat("CAMERA_BASE_POS_X"),
-					 pos.y + GetConstantFloat("CAMERA_BASE_POS_Y"),
-					 pos.z + GetConstantFloat("CAMERA_BASE_POS_Z"), };
+	Vec3 right = forward.Cross(Vec3{ 0,1,0 }).GetNormalized();
+
+	Position = -forward * 10 + right + 10 + Vec3(0, 10, 0);
 
 	// ライトの作成
 	_lightHandle = CreateDirLightHandle(VECTOR{ 0,0,0 });
@@ -26,13 +25,20 @@ PlayerCamera::~PlayerCamera()
 {
 }
 
-void PlayerCamera::Update(Vec3 pos)
+void PlayerCamera::Update(Vec3 pos,Vec3 forward, Vec3 angle)
 {
 	// ターゲットの設定
-	_target = Vec3(pos.x, pos.y + GetConstantFloat("CAMERA_MARGIN_Y"), pos.z);
+	//_target = Vec3(pos.x, pos.y + GetConstantFloat("CAMERA_MARGIN_Y"), pos.z);
+	
+	_target = forward * 100 + VGet(pos.x,pos.y + 10,pos.z);
+
+	Vec3 right = forward.Cross(Vec3{ 0,1,0 }).GetNormalized();
+
+	Position = -forward * 20 + -right * 8 + Vec3(0, 15, 0) + pos;
 
 	// 座標の設定
-	Position = Rotate(pos);
+	//Position = Rotate(Position,forward);
+
 
 	// ライトの角度を設定
 	SetLightDirectionHandle(_lightHandle, (_target - Position).VGet());
@@ -43,7 +49,7 @@ Vec3 PlayerCamera::GetTarget()
 	return _target;
 }
 
-Vec3 PlayerCamera::Rotate(Vec3 pos)
+Vec3 PlayerCamera::Rotate(Vec3 pos, Vec3 forward)
 {
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
@@ -72,11 +78,15 @@ Vec3 PlayerCamera::Rotate(Vec3 pos)
 		Angle.z = GetConstantFloat("CAMERA_ANGLE_RANGE");
 	}
 
+	return RotatePos(pos);
+
+
+
 	// 基準となるカメラの座標
-	Vec3 basePos = VGet(GetConstantFloat("CAMERA_BASE_POS_X"),GetConstantFloat("CAMERA_BASE_POS_Y"), GetConstantFloat("CAMERA_BASE_POS_Z"));
+	//Vec3 basePos = VGet(GetConstantFloat("CAMERA_BASE_POS_X"),GetConstantFloat("CAMERA_BASE_POS_Y"), GetConstantFloat("CAMERA_BASE_POS_Z"));
 
 	// カメラ座標はプレイヤー座標から変換した座標を足したところ
-	return VAdd(VGet(pos.x, pos.y + GetConstantFloat("CAMERA_BASE_POS_Y"), pos.z), RotatePos(basePos).VGet());
+	//return VAdd(VGet(pos.x, pos.y + GetConstantFloat("CAMERA_BASE_POS_Y"), pos.z), RotatePos(basePos).VGet());
 }
 
 Vec3 PlayerCamera::RotatePos(Vec3 pos)

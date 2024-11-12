@@ -86,9 +86,14 @@ void Application::Run()
 	auto& manager = SceneManager::GetInstance();
 	int a = 0;
 	// 初期シーンを設定
-	//manager.ChangeScene(std::make_shared <SceneTest>(PlayerData data));
+	PlayerData data;
+
+	data.playerNum = 1;
+	data.player[0] = 1;
+
+	manager.ChangeScene(std::make_shared <SceneTest>(data));
 	//manager.ChangeScene(std::make_shared <SceneTitle>());
-	manager.ChangeScene(std::make_shared <SceneSelect>());
+	//manager.ChangeScene(std::make_shared <SceneSelect>());
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();

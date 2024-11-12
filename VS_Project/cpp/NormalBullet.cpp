@@ -10,6 +10,8 @@ NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisi
 {
 	// 初期位置の設定
 	Position = pos;
+
+	_bulletType = NORMAL_BULLET;
 }
 
 NormalBullet::~NormalBullet()
@@ -28,12 +30,11 @@ void NormalBullet::Update()
 	}
 
 	// マップとの当たり判定をとる
-	if (_collManager->CollisionBullet(Position, 3.0f)) _deadFlag = true;
+	if (_collManager->CollisionBullet(Position, 3.0f,NORMAL_BULLET)) _deadFlag = true;
 }
 
 void NormalBullet::Draw() const
 {
-	DrawFormatString(10, 60, 0xffffff, "%f %f %f", Position.x, Position.y, Position.z);
 	DrawSphere3D(Position.VGet(), 3.0f, 16, 0x0000ff, 0x0000ff, true);
 }
 

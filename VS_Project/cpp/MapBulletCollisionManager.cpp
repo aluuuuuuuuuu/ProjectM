@@ -1,8 +1,9 @@
 #include "MapBulletCollisionManager.h"
 #include "StageManager.h"
 #include "Vec3.h"
+#include "BulletManager.h"
 
-MapBulletCollisionManager::MapBulletCollisionManager(std::shared_ptr<StageManager>& stage):
+MapBulletCollisionManager::MapBulletCollisionManager(std::shared_ptr<StageManager>& stage) :
 	_stage(stage)
 {
 }
@@ -11,7 +12,7 @@ MapBulletCollisionManager::~MapBulletCollisionManager()
 {
 }
 
-bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius)
+bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius, int bullet)
 {
 	Vec3 max, min;// 最大座標,最小座標
 
@@ -30,9 +31,12 @@ bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius)
 					// めり込んでいるかどうか判定する
 					if (CollisionSphire(max, min, pos, radius)) {
 
-						// 当たっていたら当たったマスを削除する
-						_stage->DeleteBox(a, b, c);
-
+						// 弾が壊せるものだったら
+						if (bullet == NORMAL_BULLET) {
+							// 当たっていたら当たったマスを削除する
+							_stage->DeleteBox(a, b, c);
+						}
+						
 						// 当たったと返す
 						return true;
 
@@ -48,7 +52,7 @@ bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius)
 bool MapBulletCollisionManager::CollisionSphire(Vec3 max, Vec3 min, Vec3 pos, float radius)
 {
 	// カプセルの座標とAABBとの最短距離の2乗を計算
-	float distance = DistancePointToBox(max,min,pos, radius);
+	float distance = DistancePointToBox(max, min, pos, radius);
 
 	// 距離がカプセルの半径以内かどうかを判定
 	return distance <= radius;

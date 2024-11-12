@@ -8,7 +8,19 @@ class NormalBullet:
 	public BulletBase
 {
 public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="dist">方向ベクトル</param>
+	/// <param name="pos">発生する座標</param>
+	/// <param name="col">コリジョンマネージャー</param>
+	/// <param name="mgr">バレットマネージャー</param>
 	NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~NormalBullet();
 
 	/// <summary>
@@ -22,12 +34,16 @@ public:
 	void Draw() const;
 private:
 
+	// 移動方向ベクトル
 	Vec3 _distVec;
 
+	// 重力
 	float _gravity;
 
+	// コリジョンマネージャーの参照
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;
 
+	// バレットマネージャーの参照
 	BulletManager& _bulletManager;
 };
 

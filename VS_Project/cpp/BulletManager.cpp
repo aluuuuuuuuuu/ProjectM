@@ -2,6 +2,7 @@
 #include "NormalBullet.h"
 #include "Vec3.h"
 #include "MapBulletCollisionManager.h"
+#include "GrapplerBullet.h"
 
 BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col):
 	_collManager(col)
@@ -46,8 +47,24 @@ void BulletManager::PushBullet(int bul, Vec3 dist, Vec3 pos)
 	case NORMAL_BULLET:
 		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos,_collManager,*this));
 		break;
+	case GRAPPLER_BULLET:
+		_pBullet.push_back(std::make_shared<GrapplerBullet>(dist, pos, _collManager, *this));
 	default:
 		break;
 	}
+}
+
+bool BulletManager::IsCollisionBullet()
+{
+
+	for (auto& bullet : _pBullet) {
+		if (bullet->GetBulletType() == GRAPPLER_BULLET) {
+			if (bullet->GetCollisionFlag()) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 

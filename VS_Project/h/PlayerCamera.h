@@ -14,18 +14,20 @@ public:
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
 	/// <param name="padNum">パッドナンバー</param>
-	PlayerCamera(Vec3 pos, int padNum);
+	/// <param name="forward">プレイヤーの方向ベクトル</param>
+	PlayerCamera(Vec3 pos, int padNum, Vec3 forward);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
 	virtual ~PlayerCamera();
-
+	
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
-	void Update(Vec3 pos);
+	/// <param name="forward">プレイヤーの方向ベクトル</param>
+	void Update(Vec3 pos, Vec3 forward, Vec3 angle);
 
 	/// <summary>
 	/// ターゲットの座標を取得する
@@ -41,7 +43,8 @@ private:
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
 	/// <returns>回転後の座標</returns>
-	Vec3 Rotate(Vec3 pos);
+	/// <param name="forward">プレイヤーの方向ベクトル</param>
+	Vec3 Rotate(Vec3 pos, Vec3 forward);
 
 
 	/// <summary>

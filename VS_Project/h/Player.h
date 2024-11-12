@@ -62,10 +62,6 @@ private:
 	/// 移動関数をまとめた関数
 	/// </summary>
 	void Move();
-
-	/// <summary>
-	/// カメラに合わせて移動ベクトルを回転させる
-	/// </summary>
 	
 	/// <summary>
 	/// 引数のラジアンに合わせてベクトルを回転させる
@@ -100,16 +96,6 @@ private:
 	void RotateAngleY(float targetAngle);
 
 	/// <summary>
-	/// カメラの向きにY軸回転する
-	/// </summary>
-	void RotateAngleToCamera();
-
-	/// <summary>
-	/// 移動ベクトルの向きにY軸回転する
-	/// </summary>
-	void RotateAngleToVec();
-
-	/// <summary>
 	/// 2次元ベクトルを角度ごとに8つに分類する
 	/// </summary>
 	/// <returns>分類先</returns>
@@ -119,8 +105,6 @@ private:
 	/// アニメーション制御関数
 	/// </summary>
 	void AnimationContorol();
-
-	Vec3 RotateBulletVec(Vec3 plPos, Vec3 cameraPos);
 
 	// Y軸の移動量
 	float _moveScaleY;
@@ -154,5 +138,18 @@ private:
 
 	// 残段数
 	int _bulletNum;
+
+	// 向いている方向のベクトル
+	Vec3 _forwardVec;
+
+	// グラップラーフラグ
+	bool _grapplerFlag;
+
+	// グラップラー使用可能フラグ
+	bool _grapplerAvailableFlag;
+
+	// グラップラー発射中フラグ
+	bool _grapplerUseFlag;
+
 };
 

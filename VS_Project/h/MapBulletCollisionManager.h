@@ -9,9 +9,9 @@ public:
 	MapBulletCollisionManager(std::shared_ptr<StageManager>& stage);
 	~MapBulletCollisionManager();
 
-	bool CollisionBullet(Vec3 pos, float radius);
+	bool CollisionBullet(Vec3 pos, float radius, int bullet);
 
-	bool CollisionSphire(Vec3 max, Vec3 min, Vec3 pos , float radius);
+	bool CollisionSphire(Vec3 max, Vec3 min, Vec3 pos, float radius);
 
 
 

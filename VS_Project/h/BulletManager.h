@@ -5,6 +5,7 @@
 #include <Constant.h>
 
 #define NORMAL_BULLET 0
+#define GRAPPLER_BULLET 1
 
 class MapBulletCollisionManager;
 class BulletBase;
@@ -25,10 +26,22 @@ public:
 	/// </summary>
 	void Draw() const;
 
+	/// <summary>
+	/// プレイヤーが呼ぶ関数、指定の弾を発射する
+	/// </summary>
+	/// <param name="bul">弾の種類</param>
+	/// <param name="dist">方向ベクトル</param>
+	/// <param name="pos">座標</param>
 	void PushBullet(int bul, Vec3 dist, Vec3 pos);
 
-	std::list<std::shared_ptr<BulletBase>> _pBullet;
+	/// <summary>
+	/// 現状グラップラーが当たったかどうかを返す関数
+	/// </summary>
+	/// <returns>当たっていたらtrue</returns>
+	bool IsCollisionBullet();
+
 private:
 
+	std::list<std::shared_ptr<BulletBase>> _pBullet;
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;
 };

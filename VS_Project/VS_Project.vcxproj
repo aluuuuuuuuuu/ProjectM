@@ -151,6 +151,7 @@
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Crown.cpp" />
+    <ClCompile Include="cpp\GrapplerBullet.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
     <ClCompile Include="cpp\Logo.cpp" />
     <ClCompile Include="cpp\MapBulletCollisionManager.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Crown.h" />
+    <ClInclude Include="h\GrapplerBullet.h" />
     <ClInclude Include="h\Input.h" />
     <ClInclude Include="h\Logo.h" />
     <ClInclude Include="h\MapBulletCollisionManager.h" />

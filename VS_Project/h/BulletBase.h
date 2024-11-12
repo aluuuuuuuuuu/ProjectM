@@ -25,10 +25,28 @@ public:
 	/// </summary>
 	/// <returns>死亡フラグ</returns>
 	bool IsDead() const;
+
+	 /// <summary>
+	 /// 自身の弾の種類を返す
+	 /// </summary>
+	 /// <returns>バレットマネージャーの定数</returns>
+	 int GetBulletType() const;
+
+	 /// <summary>
+	 /// マップと当たったかどうかを返す
+	 /// </summary>
+	 /// <returns>当たっていたらtrue</returns>
+	 bool GetCollisionFlag() const;
 protected:
 
 	// 死亡フラグ
 	bool _deadFlag;
+
+	// 自身の弾の種類
+	int _bulletType;
+
+	// 当たったフラグ
+	bool _collisionFlag;
 
 };
 
