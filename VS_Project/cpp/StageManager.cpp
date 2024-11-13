@@ -92,5 +92,12 @@ int StageManager::GetStageInfo(int a, int b, int c)
 
 void StageManager::DeleteBox(int x, int y, int z)
 {
+	// ”ÍˆÍŠO‚¾‚Á‚½ê‡‚Í‰½‚à‚µ‚È‚¢
+	if (x < 0 || x >= BLOCK_NUM_X ||
+		y < 0 || y >= BLOCK_NUM_Y ||
+		z < 0 || z >= BLOCK_NUM_Z) {
+		return;
+	}
+
 	_stage[x][y][z] = 0;
 }

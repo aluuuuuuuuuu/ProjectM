@@ -2,7 +2,11 @@
 
 BulletBase::BulletBase():
 	_deadFlag(false),
-	_bulletType(-1)
+	_bulletType(-1),
+	_collisionFlag(false),
+	_invalidFlag(false),
+	_playerNum(0),
+	_gravity(0)
 {
 }
 
@@ -19,4 +23,19 @@ int BulletBase::GetBulletType() const
 bool BulletBase::GetCollisionFlag() const
 {
 	return _collisionFlag;
+}
+
+bool BulletBase::GetInvalidFlag() const
+{
+	return _invalidFlag;
+}
+
+void BulletBase::KillBullet()
+{
+	_invalidFlag = true;
+}
+
+int BulletBase::GetPlayerNum()
+{
+	return _playerNum;
 }

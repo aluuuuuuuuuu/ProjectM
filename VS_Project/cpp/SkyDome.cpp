@@ -7,10 +7,10 @@ SkyDome::SkyDome()
 	InitModel(MV1LoadModel("data/model/Skydome.mv1"));
 
 	// Šg‘å—¦‚Ìİ’è
-	Scale = Vec3{ 0.04f, 0.06f, 0.04f };
+	Scale = Vec3{ 0.1f, 0.1f, 0.1f };
 
 	// À•W‚Ìİ’è
-	Position = Vec3{ 0.0f,-100.0f,0.0f };
+	Position = Vec3{ 0.0f,-500.0f,0.0f };
 
 	// ˆê“xã‚Ìİ’è‚ğ”½‰f‚³‚¹‚é
 	UpdateModel(GetTransformInstance());

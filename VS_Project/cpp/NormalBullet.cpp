@@ -2,9 +2,7 @@
 #include "MapBulletCollisionManager.h"
 #include "BulletManager.h"
 
-NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr) :
-	_distVec(dist),
-	_gravity(0),
+NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
 	_bulletManager(mgr)
 {
@@ -12,6 +10,10 @@ NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisi
 	Position = pos;
 
 	_bulletType = NORMAL_BULLET;
+
+	_playerNum = plNum;
+
+	_distVec = dist;
 }
 
 NormalBullet::~NormalBullet()

@@ -1,10 +1,10 @@
 #pragma once
-#include <memory>
 #include "BulletBase.h"
+#include <memory>
 
 class BulletManager;
-class MapBulletCollisionManager;
-class NormalBullet :
+class MapCollisionManager;
+class BombBullet:
 	public BulletBase
 {
 public:
@@ -17,13 +17,13 @@ public:
 	/// <param name="col">コリジョンマネージャー</param>
 	/// <param name="mgr">バレットマネージャー</param>
 	/// <param name="plNum">プレイヤーナンバー</param>
-	NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum);
+	BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~NormalBullet();
-
+	virtual ~BombBullet();
+	
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -33,8 +33,8 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() const;
-private:
 
+private:
 	// コリジョンマネージャーの参照
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;
 

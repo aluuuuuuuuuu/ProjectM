@@ -6,10 +6,14 @@
 
 #define NORMAL_BULLET 0
 #define GRAPPLER_BULLET 1
+#define BOMB_BULLET 2
+
+#define MAX_TYPE_NUM 3
+#define MIN_TYPE_NUM 0
 
 class MapBulletCollisionManager;
 class BulletBase;
-class BulletManager:
+class BulletManager :
 	public Constant
 {
 public:
@@ -32,16 +36,49 @@ public:
 	/// <param name="bul">弾の種類</param>
 	/// <param name="dist">方向ベクトル</param>
 	/// <param name="pos">座標</param>
-	void PushBullet(int bul, Vec3 dist, Vec3 pos);
-
+	/// <param name="plNum">プレイヤーナンバー</param>
+	void PushBullet(int bul, Vec3 dist, Vec3 pos, int plnum);
+	
 	/// <summary>
 	/// 現状グラップラーが当たったかどうかを返す関数
 	/// </summary>
+	/// <param name="plNum">プレイヤーナンバー<</param>
 	/// <returns>当たっていたらtrue</returns>
-	bool IsCollisionBullet();
+	bool IsCollisionBullet(int plNum);
+
+	/// <summary>
+	/// 弾が無効かされているか返す現状グラップラーのみ
+	/// </summary>
+	/// <param name="plNum">プレイヤーナンバー<</param>
+	/// <returns>無効であればtrue</returns>
+	bool GetInvalidFlag(int plNum) const;
+
+	/// <summary>
+	/// 弾を無効化する現状グラップラーのみ
+	/// </summary>
+	/// <param name="plNum">プレイヤーナンバー<</param>
+	void KillBullet(int plNum);
+
+	
+	/// <summary>
+	/// 現状グラップラーのみの座標を返す
+	/// </summary>
+	/// <param name="plNum">プレイヤーナンバー<</param>
+	/// <returns>弾の座標</returns>
+	Vec3 GetBulletPos(int plNum);
+
+	/// <summary>
+	/// 現状グラップラーが存在しているかどうか返す
+	/// </summary>
+	/// <param name="plNum">プレイヤーナンバー</param>
+	/// <returns>存在していたらtrue</returns>
+	bool GetBulletExist(int plNum);
 
 private:
 
+	// バレットを保存するリスト配列
 	std::list<std::shared_ptr<BulletBase>> _pBullet;
+
+	// コリジョンマネージャーの参照
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;
 };

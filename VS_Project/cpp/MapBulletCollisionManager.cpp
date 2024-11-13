@@ -31,10 +31,28 @@ bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius, int bull
 					// めり込んでいるかどうか判定する
 					if (CollisionSphire(max, min, pos, radius)) {
 
-						// 弾が壊せるものだったら
-						if (bullet == NORMAL_BULLET) {
-							// 当たっていたら当たったマスを削除する
+						// 弾ごとの処理を行う
+						switch (bullet)
+						{
+						case NORMAL_BULLET:
+							// 当たったマスを削除する
 							_stage->DeleteBox(a, b, c);
+							break;
+						case GRAPPLER_BULLET:
+							// マップには影響を与えない
+							break;
+						case BOMB_BULLET:
+							// 当たったマスの周囲も削除する
+							_stage->DeleteBox(a + 1, b, c);
+							_stage->DeleteBox(a - 1, b, c);
+							_stage->DeleteBox(a, b + 1, c);
+							_stage->DeleteBox(a, b - 1, c);
+							_stage->DeleteBox(a, b, c + 1);
+							_stage->DeleteBox(a, b, c - 1);
+							_stage->DeleteBox(a, b, c);
+							break;
+						default:
+							break;
 						}
 						
 						// 当たったと返す

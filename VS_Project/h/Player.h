@@ -54,42 +54,6 @@ public:
 private:
 
 	/// <summary>
-	/// 自身の回転
-	/// </summary>
-	void Rotate();
-
-	/// <summary>
-	/// 移動関数をまとめた関数
-	/// </summary>
-	void Move();
-	
-	/// <summary>
-	/// 引数のラジアンに合わせてベクトルを回転させる
-	/// </summary>
-	/// <param name="vec">回転させるベクトル</param>
-	/// <param name="angle">ラジアン</param>
-	/// <returns>回転後のベクトル</returns>
-	Vec3 RotateMoveVec(Vec3 vec,float angle);
-
-	/// <summary>
-	/// コントローラー入力で移動ベクトルを作成する
-	/// </summary>
-	/// <returns>移動ベクトル</returns>
-	void CreateMoveVec();
-
-	/// <summary>
-	/// ジャンプ力を返す
-	/// </summary>
-	/// <returns>ジャンプ力</returns>
-	void CreateYMoveScale();
-
-	/// <summary>
-	/// 現在地上にいるか判定する
-	/// </summary>
-	/// <returns>true:地上にいる</returns>
-	bool OnGround();
-
-	/// <summary>
 	/// Y軸の回転値を引数の値に徐々に近づけていく
 	/// </summary>
 	/// <param name="targetAngle">目標の値</param>
@@ -106,11 +70,16 @@ private:
 	/// </summary>
 	void AnimationContorol();
 
+	/// <summary>
+	/// 選択した弾を発射する
+	/// </summary>
+	void BulletTrigger();
+
 	// Y軸の移動量
 	float _moveScaleY;
 
 	// 地上に立っているフラグ
-	bool _isGround;
+	bool _groundFlag;
 
 	// 前フレームの座標
 	Vec3 _frontPos;
@@ -142,14 +111,14 @@ private:
 	// 向いている方向のベクトル
 	Vec3 _forwardVec;
 
-	// グラップラーフラグ
-	bool _grapplerFlag;
+	// グラップラー移動用単位ベクトル
+	Vec3 _grapplerUnitVec;
 
-	// グラップラー使用可能フラグ
-	bool _grapplerAvailableFlag;
+	// グラップラー用移動量
+	float _grapplerScale;
 
-	// グラップラー発射中フラグ
-	bool _grapplerUseFlag;
+	// 選択している弾の要素番号
+	int _selectBullet;
 
 };
 

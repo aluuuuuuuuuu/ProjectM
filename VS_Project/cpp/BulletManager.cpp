@@ -3,8 +3,9 @@
 #include "Vec3.h"
 #include "MapBulletCollisionManager.h"
 #include "GrapplerBullet.h"
+#include "BombBullet.h"
 
-BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col):
+BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col) :
 	_collManager(col)
 {
 	// íËêîÇÃì«Ç›çûÇ›
@@ -40,31 +41,76 @@ void BulletManager::Draw() const
 	}
 }
 
-void BulletManager::PushBullet(int bul, Vec3 dist, Vec3 pos)
+void BulletManager::PushBullet(int bul, Vec3 dist, Vec3 pos, int plnum)
 {
 	switch (bul)
 	{
 	case NORMAL_BULLET:
-		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos,_collManager,*this));
+		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos, _collManager, *this, plnum));
 		break;
 	case GRAPPLER_BULLET:
-		_pBullet.push_back(std::make_shared<GrapplerBullet>(dist, pos, _collManager, *this));
+		_pBullet.push_back(std::make_shared<GrapplerBullet>(dist, pos, _collManager, *this, plnum));
+		break;
+	case BOMB_BULLET:
+		_pBullet.push_back(std::make_shared<BombBullet>(dist, pos, _collManager, *this, plnum));
+		break;
 	default:
 		break;
 	}
 }
 
-bool BulletManager::IsCollisionBullet()
+bool BulletManager::IsCollisionBullet(int plNum)
 {
 
 	for (auto& bullet : _pBullet) {
-		if (bullet->GetBulletType() == GRAPPLER_BULLET) {
+		if (bullet->GetBulletType() == GRAPPLER_BULLET && bullet->GetPlayerNum() == plNum) {
 			if (bullet->GetCollisionFlag()) {
 				return true;
 			}
 		}
 	}
 
+	return false;
+}
+
+bool BulletManager::GetInvalidFlag(int plNum) const
+{
+	for (auto& bullet : _pBullet) {
+		if (bullet->GetBulletType() == GRAPPLER_BULLET && bullet->GetPlayerNum() == plNum) {
+			if (bullet->GetInvalidFlag()) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void BulletManager::KillBullet(int plNum)
+{
+	for (auto& bullet : _pBullet) {
+		if (bullet->GetBulletType() == GRAPPLER_BULLET && bullet->GetPlayerNum() == plNum) {
+			bullet->KillBullet();
+		}
+	}
+}
+
+Vec3 BulletManager::GetBulletPos(int plNum)
+{
+	for (auto& bullet : _pBullet) {
+		if (bullet->GetBulletType() == GRAPPLER_BULLET && bullet->GetPlayerNum() == plNum) {
+			return bullet->Position;
+		}
+	}
+	return Vec3();
+}
+
+bool BulletManager::GetBulletExist(int plNum)
+{
+	for (auto& bullet : _pBullet) {
+		if (bullet->GetBulletType() == GRAPPLER_BULLET && bullet->GetPlayerNum() == plNum) {
+			return true;
+		}
+	}
 	return false;
 }
 

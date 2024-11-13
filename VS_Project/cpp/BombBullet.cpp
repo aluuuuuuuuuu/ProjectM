@@ -1,28 +1,26 @@
-#include "GrapplerBullet.h"
+#include "BombBullet.h"
 #include "MapBulletCollisionManager.h"
 #include "BulletManager.h"
 
-GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
+BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
-	_bulletManager(mgr),
-	_flame(0)
-
+	_bulletManager(mgr)
 {
 	// 初期位置の設定
 	Position = pos;
 
-	_bulletType = GRAPPLER_BULLET;
+	_bulletType = BOMB_BULLET;
 
 	_playerNum = plNum;
 
 	_distVec = dist;
 }
 
-GrapplerBullet::~GrapplerBullet()
+BombBullet::~BombBullet()
 {
 }
 
-void GrapplerBullet::Update()
+void BombBullet::Update()
 {
 	if (!_collisionFlag) {
 		Position += _distVec * _bulletManager.GetConstantFloat("SPEED");
@@ -36,18 +34,10 @@ void GrapplerBullet::Update()
 	}
 
 	// マップとの当たり判定をとる
-	if (_collManager->CollisionBullet(Position, 3.0f,GRAPPLER_BULLET)) _collisionFlag = true;
-
-	if (_invalidFlag) {
-		_flame++;
-		if (_flame >= 120) {
-			_deadFlag = true;
-		}
-	}
-
+	if (_collManager->CollisionBullet(Position, 3.0f, BOMB_BULLET)) _deadFlag = true;
 }
 
-void GrapplerBullet::Draw() const
+void BombBullet::Draw() const
 {
-	DrawSphere3D(Position.VGet(), 3.0f, 16, 0xff00ff, 0xff00ff, true);
+	DrawSphere3D(Position.VGet(), 3.0f, 16, 0xf0ff00, 0xf0ff00, true);
 }

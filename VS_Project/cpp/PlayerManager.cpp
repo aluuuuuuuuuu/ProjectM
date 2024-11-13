@@ -90,8 +90,8 @@ void PlayerManager::Draw(int num) const
 	//_pPlayer[num]->CameraSet();
 
 	// ƒvƒŒƒCƒ„[‚Ì•`‰æ
-	for (auto& pll : _pPlayer) {
-		pll->Draw();
+	for (auto& pl : _pPlayer) {
+		pl->Draw();
 	}
 }
 
@@ -256,6 +256,7 @@ VECTOR2 PlayerManager::CreateScreenCenter(int num, int scWidth, int scHeight)
 		}
 		break;
 	default:
+		return VECTOR2{};
 		break;
 	}
 }

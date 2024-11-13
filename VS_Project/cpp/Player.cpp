@@ -9,16 +9,15 @@
 
 Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum) :
 	_moveScaleY(0),
-	_isGround(false),
+	_groundFlag(false),
 	_bulletManager(bullet),
 	_groundCount(0),
 	_runFlag(false),
 	_padNum(padNum),
 	_manager(manager),
 	_bulletNum(15),
-	_grapplerFlag(false),
-	_grapplerAvailableFlag(true),
-	_grapplerUseFlag(false)
+	_grapplerScale(0),
+	_selectBullet(NORMAL_BULLET)
 {
 	// 拡大の設定
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
@@ -45,101 +44,106 @@ Player::~Player()
 
 void Player::Control()
 {
-	// 弾を発射する
-	if (Input::GetInstance().IsTrigger(INPUT_RIGHT_TRIGGER, _padNum) && _bulletNum > 0) {
-
-		// 発射する座標
-		Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
-
-		if (_grapplerFlag) {
-			if (_grapplerAvailableFlag) {
-				_grapplerUseFlag = true;
-				_grapplerAvailableFlag = false;
-				// 弾を生成
-				_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos);
-			}
-
-				
-			
-		}
-		else {
-
-			// 撃つときに走っていたら歩きにする
-			if (_runFlag) {
-				_runFlag = false;
-			}
-
-			// 弾を生成
-			_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos);
-
-			_bulletNum--;
-		}
-	}
-
-	// グラップラーが当たっているかを知らべる
-	if (_bulletManager->IsCollisionBullet()) {
-		// 当たっていたら上方向とグラップラーの方向に移動ベクトルを与える
-	}
-
-
-
-	// グラップラーの切り替え
-	if (Input::GetInstance().IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
-		if (_grapplerFlag) {
-			if (!_grapplerUseFlag) {
-				_grapplerFlag = false;
-			}
-		}
-		else {
-			_grapplerFlag = true;
-		}
-	}
-
-
-
-
-
-
-
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
+
+	// 弾を発射する
+	if (input.IsTrigger(INPUT_RIGHT_TRIGGER, _padNum)) {
+		BulletTrigger();
+	}
+
+	// 弾の種類のの切り替え
+	if (input.IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
+		if (_selectBullet == MAX_TYPE_NUM - 1) {
+			_selectBullet = MIN_TYPE_NUM;
+		}
+		else {
+			_selectBullet++;
+		}
+	}
+	if (input.IsTrigger(INPUT_LEFT_SHOULDER, _padNum)) {
+		if (_selectBullet == MIN_TYPE_NUM) {
+			_selectBullet = MAX_TYPE_NUM - 1;
+		}
+		else {
+			_selectBullet--;
+		}
+	}
+
 	// 右スティックで回転
 	if (input.GetStickVectorLength(INPUT_RIGHT_STICK, _padNum) > 3000) {
 
 		// スティックを傾けた方向の回転の値を増減させる
 		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).x != 0) {
-			Angle.y += 0.000001 * (input.GetStickThumbX(INPUT_RIGHT_STICK, _padNum));
+			Angle.y += 0.000001f * (input.GetStickThumbX(INPUT_RIGHT_STICK, _padNum));
+
+			// ラジアン角を正規化する
+			Angle.y = fmodf(Angle.y, static_cast<float>(DX_TWO_PI));
+			if (Angle.y < 0.0f) Angle.y += static_cast<float>(DX_TWO_PI);
 		}
 		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).z != 0) {
-			Angle.z += 0.000001 * (input.GetStickThumbY(INPUT_RIGHT_STICK, _padNum));
+			Angle.z += 0.000001f * (input.GetStickThumbY(INPUT_RIGHT_STICK, _padNum));
+
+			// 最大値と最低値を調整する
+			if (Angle.z <= -0.9f) {
+				Angle.z = -0.9f;
+			}
+			else if (Angle.z >= 0.9f) {
+				Angle.z = 0.9f;
+			}
 		}
-
-		// ラジアン角を正規化する
-		Angle.y = fmodf(Angle.y, static_cast<float>(DX_TWO_PI));
-		if (Angle.y < 0.0f) Angle.y += static_cast<float>(DX_TWO_PI);
-	}
-
-	// 最大値と最低値を調整する
-	if (Angle.z <= -0.9) {
-		Angle.z = -0.9;
-	}
-	else if (Angle.z >= 0.9) {
-		Angle.z = 0.9;
 	}
 
 	// リロード
-	if (Input::GetInstance().IsTrigger(INPUT_X, _padNum)) {
+	if (input.IsTrigger(INPUT_X, _padNum)) {
 		_bulletNum = 15;
 	}
+
+	// コリジョン前の移動
 
 	// 移動ベクトルの初期化
 	_moveVec = 0;
 
-	// 移動
-	Move();
+	// スティックの入力値を移動ベクトルに代入する
+	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, _padNum) > 3000) {
+		_moveVec = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum);
 
-	// 自身の回転値を更新する
-	Rotate();
+		// 単位ベクトルの方向に移動速度分移動するベクトルを作成する
+		_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED");
+	}
+
+	// Aボタンでジャンプ
+	if (Input::GetInstance().IsHold(INPUT_A, _padNum) && _groundFlag) {
+
+		// ジャンプ力を与える
+		_moveScaleY = 2.0f;
+
+		// ジャンプの開始アニメーションを再生
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_JUMP_UP"), false, _manager.GetConstantFloat("BLEND_RATE"));
+	}
+
+	// y軸の移動も足す
+	_moveVec.y += _moveScaleY;
+
+	// 移動ベクトルをy軸回転させる
+
+	// 角度のずれを修正する
+	float angle = Angle.y - 1.5708f;
+
+	// Y軸回転行列に変換
+	MATRIX rotaMtx = MGetRotY(angle);
+
+	// スティック入力は逆になるから修正する
+	_moveVec = Vec3{ _moveVec.x * -1, _moveVec.y, _moveVec.z * -1 };
+
+	// 移動ベクトルを回転値に合わせてY軸回転させる
+	_moveVec = VTransform(_moveVec.VGet(), rotaMtx);
+
+	// グラップラーの移動
+	_moveVec += _grapplerUnitVec * _grapplerScale;
+
+	// 座標に移動ベクトルを足す
+	Position += _moveVec;
 
 	// カプセルに座標を渡す
 	Set(Position);
@@ -150,22 +154,69 @@ void Player::Update()
 	// カプセルに座標を渡す
 	Set(Position);
 
-	// 地上にいるか判定する
-	_isGround = OnGround();
+	// 前のy座標と今のy座標が同じであれば着地している
+	if (_frontPos.y == Position.y) {
+		if (_groundCount == 0) {
+			_groundCount++;
+		}
+		else {
+			_groundFlag = true;
+		}
+	}
+	else {
+		_groundCount = 0;
+		_groundFlag = false;
+	}
 
+	// 前フレームの座標を保存する
 	_frontPos = Position;
+
+	// 落下速度を少しづつ早くする
+	if (!_groundFlag && _moveScaleY > -1.5f) {
+		_moveScaleY -= 0.1f;
+	}
 
 	// 向いている方向のベクトルを求める
 	_forwardVec.x = std::cos(Angle.y * -1) * std::cos(Angle.z); // X成分
 	_forwardVec.y = std::sin(Angle.z);                 // Y成分（上下方向の影響）
 	_forwardVec.z = std::sin(Angle.y * -1) * std::cos(Angle.z); // Z成分
 
+	// グラップラーの移動処理
+	if (_groundFlag) {
+		_grapplerScale = 0.0f;
+	}
+	else if (_grapplerScale <= 0.0f) {
+		_grapplerScale = 0.0f;
+	}
+	else {
+		_grapplerScale -= 0.001f;
+	}
 
-	MATRIX aa;
+	// グラップラーが当たっているかを知らべる
+	if (_bulletManager->IsCollisionBullet(_padNum) && !_bulletManager->GetInvalidFlag(_padNum)) {
 
-	//aa = MGetRotX(Angle.z);
-	//_forwardVec = VTransform(_forwardVec.VGet(), aa);
+		// 弾の無効化
+		_bulletManager->KillBullet(_padNum);
 
+		// 当たっていたら上方向とグラップラーの方向に移動ベクトルを与える
+		if (_groundFlag) {
+			_moveScaleY = 2.4f;
+		}
+		else {
+			_moveScaleY = 1.5f;
+		}
+
+		// グラップラーに向かう単位ベクトルを作成する
+		_grapplerUnitVec = (_bulletManager->GetBulletPos(_padNum) - Position).GetNormalized();
+
+		// グラップラーの着弾点への距離によって移動速度を変化させる
+		_grapplerScale = 0.02f * (_bulletManager->GetBulletPos(_padNum) - Position).Length();
+
+		// グラップラーによる移動速度の最大値を決める
+		if (_grapplerScale > 1.8f) {
+			_grapplerScale = 1.8f;
+		}
+	}
 
 	// カメラの更新
 	_pCamera->Update(Position, _forwardVec, Angle);
@@ -174,17 +225,9 @@ void Player::Update()
 	AnimationContorol();
 
 	// アニメーションの更新
-	if (_runFlag && _isGround) {
+	UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
 
-		// 走っているときのアニメーション速度で更新する
-		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_RUN"));
-	}
-	else {
-
-		// 歩き
-		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
-	}
-
+	// モデル用のトランスフォームを作成する
 	Transform trans;
 	trans.Scale = Scale;
 	trans.Position = Position;
@@ -198,152 +241,40 @@ void Player::Draw() const
 {
 
 #ifdef _DEBUG
-	//カプセルを描画
 	DrawCapsule();
 	DrawLine3D(Position.VGet(), (Position + _forwardVec * 20).VGet(), 0x00ffff);
-	//DrawLine3D(Position.VGet(), (Position + Angle.GetNormalized() *20).VGet(), 0x00ffff);
 	DrawFormatString(10, 10, 0xffffff, "x:%f y:%f z:%f angleY:%f angleZ:%f", Position.x, Position.y, Position.z, Angle.y, Angle.z);
+	if (_groundFlag) {
+		DrawString(10, 40, "OnGrround", 0xff0f0f);
+	}
+	DrawFormatString(10, 60, 0xff0f0f, "GrapplerScale:%f", _grapplerScale);
+	if (_selectBullet == NORMAL_BULLET) {
+		DrawString(10, 80, "NormalBullet", 0xff0f0f);
+	}
+	else if (_selectBullet == GRAPPLER_BULLET) {
+		DrawString(10, 80, "GrapplerBullet", 0xff0f0f);
+	}
+	else if (_selectBullet == BOMB_BULLET) {
+		DrawString(10, 80, "bombBullet", 0xff0f0f);
+	}
+	if (_bulletManager->GetBulletExist(_padNum)) {
+		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff0000);
+	}
 #endif // DEBUG
+
+	// モデルの描画
 	DrawModel();
-
-
-	DrawCircle(1920 / 2, 1080 / 2, 10, 0xffff00);
 }
 
 void Player::CameraSet() const
 {
+	// カメラのターゲットと座標を設定する
 	SetCameraPositionAndTarget_UpVecY(_pCamera->Position.VGet(), _pCamera->GetTarget().VGet());
 }
 
 bool Player::GetGroundFlag() const
 {
-	return _isGround;
-}
-
-void Player::Rotate()
-{
-	// 歩き中はカメラと同じ方向を向く
-	if (!_runFlag) {
-		//RotateAngleY(_pCamera->Angle.y);
-	}
-	// 走り中は移動方向を向く
-	else {
-
-		float targetAngle;
-
-		// 移動する方向の角度を求める
-		Vec3 targetPos = Position + _moveVec;
-		float x = targetPos.x - Position.x;
-		float z = targetPos.z - Position.z;
-		targetAngle = atan2f(x, z);
-		targetAngle = targetAngle + static_cast<float>(DX_PI);
-		DX_TWO_PI;
-
-		RotateAngleY(targetAngle);
-	}
-}
-
-void Player::Move()
-{
-
-	//// Xボタンでダッシュ切り替え
-	//if (Input::GetInstance().IsTrigger(INPUT_X, _padNum)) {
-	//	_runFlag = !_runFlag;
-	//}
-
-	// xz軸方向の移動
-	CreateMoveVec();
-
-	// Y軸方向の移動
-	CreateYMoveScale();
-
-	// 移動ベクトルをy軸回転させる
-	_moveVec = RotateMoveVec(_moveVec, Angle.y);
-
-	// 座標に移動ベクトルを足す
-	Position += _moveVec;
-}
-
-Vec3 Player::RotateMoveVec(Vec3 vec, float angle)
-{
-	Vec3 ret = vec;
-
-	angle -= 1.5708f;
-
-	// Y軸回転行列に変換
-	MATRIX rotaMtx = MGetRotY(angle);
-
-	ret = Vec3{ vec.x * -1, vec.y, vec.z * -1 };
-
-	// 移動ベクトルを回転値に合わせてY軸回転させる
-	ret = VTransform(ret.VGet(), rotaMtx);
-
-	return ret;
-}
-
-void Player::CreateMoveVec()
-{
-	// 移動量を返すベクトル
-	Vec3 move;
-
-	// スティックの入力値を移動ベクトルに代入する
-	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, _padNum) > 3000) {
-		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum);
-	}
-
-	if (_runFlag) {
-		_moveVec += move * _manager.GetConstantFloat("RUN_SPEED");
-	}
-	else {
-		_moveVec += move * _manager.GetConstantFloat("WALK_SPEED");
-	}
-
-	DrawFormatString(30, 50, 0xffffff, "%f %f %f", _moveVec.x, _moveVec.y, _moveVec.x);
-}
-
-void Player::CreateYMoveScale()
-{
-
-	// 地上にいなかったら
-	// 一定の落下速度になるまで落下速度を上げる
-	if (_isGround) {
-		//_moveScaleY = 0.1f;
-	}
-	else {
-
-		if (_moveScaleY > -1.5f) {
-			_moveScaleY -= 0.1f;
-		}
-	}
-
-	// Aボタンでジャンプ
-	if (Input::GetInstance().IsHold(INPUT_A, _padNum) && _isGround) {
-
-		// ジャンプ力を与える
-		_moveScaleY = 2.0f;
-
-		// ジャンプの開始アニメーションを再生
-		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_JUMP_UP"), false, _manager.GetConstantFloat("BLEND_RATE"));
-	}
-
-	_moveVec.y += _moveScaleY;
-}
-
-bool Player::OnGround()
-{
-	if (_frontPos.y == Position.y) {
-		if (_groundCount == 0) {
-			_groundCount++;
-		}
-		else {
-			return true;
-		}
-	}
-	else {
-		_groundCount = 0;
-	}
-
-	return false;
+	return _groundFlag;
 }
 
 void Player::RotateAngleY(float targetAngle)
@@ -417,7 +348,7 @@ int Player::ClassifyDirection()
 void Player::AnimationContorol()
 {
 	// 地面についていないとき
-	if (!_isGround) {
+	if (!_groundFlag) {
 		// ジャンプアップアニメーション出なければループアニメーションを再生する
 		if (GetAnimTag() != _manager.GetConstantInt("ANIM_JUMP_UP")) {
 			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_JUMP_LOOP"), true, _manager.GetConstantFloat("BLEND_RATE"));
@@ -467,4 +398,36 @@ void Player::AnimationContorol()
 			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));			break;
 		}
 	}
+}
+
+void Player::BulletTrigger()
+{
+
+	// 発射する座標
+	Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
+
+	switch (_selectBullet)
+	{
+	case NORMAL_BULLET:
+		// 弾を生成
+		_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos, _padNum);
+
+		// 球数を減らす
+		_bulletNum--;
+		break;
+	case GRAPPLER_BULLET:
+
+		// グラップラーは１プレイヤーにつき1つしか存在しない
+		if (!_bulletManager->GetBulletExist(_padNum)) {
+			// 弾を生成
+			_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos, _padNum);
+		}
+		break;
+	case BOMB_BULLET:
+		_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
+		break;
+	default:
+		break;
+	}
+
 }
