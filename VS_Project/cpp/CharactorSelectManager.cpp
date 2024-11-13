@@ -83,7 +83,7 @@ bool CharactorSelectManager::GetStart() const
 void CharactorSelectManager::CreateData()
 {
 	for (int num = 0; num < _plData.playerNum; num++) {
-		_plData.player[num] = _pFinger[num]->GetSelectChara();
+		_plData.charactor[num] = _pFinger[num]->GetSelectChara();
 	}
 }
 
@@ -107,7 +107,7 @@ void CharactorSelectManager::FingerFunction()
 		if (_pFinger[num]->IsPushButton(INPUT_B)) {
 			for (auto& card : _pCard) {
 				// 選択していて、対象の指が選択したカードと重なっていたら選択解除する
-				if (IsFingerOnCard(_pFinger[num], card) && card->GetSelectFlag(num)) {
+				if (card->GetSelectFlag(num)) {
 					_pFinger[num]->SetSelectFlag(false);
 					_pCard[_pFinger[num]->GetSelectChara() - 1]->RejectCharactor(num);
 				}

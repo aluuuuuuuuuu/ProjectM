@@ -14,7 +14,7 @@ SceneSelect::SceneSelect():
 	_drawFunc = &SceneSelect::FadeInDraw;
 
 	// プレイヤーデータの初期化
-	for (auto& pl : _plData.player) {
+	for (auto& pl : _plData.charactor) {
 		pl = -1;
 	}
 

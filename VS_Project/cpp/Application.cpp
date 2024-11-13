@@ -84,12 +84,12 @@ void Application::Run()
 {
 	// シーンマネージャーのインスタンスを取得
 	auto& manager = SceneManager::GetInstance();
-	int a = 0;
+
 	// 初期シーンを設定
 	PlayerData data;
 
 	data.playerNum = 1;
-	data.player[0] = 1;
+	data.charactor[0] = 1;
 
 	manager.ChangeScene(std::make_shared <SceneTest>(data));
 	//manager.ChangeScene(std::make_shared <SceneTitle>());
