@@ -93,6 +93,8 @@ void PlayerManager::Draw(int num) const
 	for (auto& pl : _pPlayer) {
 		pl->Draw();
 	}
+
+	DrawCircle(_cameraSenter[num].a, _cameraSenter[num].b, 10, 0xff0f00);
 }
 
 VECTOR4 PlayerManager::GetArea(int num) const
