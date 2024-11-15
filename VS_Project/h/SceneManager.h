@@ -29,6 +29,17 @@ public:
 	void SceneDraw() const;
 
 	/// <summary>
+	/// 実行中のシーンの上に追加のシーンを追加する
+	/// </summary>
+	/// <param name="surface">追加するシーンのポインタ</param>
+	void PushScene(std::shared_ptr<SceneBase> surface);
+
+	/// <summary>
+	/// 追加のシーンを除去する
+	/// </summary>
+	void PopScene();
+
+	/// <summary>
 	/// ゲーム終了フラグを立てる
 	/// </summary>
 	void GameEnd();

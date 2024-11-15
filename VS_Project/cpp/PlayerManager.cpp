@@ -80,7 +80,14 @@ void PlayerManager::Update()
 
 	// プレイヤーの更新
 	for (auto& pl : _pPlayer) {
+
+		// 更新処理
 		pl->Update();
+
+		// 落下死
+		if (pl->Position.y <= GetConstantFloat("DEAD_LINE")) {
+			pl->KillPlayer();
+		}
 	}
 }
 

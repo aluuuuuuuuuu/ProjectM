@@ -22,7 +22,6 @@ void SelectFinger::Update()
 	Vec3 move;
 	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK,_padNum) >= 2000) {
 		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum) * 10;
-
 	}
 
 	_pos += Vec2{ move.x,move.z * -1 };

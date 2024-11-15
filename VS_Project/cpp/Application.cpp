@@ -88,9 +88,8 @@ void Application::Run()
 	// ‰ŠúƒV[ƒ“‚ğİ’è
 	PlayerData data;
 
-	data.playerNum = 2;
+	data.playerNum = 1;
 	data.charactor[0] = 1;
-	data.charactor[1] = 1;
 
 	manager.ChangeScene(std::make_shared <SceneTest>(data));
 	//manager.ChangeScene(std::make_shared <SceneTitle>());

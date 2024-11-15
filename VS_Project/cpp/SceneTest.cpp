@@ -8,6 +8,8 @@
 #include "Application.h"
 #include "Vec3.h"
 #include "SkyDome.h"
+#include "SceneMenu.h"
+#include "SceneManager.h"
 
 SceneTest::SceneTest(PlayerData& data)
 {
@@ -44,6 +46,13 @@ void SceneTest::Draw() const
 
 void SceneTest::NormalUpdate()
 {
+	for (int num = 0; num < _pPlayerManager->GetPlayerNum(); num++) {
+		if (Input::GetInstance().IsTrigger(INPUT_START, num)) {
+			SceneManager::GetInstance().PushScene(std::make_shared<SceneMenu>(num));
+		}
+	}
+
+
 	// スカイドームの更新処理
 	_pSkyDome->Update();
 

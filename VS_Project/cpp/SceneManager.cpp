@@ -1,6 +1,8 @@
 #include "SceneManager.h"
 #include "SceneBase.h"
 #include "Application.h"
+#include "Input.h"
+#include "SceneMenu.h"
 
 void SceneManager::ChangeScene(std::shared_ptr<SceneBase> next)
 {
@@ -22,16 +24,29 @@ void SceneManager::SceneUpdate()
 void SceneManager::SceneDraw() const
 {
 	// 末尾のみ描画
-	_pScene.back()->Draw();
+	for (auto& scene : _pScene) {
+		scene->Draw();
+	}
 }
 
-// ゲーム終了フラグをtrueにする
+void SceneManager::PushScene(std::shared_ptr<SceneBase> surface)
+{
+	_pScene.push_back(surface);
+}
+
+void SceneManager::PopScene()
+{
+	// シーン配列が2つ以上の要素を持っていれば一番上の要素を取り除く
+	if (_pScene.size() > 1) {
+		_pScene.pop_back();
+	}
+}
+
 void SceneManager::GameEnd()
 {
 	m_endFlag = true;
 }
 
-// ゲーム終了フラグを返す
 bool SceneManager::GetGameEnd()
 {
 	return m_endFlag;

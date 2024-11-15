@@ -17,7 +17,8 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_manager(manager),
 	_bulletNum(15),
 	_grapplerScale(0),
-	_selectBullet(NORMAL_BULLET)
+	_selectBullet(NORMAL_BULLET),
+	_deadFlag(false)
 {
 	// Šg‘å‚ÌÝ’è
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
@@ -243,22 +244,25 @@ void Player::Draw() const
 #ifdef _DEBUG
 	DrawCapsule();
 	DrawLine3D(Position.VGet(), (Position + _forwardVec * 20).VGet(), 0x00ffff);
-	DrawFormatString(10, 10, 0xffffff, "x:%f y:%f z:%f angleY:%f angleZ:%f", Position.x, Position.y, Position.z, Angle.y, Angle.z);
+	DrawFormatString(10, 20, 0xff0000, "x:%f y:%f z:%f angleY:%f angleZ:%f", Position.x, Position.y, Position.z, Angle.y, Angle.z);
 	if (_groundFlag) {
-		DrawString(10, 40, "OnGrround", 0xff0f0f);
+		DrawString(10, 40, "OnGrround", 0xff0000);
 	}
-	DrawFormatString(10, 60, 0xff0f0f, "GrapplerScale:%f", _grapplerScale);
+	DrawFormatString(10, 60, 0xff0000, "GrapplerScale:%f", _grapplerScale);
 	if (_selectBullet == NORMAL_BULLET) {
-		DrawString(10, 80, "NormalBullet", 0xff0f0f);
+		DrawString(10, 80, "NormalBullet", 0xff0000);
 	}
 	else if (_selectBullet == GRAPPLER_BULLET) {
-		DrawString(10, 80, "GrapplerBullet", 0xff0f0f);
+		DrawString(10, 80, "GrapplerBullet", 0xff0000);
 	}
 	else if (_selectBullet == BOMB_BULLET) {
-		DrawString(10, 80, "bombBullet", 0xff0f0f);
+		DrawString(10, 80, "bombBullet", 0xff0000);
 	}
 	if (_bulletManager->GetBulletExist(_padNum)) {
 		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff0000);
+	}
+	if (_deadFlag) {
+		DrawString(10, 100, "dead", 0xff0000);
 	}
 #endif // DEBUG
 
@@ -275,6 +279,11 @@ void Player::CameraSet() const
 bool Player::GetGroundFlag() const
 {
 	return _groundFlag;
+}
+
+void Player::KillPlayer()
+{
+	_deadFlag = true;
 }
 
 void Player::RotateAngleY(float targetAngle)

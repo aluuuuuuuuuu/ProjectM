@@ -51,6 +51,11 @@ public:
 	/// <returns>グラウンドフラグ<returns>
 	bool GetGroundFlag() const;
 
+	/// <summary>
+	/// プレイヤーマネージャーからプレイヤーを殺す
+	/// </summary>
+	void KillPlayer();
+
 private:
 
 	/// <summary>
@@ -119,6 +124,9 @@ private:
 
 	// 選択している弾の要素番号
 	int _selectBullet;
+
+	// 死亡フラグ
+	bool _deadFlag;
 
 };
 
