@@ -52,6 +52,12 @@ public:
 	bool GetGroundFlag() const;
 
 	/// <summary>
+	/// 死亡フラグを取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetDeadFlag() const;
+
+	/// <summary>
 	/// プレイヤーマネージャーからプレイヤーを殺す
 	/// </summary>
 	void KillPlayer();
@@ -101,17 +107,11 @@ private:
 	// カメラポインタ
 	std::shared_ptr<PlayerCamera> _pCamera;
 
-	// 走っているフラグ
-	bool _runFlag;
-
 	// 使用するパッドのナンバー
 	int _padNum;
 
 	// プレイヤーマネージャーの参照
 	PlayerManager& _manager;
-
-	// 残段数
-	int _bulletNum;
 
 	// 向いている方向のベクトル
 	Vec3 _forwardVec;
@@ -128,5 +128,13 @@ private:
 	// 死亡フラグ
 	bool _deadFlag;
 
+	// 通常弾クールタイム　
+	int _normalCoolTime;
+
+	// 爆弾クールタイム
+	int _bombCoolTime;
+
+	// グラップルクールタイム
+	int _grappleCoolTime;
 };
 

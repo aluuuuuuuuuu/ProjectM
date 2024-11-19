@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "Vec3.h"
 
 class Wedgeworm;
 class WedgewormManager
@@ -25,6 +26,13 @@ public:
 	/// •`‰æˆ—
 	/// </summary>
 	void Draw() const;
+
+	/// <summary>
+	/// âS’‚ÌÀ•W‚ğ“n‚·
+	/// </summary>
+	/// <param name="num">âS’ƒiƒ“ƒo[</param>
+	/// <returns>À•W</returns>
+	Vec3 GetPos(int num) const;
 
 private:
 

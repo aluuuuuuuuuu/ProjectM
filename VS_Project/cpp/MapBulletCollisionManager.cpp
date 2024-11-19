@@ -2,6 +2,7 @@
 #include "StageManager.h"
 #include "Vec3.h"
 #include "BulletManager.h"
+#include "DxLib.h"
 
 MapBulletCollisionManager::MapBulletCollisionManager(std::shared_ptr<StageManager>& stage) :
 	_stage(stage)
@@ -15,7 +16,7 @@ MapBulletCollisionManager::~MapBulletCollisionManager()
 bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius, int bullet)
 {
 	Vec3 max, min;// 最大座標,最小座標
-
+	int rnd;
 	// カプセルとステージの当たり判定を取る
 	for (int a = 0; a < BLOCK_NUM_X; a++) {
 		for (int b = 0; b < BLOCK_NUM_Y; b++) {
@@ -43,18 +44,19 @@ bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius, int bull
 							break;
 						case BOMB_BULLET:
 							// 当たったマスの周囲も削除する
-							_stage->DeleteBox(a + 1, b, c);
-							_stage->DeleteBox(a - 1, b, c);
-							_stage->DeleteBox(a, b + 1, c);
+							_stage->DeleteBox(a, b, c);
 							_stage->DeleteBox(a, b - 1, c);
+
+							_stage->DeleteBox(a - 1, b, c);
+							_stage->DeleteBox(a + 1, b, c);
 							_stage->DeleteBox(a, b, c + 1);
 							_stage->DeleteBox(a, b, c - 1);
-							_stage->DeleteBox(a, b, c);
+
 							break;
 						default:
 							break;
 						}
-						
+
 						// 当たったと返す
 						return true;
 

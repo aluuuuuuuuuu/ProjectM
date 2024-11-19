@@ -80,6 +80,13 @@ public:
 	/// </summary>
 	/// <param name="num">プレイヤーのナンバー</param>
 	void CameraSet(int num) const;
+
+	/// <summary>
+	/// 生存しているプレイヤーの数を取得
+	/// </summary>
+	/// <returns>生存しているプレイヤーの数</returns>
+	int GetAreAlivePlayerNum() const;
+
 private:
 
 	/// <summary>

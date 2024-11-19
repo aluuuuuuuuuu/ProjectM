@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "DxLib.h"
 #include "CollisionManager.h"
+#include "Player.h"
 
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data)
 {
@@ -142,6 +143,16 @@ void PlayerManager::CameraSet(int num) const
 {
 	// カメラのセット
 	_pPlayer[num]->CameraSet();
+}
+
+int PlayerManager::GetAreAlivePlayerNum() const
+{
+	// 生きているプレイヤーを数える
+	int num = 0;
+	for (auto& pl : _pPlayer) {
+		if (!pl->GetDeadFlag()) num++;
+	} 
+	return num;
 }
 
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)

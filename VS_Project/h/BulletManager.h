@@ -11,13 +11,14 @@
 #define MAX_TYPE_NUM 3
 #define MIN_TYPE_NUM 0
 
+class WedgewormManager;
 class MapBulletCollisionManager;
 class BulletBase;
 class BulletManager :
 	public Constant
 {
 public:
-	BulletManager(std::shared_ptr<MapBulletCollisionManager>& col);
+	BulletManager(std::shared_ptr<MapBulletCollisionManager>& col, std::shared_ptr<WedgewormManager>& worm);
 	virtual ~BulletManager();
 
 	/// <summary>
@@ -81,4 +82,7 @@ private:
 
 	// コリジョンマネージャーの参照
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;
+
+	// 禊虫マネージャーの参照
+	std::shared_ptr<WedgewormManager>& _wedgeManager;
 };

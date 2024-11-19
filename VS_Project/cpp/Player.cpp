@@ -12,13 +12,14 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_groundFlag(false),
 	_bulletManager(bullet),
 	_groundCount(0),
-	_runFlag(false),
 	_padNum(padNum),
 	_manager(manager),
-	_bulletNum(15),
 	_grapplerScale(0),
 	_selectBullet(NORMAL_BULLET),
-	_deadFlag(false)
+	_deadFlag(false),
+	_normalCoolTime(0),
+	_bombCoolTime(0),
+	_grappleCoolTime(0)
 {
 	// 拡大の設定
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
@@ -49,8 +50,28 @@ void Player::Control()
 	auto& input = Input::GetInstance();
 
 	// 弾を発射する
-	if (input.IsTrigger(INPUT_RIGHT_TRIGGER, _padNum)) {
+	if (input.IsHold(INPUT_RIGHT_TRIGGER, _padNum)) {
 		BulletTrigger();
+	}
+
+	// クールタイムの計算
+	if (_normalCoolTime != 0) {
+		_normalCoolTime--;
+	}
+	else {
+		_normalCoolTime = 0;
+	}
+	if (_grappleCoolTime != 0) {
+		_grappleCoolTime--;
+	}
+	else {
+		_grappleCoolTime = 0;
+	}
+	if (_bombCoolTime != 0) {
+		_bombCoolTime--;
+	}
+	else {
+		_bombCoolTime = 0;
 	}
 
 	// 弾の種類のの切り替え
@@ -93,11 +114,6 @@ void Player::Control()
 				Angle.z = 0.9f;
 			}
 		}
-	}
-
-	// リロード
-	if (input.IsTrigger(INPUT_X, _padNum)) {
-		_bulletNum = 15;
 	}
 
 	// コリジョン前の移動
@@ -190,7 +206,7 @@ void Player::Update()
 		_grapplerScale = 0.0f;
 	}
 	else {
-		_grapplerScale -= 0.001f;
+		_grapplerScale -= 0.01f;
 	}
 
 	// グラップラーが当たっているかを知らべる
@@ -222,7 +238,7 @@ void Player::Update()
 	// カメラの更新
 	_pCamera->Update(Position, _forwardVec, Angle);
 
-	// アニメーションコントロール
+	// アニメーションコントロール                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 	AnimationContorol();
 
 	// アニメーションの更新
@@ -279,6 +295,11 @@ void Player::CameraSet() const
 bool Player::GetGroundFlag() const
 {
 	return _groundFlag;
+}
+
+bool Player::GetDeadFlag() const
+{
+	return false;
 }
 
 void Player::KillPlayer()
@@ -372,68 +393,68 @@ void Player::AnimationContorol()
 
 	int dir = ClassifyDirection();
 
-	// 走っている
-	if (_runFlag) {
-
-		// 常に走っているアニメーション
-		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
-	}
 	// 歩いている
-	else {
-		// 方向に対応するアニメーションを再生
-		switch (dir) {
-		case 0:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 1:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 2:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 3:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 4:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 5:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 6:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
-			break;
-		case 7:
-			ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));			break;
-		}
+	// 方向に対応するアニメーションを再生
+	switch (dir) {
+	case 0:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 1:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 2:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 3:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 4:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 5:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 6:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 7:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));			break;
 	}
 }
 
 void Player::BulletTrigger()
 {
-
 	// 発射する座標
 	Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
 
 	switch (_selectBullet)
 	{
 	case NORMAL_BULLET:
-		// 弾を生成
-		_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos, _padNum);
+		if (_normalCoolTime == 0) {
+			// 弾を生成
+			_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos, _padNum);
 
-		// 球数を減らす
-		_bulletNum--;
+			// クールタイムを設定する
+			_normalCoolTime = 30;
+		}
 		break;
 	case GRAPPLER_BULLET:
-
-		// グラップラーは１プレイヤーにつき1つしか存在しない
-		if (!_bulletManager->GetBulletExist(_padNum)) {
+		if (_grappleCoolTime == 0) {
 			// 弾を生成
 			_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos, _padNum);
+
+			// クールタイムを設定する
+			_grappleCoolTime = 1200;
 		}
 		break;
 	case BOMB_BULLET:
-		_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
+		if (_bombCoolTime == 0) {
+			// 弾を生成
+			_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
+
+			// クールタイムを設定する
+			_bombCoolTime = 300;
+		}
 		break;
 	default:
 		break;

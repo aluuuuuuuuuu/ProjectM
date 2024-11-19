@@ -1,11 +1,13 @@
 #include "GrapplerBullet.h"
 #include "MapBulletCollisionManager.h"
 #include "BulletManager.h"
+#include "WedgewormManager.h"
 
-GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
+GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum, std::shared_ptr<WedgewormManager>& wedge) :
 	_collManager(col),
 	_bulletManager(mgr),
-	_flame(0)
+	_flame(0),
+	_wedgeManager(wedge)
 
 {
 	// 初期位置の設定
@@ -36,7 +38,18 @@ void GrapplerBullet::Update()
 	}
 
 	// マップとの当たり判定をとる
-	if (_collManager->CollisionBullet(Position, 3.0f,GRAPPLER_BULLET)) _collisionFlag = true;
+	if (_collManager->CollisionBullet(Position, 3.0f, GRAPPLER_BULLET)) _collisionFlag = true;
+
+	// 禊虫との当たり判定をとる
+
+	for (int i = 0; i < 2; i++) {
+		Vec3 pos = _wedgeManager->GetPos(i);
+		float dist = (pos - Position).Length();
+
+		if (dist < 16.0f + 16.0f) {
+			_collisionFlag = true;
+		}
+	}
 
 	if (_invalidFlag) {
 		_flame++;

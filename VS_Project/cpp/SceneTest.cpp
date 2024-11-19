@@ -10,17 +10,21 @@
 #include "SkyDome.h"
 #include "SceneMenu.h"
 #include "SceneManager.h"
+#include "WedgewormManager.h"
+#include "GameFlowManager.h"
 
 SceneTest::SceneTest(PlayerData& data)
 {
 	// 各クラスのインスタンス作成
 	{
-		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager);				// バレットマネージャー
+		_pWedgewormManager = std::make_shared<WedgewormManager>();	// 禊虫マネージャー
+		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager,_pWedgewormManager);				// バレットマネージャー
 		_pStage = std::make_shared<StageManager>();													// ステージマネージャー
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
+		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
 	}
 
 	// 関数ポインタの初期化
@@ -61,6 +65,9 @@ void SceneTest::NormalUpdate()
 
 	// バレットの更新
 	_pBulletManager->Update();
+
+	// 禊虫の更新
+	_pWedgewormManager->Update();
 }
 
 void SceneTest::NormalDraw() const
@@ -84,6 +91,9 @@ void SceneTest::NormalDraw() const
 
 		// ステージの描画
 		_pStage->DrawStage();
+
+		// 禊虫の描画
+		_pWedgewormManager->Draw();
 
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);

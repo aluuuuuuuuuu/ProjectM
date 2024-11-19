@@ -1,5 +1,6 @@
 #pragma once
 #include "Components.h"
+#include "Vec3.h"
 
 class Wedgeworm:
 	public Transform,
@@ -12,7 +13,9 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="num">ナンバー</param>
-	Wedgeworm(int num);
+	/// 
+	
+	Wedgeworm(int num,int model);
 
 	/// <summary>
 	/// デストラクタ
@@ -29,7 +32,12 @@ public:
 	/// </summary>
 	void Draw() const;
 private:
+	float _angle;
+	Vec3 _aa;
 
+	MATRIX _mtx;
+
+	Vec3 _pos;
 
 };
 

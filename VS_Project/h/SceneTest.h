@@ -6,6 +6,8 @@
 #include <vector>
 #include "PlayerManager.h"
 
+class GameFlowManager;
+class WedgewormManager;
 class SkyDome;
 class PlayerManager;
 class MapBulletCollisionManager;
@@ -74,6 +76,12 @@ private:
 
     // スカイドームポインタ
     std::shared_ptr<SkyDome> _pSkyDome;
+
+    // 禊虫マネージャー
+    std::shared_ptr<WedgewormManager> _pWedgewormManager;
+
+    // ゲームフローマネージャー
+    std::shared_ptr<GameFlowManager> _pGameFlowManager;
 
 };
 

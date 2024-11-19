@@ -5,8 +5,9 @@
 #include "GrapplerBullet.h"
 #include "BombBullet.h"
 
-BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col) :
-	_collManager(col)
+BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col, std::shared_ptr<WedgewormManager>& worm) :
+	_collManager(col),
+	_wedgeManager(worm)
 {
 	// ’è”‚Ì“Ç‚İ‚İ
 	ReadCSV("data/constant/NormalBullet.csv");
@@ -49,7 +50,7 @@ void BulletManager::PushBullet(int bul, Vec3 dist, Vec3 pos, int plnum)
 		_pBullet.push_back(std::make_shared<NormalBullet>(dist, pos, _collManager, *this, plnum));
 		break;
 	case GRAPPLER_BULLET:
-		_pBullet.push_back(std::make_shared<GrapplerBullet>(dist, pos, _collManager, *this, plnum));
+		_pBullet.push_back(std::make_shared<GrapplerBullet>(dist, pos, _collManager, *this, plnum, _wedgeManager));
 		break;
 	case BOMB_BULLET:
 		_pBullet.push_back(std::make_shared<BombBullet>(dist, pos, _collManager, *this, plnum));
