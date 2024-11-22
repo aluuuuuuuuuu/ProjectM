@@ -164,6 +164,7 @@
     <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\PlayerManager.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
+    <ClCompile Include="cpp\SceneGrapple.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
     <ClCompile Include="cpp\SceneMenu.cpp" />
     <ClCompile Include="cpp\SceneSelect.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\PlayerManager.h" />
     <ClInclude Include="h\SceneBase.h" />
+    <ClInclude Include="h\SceneGrapple.h" />
     <ClInclude Include="h\SceneManager.h" />
     <ClInclude Include="h\SceneMenu.h" />
     <ClInclude Include="h\SceneSelect.h" />
