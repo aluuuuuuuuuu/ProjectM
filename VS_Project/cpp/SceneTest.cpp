@@ -50,12 +50,12 @@ void SceneTest::Draw() const
 
 void SceneTest::NormalUpdate()
 {
+	// メニュー画面を開く
 	for (int num = 0; num < _pPlayerManager->GetPlayerNum(); num++) {
 		if (Input::GetInstance().IsTrigger(INPUT_START, num)) {
 			SceneManager::GetInstance().PushScene(std::make_shared<SceneMenu>(num));
 		}
 	}
-
 
 	// スカイドームの更新処理
 	_pSkyDome->Update();
@@ -63,15 +63,25 @@ void SceneTest::NormalUpdate()
 	// プレイヤーの更新処理
 	_pPlayerManager->Update();
 
+	// ゲームフローの更新処理
+	_pGameFlowManager->Update();
+
 	// バレットの更新
 	_pBulletManager->Update();
 
 	// 禊虫の更新
 	_pWedgewormManager->Update();
+
+	// ゲームが終了していたら終了時の処理に移る
+	if (_pGameFlowManager->GetGameEnd()) {
+		_updateFunc = &SceneTest::EndUpdate;
+		_drawFunc = &SceneTest::EndDraw;
+	}
 }
 
 void SceneTest::NormalDraw() const
 {
+	// プレイヤーの画面の数だけ描画する
 	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
 
 		// カメラの設定
@@ -98,4 +108,12 @@ void SceneTest::NormalDraw() const
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);
 	}
+}
+
+void SceneTest::EndUpdate()
+{
+}
+
+void SceneTest::EndDraw() const
+{
 }

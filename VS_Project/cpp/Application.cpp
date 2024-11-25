@@ -89,12 +89,13 @@ void Application::Run()
 	// 初期シーンを設定
 	PlayerData data;
 
-	data.playerNum = 1;
+	data.playerNum = 2;
 	data.charactor[0] = 1;
+	data.charactor[1] = 2;
 
-	manager.ChangeScene(std::make_shared<SceneGrapple>());
+	//manager.ChangeScene(std::make_shared<SceneGrapple>());
 	//manager.ChangeScene(std::make_shared <SceneTest>(data));
-	//manager.ChangeScene(std::make_shared <SceneTitle>());
+	manager.ChangeScene(std::make_shared <SceneTitle>());
 	//manager.ChangeScene(std::make_shared <SceneSelect>());
 
 	// インプットのインスタンスを取得

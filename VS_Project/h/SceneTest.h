@@ -59,6 +59,16 @@ private:
     /// </summary>
     void NormalDraw() const;
 
+    /// <summary>
+    /// ゲーム終了時の更新処理
+    /// </summary>
+    void EndUpdate();
+
+    /// <summary>
+    /// ゲーム終了時の描画処理
+    /// </summary>
+    void EndDraw() const;
+
     // ステージポインタ
     std::shared_ptr<StageManager> _pStage;
 

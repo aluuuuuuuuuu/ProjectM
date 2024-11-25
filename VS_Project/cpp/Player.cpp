@@ -299,7 +299,7 @@ bool Player::GetGroundFlag() const
 
 bool Player::GetDeadFlag() const
 {
-	return false;
+	return _deadFlag;
 }
 
 void Player::KillPlayer()
