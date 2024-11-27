@@ -12,8 +12,9 @@
 #include "SceneManager.h"
 #include "WedgewormManager.h"
 #include "GameFlowManager.h"
+#include "SceneResult.h"
 
-SceneTest::SceneTest(PlayerData& data)
+SceneTest::SceneTest(PlayerData data)
 {
 	// 各クラスのインスタンス作成
 	{
@@ -111,9 +112,43 @@ void SceneTest::NormalDraw() const
 }
 
 void SceneTest::EndUpdate()
-{
+{	
+	// ゲームフローマネージャーの更新
+	_pGameFlowManager->Update();
+
+	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
+	if (_pGameFlowManager->GetFlameCount() >= 120) {
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData()));
+	}
 }
 
 void SceneTest::EndDraw() const
 {
+	// プレイヤーの画面の数だけ描画する
+	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
+
+		// カメラの設定
+		_pPlayerManager->CameraSet(i);
+
+		// 描画範囲の設定
+		SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
+
+		// 描画先の中心を設定
+		SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(i).a), static_cast<float>(_pPlayerManager->GetCenter(i).b));
+
+		//スカイドームの描画
+		_pSkyDome->Draw();
+
+		// バレットの描画
+		_pBulletManager->Draw();
+
+		// ステージの描画
+		_pStage->DrawStage();
+
+		// 禊虫の描画
+		_pWedgewormManager->Draw();
+
+		// プレイヤーの描画
+		_pPlayerManager->Draw(i);
+	}
 }

@@ -87,6 +87,11 @@ public:
 	/// <returns>生存しているプレイヤーの数</returns>
 	int GetAreAlivePlayerNum() const;
 
+	/// <summary>
+	/// プレイヤーデータを取得する
+	/// </summary>
+	PlayerData GetPlayerData() const;
+
 private:
 
 	/// <summary>
@@ -127,5 +132,7 @@ private:
 
 	// コリジョンマネージャーのポインタ
 	std::shared_ptr<CollisionManager> _pCollision;
+
+	PlayerData _playerData;
 };
 

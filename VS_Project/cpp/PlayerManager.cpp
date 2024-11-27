@@ -6,13 +6,14 @@
 #include "CollisionManager.h"
 #include "Player.h"
 
-PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data)
+PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data):
+	_playerData(data)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
 
 	// モデルのロード
-	for (int num = 0; num < data.playerNum; num++) {
+	for (int num = 0; num < _playerData.playerNum; num++) {
 		switch (num)
 		{
 		case 0:
@@ -35,7 +36,7 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	// 各インスタンスの作成
 	{
 		// プレイヤーインスタンスの作成
-		for (int num = 0; num < data.playerNum; num++) {
+		for (int num = 0; num < _playerData.playerNum; num++) {
 			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num));
 			_pPlayer[num]->Position = Vec3{ num * 10.0f,0.0f,0.0f };
 		}
@@ -153,6 +154,11 @@ int PlayerManager::GetAreAlivePlayerNum() const
 		if (!pl->GetDeadFlag()) num++;
 	} 
 	return num;
+}
+
+PlayerData PlayerManager::GetPlayerData() const
+{
+	return _playerData;
 }
 
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)

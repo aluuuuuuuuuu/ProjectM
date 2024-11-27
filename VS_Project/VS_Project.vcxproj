@@ -167,6 +167,7 @@
     <ClCompile Include="cpp\SceneGrapple.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
     <ClCompile Include="cpp\SceneMenu.cpp" />
+    <ClCompile Include="cpp\SceneResult.cpp" />
     <ClCompile Include="cpp\SceneSelect.cpp" />
     <ClCompile Include="cpp\SceneTest.cpp" />
     <ClCompile Include="cpp\SceneTitle.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="h\SceneGrapple.h" />
     <ClInclude Include="h\SceneManager.h" />
     <ClInclude Include="h\SceneMenu.h" />
+    <ClInclude Include="h\SceneResult.h" />
     <ClInclude Include="h\SceneSelect.h" />
     <ClInclude Include="h\SceneTest.h" />
     <ClInclude Include="h\SceneTitle.h" />

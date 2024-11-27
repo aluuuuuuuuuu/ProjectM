@@ -24,7 +24,7 @@ public:
     /// コンストラクタ
     /// </summary>
     /// <param name="data">プレイヤーデータ</param>
-    SceneTest(PlayerData& data);
+    SceneTest(PlayerData data);
 
     /// <summary>
     /// デストラクタ

@@ -28,11 +28,20 @@ public:
 	/// <returns>終了していたらtrue</returns>
 	bool GetGameEnd();
 
+	/// <summary>
+	/// ゲームが終了してからのフレーム数を返す
+	/// </summary>
+	/// <returns>フレーム数</returns>
+	int GetFlameCount();
+
 private:
 	// プレイヤーマネージャーの参照
 	std::shared_ptr<PlayerManager>& _playerManager;
 
 	// ゲーム終了フラグ
 	bool _gameEndFlag;
+
+	// フレームカウンタ
+	int _flame;
 };
 
