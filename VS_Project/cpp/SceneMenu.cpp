@@ -3,8 +3,9 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "MenuManager.h"
+#include "Application.h"
 
-SceneMenu::SceneMenu(int padNum):
+SceneMenu::SceneMenu(int padNum) :
 	_padNum(padNum),
 	_flame(0)
 {
@@ -30,6 +31,10 @@ void SceneMenu::Update()
 
 void SceneMenu::Draw() const
 {
+	// •`‰æ”ÍˆÍ‚Æ•`‰ææ‚Ì’†S‚Ì‰Šú‰»
+	SetDrawArea(0, 0, Application::GetInstance().GetConstantInt("SCREEN_WIDTH"), Application::GetInstance().GetConstantInt("SCREEN_HEIGHT"));
+	SetCameraScreenCenter(static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2), static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2));
+
 	(this->*_drawFunc)();
 }
 

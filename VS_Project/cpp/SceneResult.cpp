@@ -36,5 +36,7 @@ void SceneResult::Update()
 
 void SceneResult::Draw() const
 {
-	printfDx("unko");
+	DrawString(10, 10, "Aボタンでリスタート", 0xffffff);
+	DrawString(10, 40, "Bボタンでタイトル画面へ", 0xffffff);
+	DrawString(10, 70, "STARTボタンでメニュー", 0xffffff);
 }
