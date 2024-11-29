@@ -160,9 +160,12 @@
     <ClCompile Include="cpp\MenuButton.cpp" />
     <ClCompile Include="cpp\MenuManager.cpp" />
     <ClCompile Include="cpp\NormalBullet.cpp" />
+    <ClCompile Include="cpp\NumUtility.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
     <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\PlayerManager.cpp" />
+    <ClCompile Include="cpp\ResultLogo.cpp" />
+    <ClCompile Include="cpp\ResultUi.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
     <ClCompile Include="cpp\SceneGrapple.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
@@ -200,9 +203,12 @@
     <ClInclude Include="h\MenuButton.h" />
     <ClInclude Include="h\MenuManager.h" />
     <ClInclude Include="h\NormalBullet.h" />
+    <ClInclude Include="h\NumUtility.h" />
     <ClInclude Include="h\Player.h" />
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\PlayerManager.h" />
+    <ClInclude Include="h\ResultLogo.h" />
+    <ClInclude Include="h\ResultUi.h" />
     <ClInclude Include="h\SceneBase.h" />
     <ClInclude Include="h\SceneGrapple.h" />
     <ClInclude Include="h\SceneManager.h" />

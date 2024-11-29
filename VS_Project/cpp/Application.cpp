@@ -9,6 +9,7 @@
 #include "SceneSelect.h"
 #include "PlayerManager.h"
 #include "SceneGrapple.h"
+#include "SceneResult.h"
 
 bool Application::Init()
 {
@@ -93,8 +94,9 @@ void Application::Run()
 	data.charactor[0] = 1;
 	data.charactor[1] = 2;
 
+	manager.ChangeScene(std::make_shared<SceneResult>(data));
 	//manager.ChangeScene(std::make_shared<SceneGrapple>());
-	manager.ChangeScene(std::make_shared <SceneTest>(data));
+	//manager.ChangeScene(std::make_shared <SceneTest>(data));
 	//manager.ChangeScene(std::make_shared <SceneTitle>());
 	//manager.ChangeScene(std::make_shared <SceneSelect>());
 

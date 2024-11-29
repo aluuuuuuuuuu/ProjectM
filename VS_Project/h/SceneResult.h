@@ -3,6 +3,8 @@
 #include <memory>
 #include "PlayerManager.h"
 
+class NumUtility;
+class ResultUi;
 class SceneResult :
     public SceneBase
 {
@@ -27,7 +29,15 @@ public:
     void Draw() const;
 
 private:
+    // 数字利用ポインタ
+    std::shared_ptr<NumUtility> _pNum;
 
+    // リザルトロゴポインタ
+    std::shared_ptr<ResultUi> _pResultUi;
+
+    // プレイヤーデータを保持する
     PlayerData _playerData;
+
+    int test;
 };
 

@@ -37,6 +37,9 @@ SceneTest::SceneTest(PlayerData data)
 
 SceneTest::~SceneTest()
 {
+	// ƒ‰ƒCƒg‚Ìíœ
+	DeleteLightHandleAll();
+
 	// •`‰æ”ÍˆÍ‚Æ•`‰ææ‚Ì’†S‚Ì‰Šú‰»
 	SetDrawArea(0, 0, Application::GetInstance().GetConstantInt("SCREEN_WIDTH"), Application::GetInstance().GetConstantInt("SCREEN_HEIGHT"));
 	SetCameraScreenCenter(static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2), static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2));
