@@ -14,7 +14,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime):
 	_flame(0)
 {
 	// キャラクターの作成
-	_pCharactor = std::make_shared<ResultCharactor>(3);
+	_pCharactor = std::make_shared<ResultCharactor>(1);
 
 	// 数字の作成
 	_pNum = std::make_shared<NumUtility>(Vec2{10,350},gameTime);
