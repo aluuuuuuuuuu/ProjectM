@@ -165,6 +165,55 @@ void Animation::UpdateAnimation(int& modelHandle, float count)
 	int n = 0;
 }
 
+void Animation::UpdateAnimationOnce(int& modelHandle, float count)
+{
+
+	// 再生時間を進める
+	_flameCount += count;
+
+	// ブレンドレートを加算していく
+	if (_blendRate >= 1.0f) {
+		MV1SetAttachAnimBlendRate(modelHandle, _attachIndex1, 1.0f);
+	}
+	else {
+		_blendRate += _blendRateSave;
+
+		MV1SetAttachAnimBlendRate(modelHandle, _attachIndex2, 1.0f - _blendRate);
+
+		MV1SetAttachAnimBlendRate(modelHandle, _attachIndex1, _blendRate);
+	}
+
+	// 再生時間がアニメーションの総再生時間に達したとき
+	if (_flameCount >= _maxFlame) {
+
+		// コネクトフラグがtrueだったら次のアニメーションをスタートさせる
+		if (_connectFlag) {
+			_animationState++;
+			ChangeAnimation(modelHandle, _connectAnimation[_animationState], true, _rate2);
+			//_connectAnimation.clear();
+			_animationState = 0;
+
+			// コネクトフラグを下げる
+			_connectFlag = false;
+		}
+		// ループフラグがtrueだったらループさせる
+		else if (_loopFlag) {
+			_flameCount = 0.0f;
+		}
+		// 完全に終了したらフラグを立てる
+		else {
+			_endAnimFlag = true;
+		}
+	}
+
+	// アニメーション更新
+	int a = MV1SetAttachAnimTime(modelHandle, _attachIndex1, _flameCount);
+
+	int n = 0;
+
+
+}
+
 /// <summary>
 /// アニメーション変更
 /// </summary>
@@ -226,6 +275,11 @@ bool Animation::GetEndAnimFlag()
 int Animation::GetAnimTag()
 {
 	return _playAnimation;
+}
+
+int Animation::GetAnimeFlame()
+{
+	return _flameCount;
 }
 
 // カプセル

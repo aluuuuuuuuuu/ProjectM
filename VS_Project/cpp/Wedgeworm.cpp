@@ -9,7 +9,7 @@ Wedgeworm::Wedgeworm(int num,int model):
 
 	// ナンバーで初期座標を切り替える
 	if (num == 0) {
-		_angle = 3.14;
+		_angle = 3.14f;
 		Angle.y = 0.0f;
 	}
 	else {

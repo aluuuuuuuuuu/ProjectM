@@ -1,10 +1,53 @@
 #include "NumUtility.h"
 #include "DxLib.h"
 
-NumUtility::NumUtility(Vec2 pos):
+NumUtility::NumUtility(Vec2 pos, int num):
 	_drawPos(pos)
 {
 
+	// 数字画像のロード
+	_numHandle[NUM_0] = LoadGraph("data/image/Num0.png");
+	_numHandle[NUM_1] = LoadGraph("data/image/Num1.png");
+	_numHandle[NUM_2] = LoadGraph("data/image/Num2.png");
+	_numHandle[NUM_3] = LoadGraph("data/image/Num3.png");
+	_numHandle[NUM_4] = LoadGraph("data/image/Num4.png");
+	_numHandle[NUM_5] = LoadGraph("data/image/Num5.png");
+	_numHandle[NUM_6] = LoadGraph("data/image/Num6.png");
+	_numHandle[NUM_7] = LoadGraph("data/image/Num7.png");
+	_numHandle[NUM_8] = LoadGraph("data/image/Num8.png");
+	_numHandle[NUM_9] = LoadGraph("data/image/Num9.png");
+	_numHandle[NUM_DOT] = LoadGraph("data/image/NumDot.png");
+
+	_drawNumHandle[0] = 0;
+	_drawNumHandle[1] = 0;
+	_drawNumHandle[2] = 0;
+	_drawNumHandle[3] = 0;
+	_drawNumHandle[4] = 0;
+	_drawNumHandle[5] = 0;
+
+	int a = num;	// 小数点以下
+	int b = 0;	// 秒
+	int c = 0;	// 分
+
+	b = a / 60;
+
+	a = a % 60;
+
+	if (b > 60) {
+		c = b / 60;
+		b = b & 60;
+	}
+
+	_drawNumHandle[0] = _numHandle[c / 10];
+	_drawNumHandle[1] = _numHandle[c % 10];
+	_drawNumHandle[2] = _numHandle[b / 10];
+	_drawNumHandle[3] = _numHandle[b % 10];
+	_drawNumHandle[4] = _numHandle[a / 10];
+	_drawNumHandle[5] = _numHandle[a % 10];
+}
+
+NumUtility::NumUtility(Vec2 pos)
+{
 	// 数字画像のロード
 	_numHandle[NUM_0] = LoadGraph("data/image/Num0.png");
 	_numHandle[NUM_1] = LoadGraph("data/image/Num1.png");
@@ -34,9 +77,9 @@ NumUtility::~NumUtility()
 	}
 }
 
-void NumUtility::Update(int num)
+void NumUtility::Update(int time)
 {
-	int a = num;	// 小数点以下
+	int a = time;	// 小数点以下
 	int b = 0;	// 秒
 	int c = 0;	// 分
 

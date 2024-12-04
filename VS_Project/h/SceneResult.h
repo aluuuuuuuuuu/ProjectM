@@ -3,6 +3,7 @@
 #include <memory>
 #include "PlayerManager.h"
 
+class ResultCharactor;
 class NumUtility;
 class ResultUi;
 class SceneResult :
@@ -11,7 +12,7 @@ class SceneResult :
 public:
 
    
-    SceneResult(PlayerData data);
+    SceneResult(PlayerData data, int gameTime);
 
     /// <summary>
     /// デストラクタ
@@ -29,6 +30,36 @@ public:
     void Draw() const;
 
 private:
+
+    // 関数ポインタ
+    using _UpdateFunc_t = void (SceneResult::*)();
+    using _DrawFunc_t = void (SceneResult::*)() const;
+
+    // 任意のアップデート関数変数、ドロー関数変数
+    _UpdateFunc_t _updateFunc = nullptr;
+    _DrawFunc_t  _drawFunc = nullptr;
+
+    /// <summary>
+    /// 通常の更新処理
+    /// </summary>
+    void NormalUpdate();
+
+    /// <summary>
+    /// 通常の描画処理
+    /// </summary>
+    void NormalDraw() const;
+
+    /// <summary>
+    /// フェード用の更新処理
+    /// </summary>
+    void FadeOutUpdate();
+
+    /// <summary>
+    /// フェード用の描画処理
+    /// </summary>
+    void FadeDraw() const;
+
+
     // 数字利用ポインタ
     std::shared_ptr<NumUtility> _pNum;
 
@@ -38,6 +69,13 @@ private:
     // プレイヤーデータを保持する
     PlayerData _playerData;
 
-    int test;
+    // キャラクター
+    std::shared_ptr<ResultCharactor> _pCharactor;
+
+    // フレームカウンタ
+    int _flame;
+
+    
+    std::shared_ptr<SceneBase> _nextScece;
 };
 

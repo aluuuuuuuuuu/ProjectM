@@ -23,6 +23,7 @@ PlayerCamera::PlayerCamera(Vec3 pos, int padNum, Vec3 forward):
 
 PlayerCamera::~PlayerCamera()
 {
+	DeleteLightHandle(_lightHandle);
 }
 
 void PlayerCamera::Update(Vec3 pos,Vec3 forward, Vec3 angle)

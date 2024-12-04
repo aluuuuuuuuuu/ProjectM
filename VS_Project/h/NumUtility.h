@@ -17,11 +17,13 @@
 class NumUtility
 {
 public:
+	NumUtility(Vec2 pos, int num);
+
 	NumUtility(Vec2 pos);
 
 	virtual ~NumUtility();
 
-	void Update(int num);
+	void Update(int time);
 
 	void Draw() const;
 

@@ -8,7 +8,8 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	ResultUi();
+	/// <param name="time">撃破タイム</param>
+	ResultUi(int time);
 
 	/// <summary>
 	/// デストラクタ

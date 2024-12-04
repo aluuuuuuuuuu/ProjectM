@@ -94,7 +94,7 @@ void Application::Run()
 	data.charactor[0] = 1;
 	data.charactor[1] = 2;
 
-	manager.ChangeScene(std::make_shared<SceneResult>(data));
+	manager.ChangeScene(std::make_shared<SceneResult>(data,400));
 	//manager.ChangeScene(std::make_shared<SceneGrapple>());
 	//manager.ChangeScene(std::make_shared <SceneTest>(data));
 	//manager.ChangeScene(std::make_shared <SceneTitle>());

@@ -34,6 +34,13 @@ public:
 	/// <returns>フレーム数</returns>
 	int GetFlameCount();
 
+
+	/// <summary>
+	/// ゲーム開始からの時間を返す
+	/// </summary>
+	/// <returns>ゲームタイム</returns>
+	int GetGameTime();
+
 private:
 	// プレイヤーマネージャーの参照
 	std::shared_ptr<PlayerManager>& _playerManager;
@@ -43,5 +50,8 @@ private:
 
 	// フレームカウンタ
 	int _flame;
+
+	// ゲーム開始からのフレームを数える
+	int _gameTime;
 };
 

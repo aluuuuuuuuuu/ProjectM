@@ -83,6 +83,13 @@ public:
 	void UpdateAnimation(int& modelHandle, float count);
 
 	/// <summary>
+	/// アニメーション更新処理（アニメーションが終了すると停止する）
+	/// </summary>
+	/// <param name="modelHandle">モデルハンドル</param>
+	/// <param name="count">再生速度</param>
+	void UpdateAnimationOnce(int& modelHandle, float count);
+
+	/// <summary>
 	/// アニメーション変更
 	/// </summary>
 	/// <param name="modelHandle">モデルハンドル</param>
@@ -112,6 +119,9 @@ public:
 	/// </summary>
 	/// <returns>現行のアニメーション</returns>
 	int GetAnimTag();
+
+
+	int GetAnimeFlame();
 
 private:
 

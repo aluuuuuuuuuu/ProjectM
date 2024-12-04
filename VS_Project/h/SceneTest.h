@@ -6,6 +6,7 @@
 #include <vector>
 #include "PlayerManager.h"
 
+class NumUtility;
 class GameFlowManager;
 class WedgewormManager;
 class SkyDome;
@@ -92,6 +93,9 @@ private:
 
     // ゲームフローマネージャー
     std::shared_ptr<GameFlowManager> _pGameFlowManager;
+
+    // 数字クラスポインタ
+    std::shared_ptr<NumUtility> _pNum;
 
 };
 

@@ -13,6 +13,7 @@
 #include "WedgewormManager.h"
 #include "GameFlowManager.h"
 #include "SceneResult.h"
+#include "NumUtility.h"
 
 SceneTest::SceneTest(PlayerData data)
 {
@@ -26,6 +27,7 @@ SceneTest::SceneTest(PlayerData data)
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
+		_pNum = std::make_shared<NumUtility>(Vec2{ 1000,30 });	// 数字ユーティリティ
 	}
 
 	// 関数ポインタの初期化
@@ -84,6 +86,9 @@ void SceneTest::NormalUpdate()
 		_updateFunc = &SceneTest::EndUpdate;
 		_drawFunc = &SceneTest::EndDraw;
 	}
+
+	// 時間の更新処理
+	_pNum->Update(_pGameFlowManager->GetGameTime());
 }
 
 void SceneTest::NormalDraw() const
@@ -115,6 +120,16 @@ void SceneTest::NormalDraw() const
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);
 	}
+
+	// 描画範囲の設定
+	SetDrawArea(0, 0, 1920, 1080);
+
+	// 描画先の中心を設定
+	SetCameraScreenCenter(static_cast<float>(1920 / 2), static_cast<float>(1080 / 2));
+
+	// 数字の描画
+	_pNum->Draw();
+
 }
 
 void SceneTest::EndUpdate()
@@ -124,7 +139,7 @@ void SceneTest::EndUpdate()
 
 	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
 	if (_pGameFlowManager->GetFlameCount() >= 120) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData()));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(),_pGameFlowManager->GetGameTime()));
 	}
 }
 

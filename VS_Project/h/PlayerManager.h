@@ -25,6 +25,9 @@ struct PlayerData
 
 	// プレイヤーの総数
 	int playerNum = 0;
+
+	// 勝利したプレイヤー
+	int winner = 0;
 };
 
 class StageManager;

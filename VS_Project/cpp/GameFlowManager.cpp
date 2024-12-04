@@ -1,10 +1,11 @@
 #include "GameFlowManager.h"
 #include "PlayerManager.h"
 
-GameFlowManager::GameFlowManager(std::shared_ptr<PlayerManager>& plMg):
+GameFlowManager::GameFlowManager(std::shared_ptr<PlayerManager>& plMg) :
 	_playerManager(plMg),
 	_gameEndFlag(false),
-	_flame(0)
+	_flame(0),
+	_gameTime(0)
 {
 }
 
@@ -23,6 +24,11 @@ void GameFlowManager::Update()
 	if (_gameEndFlag) {
 		_flame++;
 	}
+
+	// マイフレームゲームタイムを加算する
+	if (!_gameEndFlag) {
+		_gameTime++;
+	}
 }
 
 bool GameFlowManager::GetGameEnd()
@@ -33,4 +39,9 @@ bool GameFlowManager::GetGameEnd()
 int GameFlowManager::GetFlameCount()
 {
 	return _flame;
+}
+
+int GameFlowManager::GetGameTime()
+{
+	return _gameTime;
 }
