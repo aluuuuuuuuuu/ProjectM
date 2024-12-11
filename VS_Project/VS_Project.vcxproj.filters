@@ -102,56 +102,56 @@
     <ClCompile Include="cpp\SoundManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\SelectFinger.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\CharactorCard.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\CharactorSelectManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\GrapplerBullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\BombBullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\SceneMenu.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\MenuManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\MenuButton.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\Wedgeworm.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="cpp\WedgewormManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="cpp\GameFlowManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\SceneGrapple.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="cpp\CharactorSelectManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\MenuManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneMenu.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="cpp\SceneResult.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\ResultLogo.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\ResultUi.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="cpp\SceneGrapple.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="cpp\NumUtility.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\Wedgeworm.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SelectFinger.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\ResultUi.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\ResultLogo.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="cpp\ResultCharactor.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\MenuButton.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\GrapplerBullet.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\CharactorCard.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\BombBullet.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,56 +236,56 @@
     <ClInclude Include="h\SoundManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\SelectFinger.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\CharactorCard.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\CharactorSelectManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\GrapplerBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\BombBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\SceneMenu.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\MenuManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\MenuButton.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="h\Wedgeworm.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="h\WedgewormManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="h\GameFlowManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\SceneGrapple.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="h\CharactorSelectManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="h\MenuManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="h\SceneResult.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\ResultLogo.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="h\SceneMenu.h">
+      <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\ResultUi.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="h\SceneGrapple.h">
+      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="h\NumUtility.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="h\BombBullet.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\Wedgeworm.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SelectFinger.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\ResultUi.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\ResultLogo.h">
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="h\ResultCharactor.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\GrapplerBullet.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\MenuButton.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\CharactorCard.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
