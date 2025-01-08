@@ -1,8 +1,9 @@
 #include "NumUtility.h"
 #include "DxLib.h"
 
-NumUtility::NumUtility(Vec2 pos, int num):
-	_drawPos(pos)
+NumUtility::NumUtility(float size, Vec2 pos, int num):
+	_drawPos(pos),
+	_size(size)
 {
 
 	// 数字画像のロード
@@ -46,7 +47,9 @@ NumUtility::NumUtility(Vec2 pos, int num):
 	_drawNumHandle[5] = _numHandle[a % 10];
 }
 
-NumUtility::NumUtility(Vec2 pos)
+NumUtility::NumUtility(float size, Vec2 pos):
+	_drawPos(pos),
+	_size(size)
 {
 	// 数字画像のロード
 	_numHandle[NUM_0] = LoadGraph("data/image/Num0.png");
@@ -105,12 +108,14 @@ void NumUtility::Draw() const
 	int n = 0;
 	int i = 1;
 	while (i <= 8) {
-		DrawGraph(_drawPos.intX() + 100 * i , _drawPos.intY(), _drawNumHandle[n], true);
+		//DrawGraph(_drawPos.intX() + 100 * i , _drawPos.intY(), _drawNumHandle[n], true);
+		DrawRotaGraph(_drawPos.x + (100 * _size) * i, _drawPos.intY(), _size, 0.0, _drawNumHandle[n], true);
 		n++;
 
 		if (n % 2 == 0 && n != 6) {
 			i++;
-			DrawGraph(_drawPos.intX() + 100 * i, _drawPos.intY(), _numHandle[NUM_DOT], true);
+			//DrawGraph(_drawPos.intX() + 100 * i, _drawPos.intY(), _numHandle[NUM_DOT], true);
+			DrawRotaGraph(_drawPos.x + (100 * _size) * i, _drawPos.intY(), _size, 0.0, _numHandle[NUM_DOT], true);
 		}
 		i++;
 	}

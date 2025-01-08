@@ -114,12 +114,6 @@
     <ClCompile Include="cpp\MenuManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\SceneMenu.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\SceneResult.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="cpp\SceneGrapple.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
@@ -152,6 +146,15 @@
     </ClCompile>
     <ClCompile Include="cpp\BombBullet.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneMenu.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\SceneResult.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp\MenuCollisionManager.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -248,12 +251,6 @@
     <ClInclude Include="h\MenuManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\SceneResult.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="h\SceneMenu.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="h\SceneGrapple.h">
       <Filter>Manager</Filter>
     </ClInclude>
@@ -286,6 +283,15 @@
     </ClInclude>
     <ClInclude Include="h\CharactorCard.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SceneMenu.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\SceneResult.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="h\MenuCollisionManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

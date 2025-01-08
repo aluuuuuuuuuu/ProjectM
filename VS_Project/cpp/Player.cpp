@@ -130,7 +130,7 @@ void Player::Control()
 	}
 
 	// Aボタンでジャンプ
-	if (Input::GetInstance().IsHold(INPUT_A, _padNum) && _groundFlag) {
+	if (Input::GetInstance().IsTrigger(INPUT_A, _padNum) && _groundFlag) {
 
 		// ジャンプ力を与える
 		_moveScaleY = 2.0f;

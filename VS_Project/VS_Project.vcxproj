@@ -158,6 +158,7 @@
     <ClCompile Include="cpp\Logo.cpp" />
     <ClCompile Include="cpp\MapBulletCollisionManager.cpp" />
     <ClCompile Include="cpp\MenuButton.cpp" />
+    <ClCompile Include="cpp\MenuCollisionManager.cpp" />
     <ClCompile Include="cpp\MenuManager.cpp" />
     <ClCompile Include="cpp\NormalBullet.cpp" />
     <ClCompile Include="cpp\NumUtility.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="h\Logo.h" />
     <ClInclude Include="h\MapBulletCollisionManager.h" />
     <ClInclude Include="h\MenuButton.h" />
+    <ClInclude Include="h\MenuCollisionManager.h" />
     <ClInclude Include="h\MenuManager.h" />
     <ClInclude Include="h\NormalBullet.h" />
     <ClInclude Include="h\NumUtility.h" />

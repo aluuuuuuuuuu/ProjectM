@@ -44,10 +44,10 @@ void SceneManager::PopScene()
 
 void SceneManager::GameEnd()
 {
-	m_endFlag = true;
+	_endFlag = true;
 }
 
 bool SceneManager::GetGameEnd()
 {
-	return m_endFlag;
+	return _endFlag;
 }

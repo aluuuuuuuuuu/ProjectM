@@ -27,7 +27,19 @@ SceneTest::SceneTest(PlayerData data)
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
-		_pNum = std::make_shared<NumUtility>(Vec2{ 1000,30 });	// 数字ユーティリティ
+		_pNum = std::make_shared<NumUtility>(0.5f,Vec2{ 734,100 });	// 数字ユーティリティ
+	}
+
+	// ライトの設定
+	{
+		// ライティングを使用する
+		SetUseLighting(true);
+
+		// ライトのカラーを調整する
+		SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+
+		// ライトの角度を設定
+		SetLightDirection(VECTOR{ 1.0f, -1.0f ,0.0f, });
 	}
 
 	// 関数ポインタの初期化

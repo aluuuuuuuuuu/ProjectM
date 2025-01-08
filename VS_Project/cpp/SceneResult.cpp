@@ -17,7 +17,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime):
 	_pCharactor = std::make_shared<ResultCharactor>(1);
 
 	// ”š‚Ìì¬
-	_pNum = std::make_shared<NumUtility>(Vec2{10,350},gameTime);
+	_pNum = std::make_shared<NumUtility>(1.0f,Vec2{10,350},gameTime);
 
 	// ƒŠƒUƒ‹ƒgUI‚Ìì¬
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
@@ -89,7 +89,7 @@ void SceneResult::FadeOutUpdate()
 {
 	_flame++;
 	if (_flame >= 110) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_playerData));
+		SceneManager::GetInstance().ChangeScene(_nextScece);
 	}
 }
 

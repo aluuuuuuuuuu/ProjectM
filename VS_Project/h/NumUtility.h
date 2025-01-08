@@ -17,9 +17,9 @@
 class NumUtility
 {
 public:
-	NumUtility(Vec2 pos, int num);
+	NumUtility(float size ,Vec2 pos, int num);
 
-	NumUtility(Vec2 pos);
+	NumUtility(float size, Vec2 pos);
 
 	virtual ~NumUtility();
 
@@ -37,5 +37,7 @@ private:
 
 	// ”—ñ‚ğ•\¦‚·‚é¶ã‚ÌÀ•W
 	Vec2 _drawPos;
+
+	float _size;
 };
 

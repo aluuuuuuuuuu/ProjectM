@@ -59,6 +59,7 @@ private:
 	std::list<std::shared_ptr<SceneBase>> _pScene;
 
 	// ゲーム終了フラグ
-	bool m_endFlag = false;
+	bool _endFlag = false;
+
 };
 

@@ -18,10 +18,11 @@ void MenuButton::Update()
 {
 }
 
-void MenuButton::Draw() const
+void MenuButton::Draw(int margin) const
 {
 	// ‰æ‘œ‚Ì•`‰æ
-	DrawRotaGraph(_pos.intX(), _pos.intY(), 1.0, 0.0, _graphHandle, true);
+	DrawRotaGraph(_pos.intX(), _pos.intY() + margin, 1.0, 0.0, _graphHandle, true);
+	DrawBox(_pos.intX() - GetRange().intX(), _pos.intY() - GetRange().intY(), _pos.intX() + GetRange().intX(), _pos.intY() + GetRange().intY(), 0xff0000, false);
 }
 
 Vec2 MenuButton::GetRange() const
@@ -37,4 +38,9 @@ Vec2 MenuButton::GetPos() const
 int MenuButton::GetType() const
 {
 	return _type;
+}
+
+void MenuButton::ChangeImage(int handle)
+{
+	_graphHandle = handle;
 }

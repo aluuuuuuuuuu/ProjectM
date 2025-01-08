@@ -1,12 +1,15 @@
 #include "SelectFinger.h"
 #include "DxLib.h"
+#include "Application.h"
 #include "Input.h"
 
 SelectFinger::SelectFinger(int padNum) :
 	_padNum(padNum),
+	_chara(0),
 	_selectFlag(false)
 {
-	_pos = Vec2{ 100,100 };
+	_pos = Vec2{ Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2,
+		Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2 };
 }
 
 SelectFinger::~SelectFinger()

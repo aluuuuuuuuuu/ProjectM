@@ -26,7 +26,8 @@ public:
 	/// <summary>
 	/// •`‰æˆ—
 	/// </summary>
-	void Draw() const;
+	/// <param name="margin">—]”’</param>
+	void Draw(int margin) const;
 
 	/// <summary>
 	/// “–‚½‚è”»’è”ÍˆÍ‚ğæ“¾‚·‚é
@@ -45,6 +46,12 @@ public:
 	/// </summary>
 	/// <returns>í—Ş</returns>
 	int GetType() const;
+
+	/// <summary>
+	/// ‰æ‘œ‚ğ·‚µ‘Ö‚¦‚é
+	/// </summary>
+	/// <param name="handle">·‚µ‘Ö‚¦‚é‰æ‘œƒnƒ“ƒhƒ‹</param>
+	void ChangeImage(int handle);
 
 private:
 

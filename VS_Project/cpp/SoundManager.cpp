@@ -3,8 +3,14 @@
 
 void SoundManager::Init()
 {
+	// âπÇÃÉçÅ[Éh
 	_opBGM = LoadSoundMem("data/BGM/Title_BGM.mp3");
 	_startSE = LoadSoundMem("data/SE/StartSound.mp3");
+
+	// âπó ÇÃê›íË
+	ChangeVolumeSoundMem(VOLUME_MIDDLE, _opBGM);
+	ChangeVolumeSoundMem(VOLUME_MIDDLE, _startSE);
+
 }
 
 void SoundManager::StartOp()
@@ -21,4 +27,26 @@ void SoundManager::StopOp()
 void SoundManager::RingStartSE()
 {
 	PlaySoundMem(_startSE, DX_PLAYTYPE_BACK);
+}
+
+void SoundManager::SetVolumeBGM(int volume)
+{
+	ChangeVolumeSoundMem(volume, _opBGM);
+	_volumeBGM = volume;
+}
+
+void SoundManager::SetVolumeSE(int volume)
+{
+	ChangeVolumeSoundMem(volume, _startSE);
+	_volumeSE = volume;
+}
+
+int SoundManager::GetVolumeBGM()
+{
+	return _volumeBGM;
+}
+
+int SoundManager::GetVolumeSE()
+{
+	return _volumeSE;
 }

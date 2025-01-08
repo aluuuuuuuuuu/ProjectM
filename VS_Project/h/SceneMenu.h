@@ -49,23 +49,8 @@ private:
     /// </summary>
     void NormalDraw() const;
 
-    /// <summary>
-    /// フェードイン更新処理
-    /// </summary>
-    void FadeInUpdate();
-
-    /// <summary>
-    /// フェードアウト更新処理
-    /// </summary>
-    void FadeOutUpdate();
-
-    /// <summary>
-    /// フェード共通の描画処理
-    /// </summary>
-    void FadeDraw() const;
-
     // メニューマネージャーのポインタ
-    std::shared_ptr<MenuManager> _pManager;
+    std::shared_ptr<MenuManager> _manager;
 
     // 操作するパッド
     int _padNum;
