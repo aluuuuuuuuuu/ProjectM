@@ -6,6 +6,7 @@
 #include "Crown.h"
 #include "Logo.h"
 #include "AnyPushButton.h"
+#include "SceneTest.h"
 
 SceneTitle::SceneTitle() :
 	_flame(110)
@@ -102,7 +103,16 @@ void SceneTitle::FadeOutUpdate()
 {
 	_flame++;
 	if (_flame >= 110) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>());
+		//SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>());
+
+		// テスト用仮実装
+		// 初期シーンを設定
+		PlayerData data;
+
+		data.playerNum = 2;
+		data.charactor[0] = 1;
+		data.charactor[1] = 2;
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(data));
 	}
 }
 

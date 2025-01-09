@@ -42,25 +42,27 @@ void SceneResult::Draw() const
 
 void SceneResult::NormalUpdate()
 {
-	// Aボタンが押されたらリスタート
-	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
-		_nextScece = std::make_shared<SceneTest>(_playerData);
-		_updateFunc = &SceneResult::FadeOutUpdate;
-		_drawFunc = &SceneResult::FadeDraw;
-	}
 
-	// Bボタンが押されたらタイトル画面
-	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
-		_nextScece = std::make_shared<SceneTitle>();
-		_updateFunc = &SceneResult::FadeOutUpdate;
-		_drawFunc = &SceneResult::FadeDraw;
-	}
+	for (int num = 0; num < _playerData.playerNum; num++) {
 
-	// STARTボタンが押されたらメニューを開く
-	if (Input::GetInstance().IsTrigger(INPUT_START, INPUT_PAD_1)) {
-		_nextScece = std::make_shared<SceneMenu>(INPUT_PAD_1);
-		_updateFunc = &SceneResult::FadeOutUpdate;
-		_drawFunc = &SceneResult::FadeDraw;
+		// Aボタンが押されたらリスタート
+		if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
+			_nextScece = std::make_shared<SceneTest>(_playerData);
+			_updateFunc = &SceneResult::FadeOutUpdate;
+			_drawFunc = &SceneResult::FadeDraw;
+		}
+
+		// Bボタンが押されたらタイトル画面
+		if (Input::GetInstance().IsTrigger(INPUT_B, num)) {
+			_nextScece = std::make_shared<SceneTitle>();
+			_updateFunc = &SceneResult::FadeOutUpdate;
+			_drawFunc = &SceneResult::FadeDraw;
+		}
+
+		// STARTボタンが押されたらメニューを開く
+		if (Input::GetInstance().IsTrigger(INPUT_START, num)) {
+			SceneManager::GetInstance().PushScene(std::make_shared<SceneMenu>(num));
+		}
 	}
 
 	// キャラクターの更新処理

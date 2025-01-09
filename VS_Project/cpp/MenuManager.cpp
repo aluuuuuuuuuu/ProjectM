@@ -201,6 +201,7 @@ void MenuManager::NormalUpdate()
 			break;
 		case END_BUTTON:
 			// ゲーム終了確認画面を開く
+			
 			break;
 		default:
 			break;
