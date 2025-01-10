@@ -8,7 +8,6 @@
 #include "SoundManager.h"
 #include "SceneSelect.h"
 #include "PlayerManager.h"
-#include "SceneGrapple.h"
 #include "SceneResult.h"
 
 bool Application::Init()

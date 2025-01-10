@@ -14,7 +14,7 @@ MenuManager::MenuManager(int padNum) :
 {
 	// 関数ポインタの初期化
 	_updateFunc = &MenuManager::SlideInUpdate;
-	_drawFunc = &MenuManager::NormalDraw;
+	_drawFunc = &MenuManager::StartDraw;
 
 	// コリジョンマネージャーの作成
 	_pCollisionManager = std::make_shared<MenuCollisionManager>(*this);
@@ -117,7 +117,7 @@ Vec2 MenuManager::GetRange(int buttonNum)
 	return _pButton[buttonNum]->GetRange();
 }
 
-void MenuManager::NormalUpdate()
+void MenuManager::StartUpdate()
 {
 	// 指の更新処理
 	_pFinger->Update();
@@ -209,7 +209,7 @@ void MenuManager::NormalUpdate()
 	}
 }
 
-void MenuManager::NormalDraw() const
+void MenuManager::StartDraw() const
 {
 	// ぼかしの描画
 	DrawGraph(1, 0, _backHandle, true);
@@ -235,7 +235,7 @@ void MenuManager::SlideInUpdate()
 		}
 	}
 	else {
-		_updateFunc = &MenuManager::NormalUpdate;
+		_updateFunc = &MenuManager::StartUpdate;
 	}
 
 	// 指の更新処理
@@ -251,7 +251,7 @@ void MenuManager::SlideOutUpdate()
 	}
 	else {
 		_updateFunc = &MenuManager::FadeOutUpdate;
-		_drawFunc = &MenuManager::FadeDraw;
+		_drawFunc = &MenuManager::FadeOutDraw;
 	}
 }
 
@@ -263,7 +263,7 @@ void MenuManager::FadeOutUpdate()
 	}
 }
 
-void MenuManager::FadeDraw() const
+void MenuManager::FadeOutDraw() const
 {
 	// ぼかしの描画
 	int alpha = static_cast<int>(255 * ((float)_flame / 15));

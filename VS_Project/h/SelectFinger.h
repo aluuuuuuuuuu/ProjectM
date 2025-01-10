@@ -76,7 +76,7 @@ private:
 	int _padNum;
 
 	// 最大プレイヤー数分の指画像ハンドル
-	int _fingerHandle[4];
+	int _fingerHandle;
 
 	// 表示座標
 	Vec2 _pos;

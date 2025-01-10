@@ -22,8 +22,8 @@ SceneResult::SceneResult(PlayerData data, int gameTime):
 	// リザルトUIの作成
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
 
-	_updateFunc = &SceneResult::NormalUpdate;
-	_drawFunc = &SceneResult::NormalDraw;
+	_updateFunc = &SceneResult::StartUpdate;
+	_drawFunc = &SceneResult::StartDraw;
 }
 
 SceneResult::~SceneResult()
@@ -40,23 +40,23 @@ void SceneResult::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneResult::NormalUpdate()
+void SceneResult::StartUpdate()
 {
 
-	for (int num = 0; num < _playerData.playerNum; num++) {
+	for (int num = 0; num <= _playerData.playerNum; num++) {
 
 		// Aボタンが押されたらリスタート
 		if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
 			_nextScece = std::make_shared<SceneTest>(_playerData);
 			_updateFunc = &SceneResult::FadeOutUpdate;
-			_drawFunc = &SceneResult::FadeDraw;
+			_drawFunc = &SceneResult::FadeOutDraw;
 		}
 
 		// Bボタンが押されたらタイトル画面
 		if (Input::GetInstance().IsTrigger(INPUT_B, num)) {
 			_nextScece = std::make_shared<SceneTitle>();
 			_updateFunc = &SceneResult::FadeOutUpdate;
-			_drawFunc = &SceneResult::FadeDraw;
+			_drawFunc = &SceneResult::FadeOutDraw;
 		}
 
 		// STARTボタンが押されたらメニューを開く
@@ -69,7 +69,7 @@ void SceneResult::NormalUpdate()
 	_pCharactor->Update();
 }
 
-void SceneResult::NormalDraw() const
+void SceneResult::StartDraw() const
 {
 	// キャラクターの描画
 	_pCharactor->Draw();
@@ -95,9 +95,9 @@ void SceneResult::FadeOutUpdate()
 	}
 }
 
-void SceneResult::FadeDraw() const
+void SceneResult::FadeOutDraw() const
 {
-	NormalDraw();
+	StartDraw();
 
 	//フェード暗幕
 	int alpha = static_cast<int>(255 * ((float)_flame / 110));

@@ -4,6 +4,7 @@
 #include <memory>
 #include "Constant.h"
 
+class NumSelectButton;
 class AnyPushButton;
 class Logo;
 class Crown;
@@ -44,12 +45,12 @@ private:
 	/// <summary>
 	/// 通常の更新処理
 	/// </summary>
-	void NormalUpdate();
+	void StartUpdate();
 
 	/// <summary>
 	/// 通常の描画処理
 	/// </summary>
-	void NormalDraw() const;
+	void StartDraw() const;
 
 	/// <summary>
 	/// フェードイン更新処理
@@ -62,9 +63,24 @@ private:
 	void FadeOutUpdate();
 
 	/// <summary>
-	/// フェード共通の描画処理
+	/// フェードイン描画処理
 	/// </summary>
-	void FadeDraw() const;
+	void FadeInDraw() const;
+
+	/// <summary>
+	/// フェードアウト描画処理
+	/// </summary>
+	void FadeOutDraw() const;
+
+	/// <summary>
+	/// 人数セレクトの更新処理
+	/// </summary>
+	void NumSelectUpdate();
+
+	/// <summary>
+	/// 人数セレクトの描画処理
+	/// </summary>
+	void NumSelectDraw() const;
 
 	// 王冠ポインタ
 	std::shared_ptr<Crown> _pCrown;
@@ -75,10 +91,15 @@ private:
 	// 文章ポインタ
 	std::shared_ptr<AnyPushButton> _pText;
 
+	// 人数セレクトポインタ
+	std::shared_ptr<NumSelectButton> _pNum;
+
 	// フェード用フレームカウンタ
 	int _flame;
 
 	// 背景画像
 	int _backgroundHandle;
+
+
 };
 

@@ -8,15 +8,35 @@ SelectFinger::SelectFinger(int padNum) :
 	_chara(0),
 	_selectFlag(false)
 {
+	// 初期一の設定
 	_pos = Vec2{ Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2,
 		Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2 };
+
+	// 指画像のロード
+	switch (padNum)
+	{
+	case 0:
+		_fingerHandle = LoadGraph("data/image/finger_down_red.png");
+		break;
+	case 1:
+		_fingerHandle = LoadGraph("data/image/finger_down_blue.png");
+		break;
+	case 2:
+		_fingerHandle = LoadGraph("data/image/finger_down_green.png");
+		break;
+	case 3:
+		_fingerHandle = LoadGraph("data/image/finger_down_yellow.png");
+		break;
+	default:
+		_fingerHandle = 0;
+		break;
+	}
 }
 
 SelectFinger::~SelectFinger()
 {
-	for (auto& handle : _fingerHandle) {
-		DeleteGraph(handle);
-	}
+	// 画像の削除
+	DeleteGraph(_fingerHandle);
 }
 
 void SelectFinger::Update()
@@ -32,19 +52,8 @@ void SelectFinger::Update()
 
 void SelectFinger::Draw() const
 {
-	// 仮に円で表示する
-	if (_padNum == 0) {
-		DrawCircle(_pos.intX(), _pos.intY(), 30, 0xff0000);
-	}
-	else if (_padNum == 1) {
-		DrawCircle(_pos.intX(), _pos.intY(), 30, 0x0000ff);
-	}
-	else if (_padNum == 2) {
-		DrawCircle(_pos.intX(), _pos.intY(), 30, 0x00ff00);
-	}
-	else if (_padNum == 3) {
-		DrawCircle(_pos.intX(), _pos.intY(), 30, 0xffff00);
-	}
+	// 指の描画
+	DrawGraph(_pos.intX() - 50, _pos.intY() - 30, _fingerHandle, true);
 }
 
 

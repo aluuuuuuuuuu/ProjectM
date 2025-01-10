@@ -25,7 +25,7 @@ public:
     /// コンストラクタ
     /// </summary>
     /// <param name="data">プレイヤーデータ</param>
-    SceneTest(PlayerData data);
+    SceneTest(PlayerData& data);
 
     /// <summary>
     /// デストラクタ
@@ -53,12 +53,12 @@ private:
     /// <summary>
     /// 通常の更新処理
     /// </summary>
-    void NormalUpdate();
+    void StartUpdate();
 
     /// <summary>
     /// 通常の描画処理
     /// </summary>
-    void NormalDraw() const;
+    void StartDraw() const;
 
     /// <summary>
     /// ゲーム終了時の更新処理

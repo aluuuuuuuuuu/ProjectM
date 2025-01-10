@@ -8,11 +8,7 @@ constexpr int CHARACTOR_2 = 2;
 constexpr int CHARACTOR_3 = 3;
 constexpr int CHARACTOR_4 = 4;
 
-constexpr int PLAYER_1 = 1;
-constexpr int PLAYER_2 = 2;
-constexpr int PLAYER_3 = 3;
-constexpr int PLAYER_4 = 4;
-
+class SelectUI;
 class CharactorSelectManager;
 class CharactorCard;
 class SelectFinger;
@@ -24,7 +20,8 @@ public:
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    SceneSelect();
+    /// <param name="num">プレイヤー数</param>
+    SceneSelect(int num);
 
     /// <summary>
     /// デストラクタ
@@ -49,16 +46,6 @@ private:
     // 任意のアップデート関数変数、ドロー関数変数
     _UpdateFunc_t _updateFunc = nullptr;
     _DrawFunc_t  _drawFunc = nullptr;
-
-	/// <summary>
-	/// プレイヤー数選択時の更新処理
-	/// </summary>
-	void PlayerNumSelectUpdate();
-
-	/// <summary>
-	/// プレイヤー数選択時の描画処理
-	/// </summary>
-	void PlayerNumSelectDraw() const;
 
 	/// <summary>
 	/// キャラクター選択時の更新処理
@@ -99,6 +86,10 @@ private:
 	// ゲームシーンに渡すプレイヤーのデータ
 	PlayerData _plData;
 
+	// uiクラスポインタ
+	std::shared_ptr<SelectUI> _pUi;
+
 	int back;
+
 };
 

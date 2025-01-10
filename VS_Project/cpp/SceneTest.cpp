@@ -15,7 +15,7 @@
 #include "SceneResult.h"
 #include "NumUtility.h"
 
-SceneTest::SceneTest(PlayerData data)
+SceneTest::SceneTest(PlayerData& data)
 {
 	// 各クラスのインスタンス作成
 	{
@@ -44,8 +44,8 @@ SceneTest::SceneTest(PlayerData data)
 
 	// 関数ポインタの初期化
 	{
-		_updateFunc = &SceneTest::NormalUpdate;
-		_drawFunc = &SceneTest::NormalDraw;
+		_updateFunc = &SceneTest::StartUpdate;
+		_drawFunc = &SceneTest::StartDraw;
 	}
 }
 
@@ -69,7 +69,7 @@ void SceneTest::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneTest::NormalUpdate()
+void SceneTest::StartUpdate()
 {
 	// メニュー画面を開く
 	for (int num = 0; num < _pPlayerManager->GetPlayerNum(); num++) {
@@ -103,7 +103,7 @@ void SceneTest::NormalUpdate()
 	_pNum->Update(_pGameFlowManager->GetGameTime());
 }
 
-void SceneTest::NormalDraw() const
+void SceneTest::StartDraw() const
 {
 	// プレイヤーの画面の数だけ描画する
 	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {

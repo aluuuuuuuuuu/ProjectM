@@ -3,6 +3,11 @@
 #include <vector>
 #include "Constant.h"
 
+constexpr int PLAYER_ONE = 0;
+constexpr int PLAYER_TWO = 1;
+constexpr int PLAYER_THREE = 2;
+constexpr int PLAYER_FORE = 3;
+
 struct VECTOR4
 {
 	int a;
@@ -24,7 +29,7 @@ struct PlayerData
 	int charactor[4];
 
 	// プレイヤーの総数
-	int playerNum = 0;
+	int playerNum = -1;
 
 	// 勝利したプレイヤー
 	int winner = 0;

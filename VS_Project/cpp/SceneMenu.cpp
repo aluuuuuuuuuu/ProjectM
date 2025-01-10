@@ -10,8 +10,8 @@ SceneMenu::SceneMenu(int padNum) :
 	_flame(0)
 {
 	// 関数ポインタの初期化
-	_updateFunc = &SceneMenu::NormalUpdate;
-	_drawFunc = &SceneMenu::NormalDraw;
+	_updateFunc = &SceneMenu::StartUpdate;
+	_drawFunc = &SceneMenu::StartDraw;
 
 	// メニューマネージャーのポインタを作成
 	_manager = std::make_shared<MenuManager>(_padNum);
@@ -35,13 +35,13 @@ void SceneMenu::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneMenu::NormalUpdate()
+void SceneMenu::StartUpdate()
 {
 	// マネージャーの更新処理
 	_manager->Update();
 }
 
-void SceneMenu::NormalDraw() const
+void SceneMenu::StartDraw() const
 {
 	// メニューマネージャーの描画処理
 	_manager->Draw();

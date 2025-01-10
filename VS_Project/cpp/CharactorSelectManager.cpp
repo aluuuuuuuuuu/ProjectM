@@ -10,13 +10,13 @@ CharactorSelectManager::CharactorSelectManager(PlayerData& plData) :
 	_pushStart(false)
 {
 	// 指のインスタンスを人数分作成する
-	for (int i = 0; i < _plData.playerNum; i++) {
+	for (int i = 0; i <= _plData.playerNum; i++) {
 		_pFinger[i] = std::make_shared<SelectFinger>(i);
 	}
 
 	// カードのインスタンスをキャラクター分作成する
 	for (int i = 0; i < 4; i++) {
-		_pCard[i] = std::make_shared<CharactorCard>(i + 1);
+		_pCard[i] = std::make_shared<CharactorCard>(i);
 	}
 }
 
@@ -28,7 +28,7 @@ void CharactorSelectManager::Update()
 {
 
 	// 全指の更新処理
-	for (int num = 0; num < _plData.playerNum; num++) {
+	for (int num = 0; num <= _plData.playerNum; num++) {
 		_pFinger[num]->Update();
 	}
 
@@ -42,7 +42,7 @@ void CharactorSelectManager::Update()
 
 	// 全指が選択し終わったか判定する
 	_selectFinishFlag = true;
-	for (int num = 0; num < _plData.playerNum; num++) {
+	for (int num = 0; num <= _plData.playerNum; num++) {
 		if (!_pFinger[num]->IsSelected()) {
 			_selectFinishFlag = false;
 			break;
@@ -65,7 +65,7 @@ void CharactorSelectManager::Draw() const
 	}
 
 	// 全指の描画
-	for (int num = 0; num < _plData.playerNum; num++) {
+	for (int num = 0; num <= _plData.playerNum; num++) {
 		_pFinger[num]->Draw();
 	}
 
@@ -82,14 +82,14 @@ bool CharactorSelectManager::GetStart() const
 
 void CharactorSelectManager::CreateData()
 {
-	for (int num = 0; num < _plData.playerNum; num++) {
+	for (int num = 0; num <= _plData.playerNum; num++) {
 		_plData.charactor[num] = _pFinger[num]->GetSelectChara();
 	}
 }
 
 void CharactorSelectManager::FingerFunction()
 {
-	for (int num = 0; num < _plData.playerNum; num++) {
+	for (int num = 0; num <= _plData.playerNum; num++) {
 
 		// Aボタンを押したときの処理
 		if (_pFinger[num]->IsPushButton(INPUT_A)) {

@@ -25,7 +25,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
 
 	// ƒ‚ƒfƒ‹‚Ì‰Šúˆ—
-	InitModel(_manager.GetModelHandle(padNum));
+	InitModel(_manager.GetModelHandle(_manager.GetPlayerData().charactor[padNum]));
 
 	// À•W‚Ìİ’è
 	Position = Vec3{ 0.0f,25.0f,0.0f };

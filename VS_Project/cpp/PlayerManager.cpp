@@ -6,37 +6,22 @@
 #include "CollisionManager.h"
 #include "Player.h"
 
-PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data):
+PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
 	_playerData(data)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
 
 	// モデルのロード
-	for (int num = 0; num < _playerData.playerNum; num++) {
-		switch (num)
-		{
-		case 0:
-			_modelHandle[num] = MV1LoadModel("data/model/Player1.mv1");
-			break;
-		case 1:
-			_modelHandle[num] = MV1LoadModel("data/model/Player2.mv1");
-			break;
-		case 2:
-			_modelHandle[num] = MV1LoadModel("data/model/Player3.mv1");
-			break;
-		case 3:
-			_modelHandle[num] = MV1LoadModel("data/model/Player4.mv1");
-			break;
-		default:
-			break;
-		}
-	}
+	_modelHandle[0] = MV1LoadModel("data/model/Player1.mv1");
+	_modelHandle[1] = MV1LoadModel("data/model/Player2.mv1");
+	_modelHandle[2] = MV1LoadModel("data/model/Player3.mv1");
+	_modelHandle[3] = MV1LoadModel("data/model/Player4.mv1");
 
 	// 各インスタンスの作成
 	{
 		// プレイヤーインスタンスの作成
-		for (int num = 0; num < _playerData.playerNum; num++) {
+		for (int num = 0; num <= _playerData.playerNum; num++) {
 			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num));
 			_pPlayer[num]->Position = Vec3{ num * 10.0f,0.0f,0.0f };
 		}
@@ -124,20 +109,23 @@ int PlayerManager::GetPlayerNum() const
 int PlayerManager::GetModelHandle(int num) const
 {
 	// プレイヤーナンバーに対応したモデルハンドルを返す
-	switch (num)
-	{
-	case 0:
-		return _modelHandle[num];
-	case 1:
-		return _modelHandle[num];
-	case 2:
-		return _modelHandle[num];
-	case 3:
-		return _modelHandle[num];
-	default:
-		return 0;
-		break;
-	}
+	return MV1DuplicateModel(_playerData.charactor[num]);
+
+
+	//switch (num)
+	//{
+	//case 0:
+	//	return _modelHandle[num];
+	//case 1:
+	//	return _modelHandle[num];
+	//case 2:
+	//	return _modelHandle[num];
+	//case 3:
+	//	return _modelHandle[num];
+	//default:
+	//	return 0;
+	//	break;
+	//}
 }
 
 void PlayerManager::CameraSet(int num) const
@@ -152,7 +140,7 @@ int PlayerManager::GetAreAlivePlayerNum() const
 	int num = 0;
 	for (auto& pl : _pPlayer) {
 		if (!pl->GetDeadFlag()) num++;
-	} 
+	}
 	return num;
 }
 

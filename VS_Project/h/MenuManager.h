@@ -66,9 +66,9 @@ private:
 	_UpdateFunc_t _updateFunc = nullptr;
 	_DrawFunc_t _drawFunc = nullptr;
 
-	void NormalUpdate();
+	void StartUpdate();
 
-	void NormalDraw() const;
+	void StartDraw() const;
 
 	void SlideInUpdate();
 
@@ -76,7 +76,7 @@ private:
 
 	void FadeOutUpdate();
 
-	void FadeDraw() const;
+	void FadeOutDraw() const;
 
 	// ƒƒjƒ…[‚ÌŠî”Õ‰æ‘œ
 	int _menuBordHandle;

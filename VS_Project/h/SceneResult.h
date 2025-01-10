@@ -42,12 +42,12 @@ private:
     /// <summary>
     /// 通常の更新処理
     /// </summary>
-    void NormalUpdate();
+    void StartUpdate();
 
     /// <summary>
     /// 通常の描画処理
     /// </summary>
-    void NormalDraw() const;
+    void StartDraw() const;
 
     /// <summary>
     /// フェード用の更新処理
@@ -57,7 +57,7 @@ private:
     /// <summary>
     /// フェード用の描画処理
     /// </summary>
-    void FadeDraw() const;
+    void FadeOutDraw() const;
 
 
     // 数字利用ポインタ
