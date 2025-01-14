@@ -1,6 +1,11 @@
 #pragma once
 #include "Vec3.h"
 
+constexpr int SCENE_TITLE = 1;
+constexpr int SCENE_SELECT = 2;
+constexpr int SCENE_TEST = 3;
+constexpr int SCENE_RESELT = 4;
+
 class SceneManager;
 // シーンの基底クラス、全てのシーンクラスはこれを継承する
 class SceneBase

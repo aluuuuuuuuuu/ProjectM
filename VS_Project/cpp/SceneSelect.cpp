@@ -6,9 +6,11 @@
 #include "CharactorCard.h"
 #include "CharactorSelectManager.h"
 #include "SelectUI.h"
+#include "SceneTitle.h"
 
-SceneSelect::SceneSelect(int num):
-	_flame(60)
+SceneSelect::SceneSelect(int num) :
+	_flame(60),
+	_nextScene(0)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelect::FadeInUpdate;
@@ -55,16 +57,32 @@ void SceneSelect::CharactorSelectUpdate()
 		// プレイヤーデータを作成する
 		_pSelectManager->CreateData();
 
+		// 次のシーンをセレクトシーンに切り替える
+		_nextScene = SCENE_TEST;
+
 		// フェードアウトに移行
 		_updateFunc = &SceneSelect::FadeOutUpdate;
 		_drawFunc = &SceneSelect::FadeOutDraw;
+	}
+
+	// Bボタンが押されたら人数選択に戻る
+	for (int i = 0; i < Input::GetInstance().GetPadNum(); i++) {
+		if (Input::GetInstance().IsTrigger(INPUT_B, i)) {
+
+			// 次のシーンをタイトルシーンに切り替える
+			_nextScene = SCENE_TITLE;
+
+			// フェードアウトに移行
+			_updateFunc = &SceneSelect::FadeOutUpdate;
+			_drawFunc = &SceneSelect::FadeOutDraw;
+		}
 	}
 }
 
 void SceneSelect::CharactorSelectDraw() const
 {
 	// 背景画像の描画
-	DrawGraph(0, 0, back,true);
+	DrawGraph(0, 0, back, true);
 
 	// uiの描画
 	_pUi->Draw();
@@ -86,7 +104,19 @@ void SceneSelect::FadeOutUpdate()
 {
 	_flame++;
 	if (_flame >= 60) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_plData));
+
+		// 次のシーンに移行する
+		switch (_nextScene)
+		{
+		case SCENE_TITLE:
+			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>());
+			break;
+		case SCENE_TEST:
+			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_plData));
+			break;
+		default:
+			break;
+		}
 	}
 }
 

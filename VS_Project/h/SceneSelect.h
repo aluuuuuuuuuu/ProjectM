@@ -91,5 +91,8 @@ private:
 
 	int back;
 
+	// 次にロードするシーン
+	int _nextScene;
+
 };
 

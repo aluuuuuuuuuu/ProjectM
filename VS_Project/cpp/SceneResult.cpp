@@ -9,15 +9,16 @@
 #include "NumUtility.h"
 #include "ResultCharactor.h"
 
-SceneResult::SceneResult(PlayerData data, int gameTime):
+SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
-	_flame(0)
+	_flame(0),
+	_nextScene(0)
 {
 	// キャラクターの作成
 	_pCharactor = std::make_shared<ResultCharactor>(1);
 
 	// 数字の作成
-	_pNum = std::make_shared<NumUtility>(1.0f,Vec2{10,350},gameTime);
+	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,350 }, gameTime);
 
 	// リザルトUIの作成
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
@@ -47,14 +48,14 @@ void SceneResult::StartUpdate()
 
 		// Aボタンが押されたらリスタート
 		if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
-			_nextScece = std::make_shared<SceneTest>(_playerData);
+			_nextScene = SCENE_TEST;
 			_updateFunc = &SceneResult::FadeOutUpdate;
 			_drawFunc = &SceneResult::FadeOutDraw;
 		}
 
 		// Bボタンが押されたらタイトル画面
 		if (Input::GetInstance().IsTrigger(INPUT_B, num)) {
-			_nextScece = std::make_shared<SceneTitle>();
+			_nextScene = SCENE_TITLE;
 			_updateFunc = &SceneResult::FadeOutUpdate;
 			_drawFunc = &SceneResult::FadeOutDraw;
 		}
@@ -90,9 +91,23 @@ void SceneResult::StartDraw() const
 void SceneResult::FadeOutUpdate()
 {
 	_flame++;
+
+	// フェードが終了したら
 	if (_flame >= 110) {
-		SceneManager::GetInstance().ChangeScene(_nextScece);
+		// 次のシーンに切り替える
+		switch (_nextScene)
+		{
+		case SCENE_TEST:
+			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_playerData));
+			break;
+		case SCENE_TITLE:
+			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>());
+			break;
+		default:
+			break;
+		}
 	}
+
 }
 
 void SceneResult::FadeOutDraw() const

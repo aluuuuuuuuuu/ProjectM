@@ -109,23 +109,7 @@ int PlayerManager::GetPlayerNum() const
 int PlayerManager::GetModelHandle(int num) const
 {
 	// プレイヤーナンバーに対応したモデルハンドルを返す
-	return MV1DuplicateModel(_playerData.charactor[num]);
-
-
-	//switch (num)
-	//{
-	//case 0:
-	//	return _modelHandle[num];
-	//case 1:
-	//	return _modelHandle[num];
-	//case 2:
-	//	return _modelHandle[num];
-	//case 3:
-	//	return _modelHandle[num];
-	//default:
-	//	return 0;
-	//	break;
-	//}
+	return MV1DuplicateModel(_modelHandle[_playerData.charactor[num]]);
 }
 
 void PlayerManager::CameraSet(int num) const

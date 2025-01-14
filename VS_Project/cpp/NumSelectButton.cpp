@@ -4,7 +4,7 @@
 #include "PlayerManager.h"
 
 NumSelectButton::NumSelectButton():
-	_selectNum(1)
+	_selectNum(0)
 {
 	// 人数選択の画像のロード
 	_numHandle[PLAYER_ONE] = LoadGraph("data/image/1play.png");
@@ -34,8 +34,10 @@ NumSelectButton::~NumSelectButton()
 
 void NumSelectButton::Update()
 {
+	// インプットインスタンスを取得
 	auto& input = Input::GetInstance();
 
+	// 右入力がされたときの動作
 	if (input.IsTrigger(INPUT_RIGHT, INPUT_PAD_1)) {
 		switch (_arrowPos.intX())
 		{
@@ -59,6 +61,8 @@ void NumSelectButton::Update()
 			break;
 		}
 	}
+
+	// 左入力がされたときの動作
 	if (input.IsTrigger(INPUT_LEFT, INPUT_PAD_1)) {
 		switch (_arrowPos.intX())
 		{

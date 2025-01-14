@@ -15,7 +15,9 @@ void SoundManager::Init()
 
 void SoundManager::StartOp()
 {
-	PlaySoundMem(_opBGM, DX_PLAYTYPE_LOOP);
+	if (CheckSoundMem(_opBGM) == 0) {
+		PlaySoundMem(_opBGM, DX_PLAYTYPE_LOOP);
+	}
 }
 
 void SoundManager::StopOp()

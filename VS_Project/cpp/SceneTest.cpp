@@ -14,9 +14,13 @@
 #include "GameFlowManager.h"
 #include "SceneResult.h"
 #include "NumUtility.h"
+#include "SoundManager.h"
 
 SceneTest::SceneTest(PlayerData& data)
 {
+	// タイトルのBGMを止める
+	SoundManager::GetInstance().StopOp();
+
 	// 各クラスのインスタンス作成
 	{
 		_pWedgewormManager = std::make_shared<WedgewormManager>();	// 禊虫マネージャー
