@@ -33,7 +33,7 @@ SceneTitle::SceneTitle() :
 	_backgroundHandle = LoadGraph("data/image/back.jpg");
 
 	// オープニングのテーマを再生する
-	SoundManager::GetInstance().StartOp();
+	SoundManager::GetInstance().StartBGM(BGM_OPENING);
 }
 
 SceneTitle::~SceneTitle()
@@ -59,13 +59,13 @@ void SceneTitle::StartUpdate()
 	// 文章の更新処理
 	_pText->Update();
 
-	// いずれかのボタンでシーン移行
+	// いずれかのボタンが押されたら人数選択へ
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
 
 		// 決定音を鳴らす
-		SoundManager::GetInstance().RingStartSE();
+		SoundManager::GetInstance().RingSE(SE_TITLE_START);
 
-		// フェードアウトへ移行
+		// 人数選択へ移行
 		_updateFunc = &SceneTitle::NumSelectUpdate;
 		_drawFunc = &SceneTitle::NumSelectDraw;
 	}
@@ -106,15 +106,6 @@ void SceneTitle::FadeOutUpdate()
 	_flame++;
 	if (_flame >= 110) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));
-
-		//// テスト用仮実装
-		//// 初期シーンを設定
-		//PlayerData data;
-
-		//data.playerNum = 2;
-		//data.charactor[0] = 1;
-		//data.charactor[1] = 2;
-		//SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(data));
 	}
 }
 
@@ -153,6 +144,10 @@ void SceneTitle::NumSelectUpdate()
 
 	// Aボタンが押されたら状態遷移
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
+
+		// 決定音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_TITLE_START);
+
 		_updateFunc = &SceneTitle::FadeOutUpdate;
 		_drawFunc = &SceneTitle::FadeOutDraw;
 	}

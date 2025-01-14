@@ -1,14 +1,14 @@
 #pragma once
 #include "Components.h"
 
-class ResultCharactor :
+class ResultCharacter :
 	public Model,
 	public Animation,
 	public Transform
 {
 public:
-	ResultCharactor(int plNum);
-	virtual ~ResultCharactor();
+	ResultCharacter(int plNum);
+	virtual ~ResultCharacter();
 
 	void Update();
 

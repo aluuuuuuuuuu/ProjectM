@@ -108,7 +108,7 @@
     <ClCompile Include="cpp\GameFlowManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\CharactorSelectManager.cpp">
+    <ClCompile Include="cpp\CharacterSelectManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="cpp\MenuManager.cpp">
@@ -129,7 +129,7 @@
     <ClCompile Include="cpp\ResultLogo.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\ResultCharactor.cpp">
+    <ClCompile Include="cpp\ResultCharacter.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="cpp\MenuButton.cpp">
@@ -138,7 +138,7 @@
     <ClCompile Include="cpp\GrapplerBullet.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\CharactorCard.cpp">
+    <ClCompile Include="cpp\CharacterCard.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="cpp\BombBullet.cpp">
@@ -248,7 +248,7 @@
     <ClInclude Include="h\GameFlowManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="h\CharactorSelectManager.h">
+    <ClInclude Include="h\CharacterSelectManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="h\MenuManager.h">
@@ -272,7 +272,7 @@
     <ClInclude Include="h\ResultLogo.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="h\ResultCharactor.h">
+    <ClInclude Include="h\ResultCharacter.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="h\GrapplerBullet.h">
@@ -281,7 +281,7 @@
     <ClInclude Include="h\MenuButton.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="h\CharactorCard.h">
+    <ClInclude Include="h\CharacterCard.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="h\SceneMenu.h">
@@ -316,6 +316,6 @@
     <None Include="data\constant\NormalBullet.csv" />
     <None Include="data\constant\Stage.csv" />
     <None Include="data\constant\SceneTitle.csv" />
-    <None Include="data\constant\CharactorCard.csv" />
+    <None Include="data\constant\CharacterCard.csv" />
   </ItemGroup>
 </Project>

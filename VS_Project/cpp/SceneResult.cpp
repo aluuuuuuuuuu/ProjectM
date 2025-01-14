@@ -7,7 +7,7 @@
 #include "SceneManager.h"
 #include "ResultUi.h"
 #include "NumUtility.h"
-#include "ResultCharactor.h"
+#include "ResultCharacter.h"
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
@@ -15,7 +15,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_nextScene(0)
 {
 	// キャラクターの作成
-	_pCharactor = std::make_shared<ResultCharactor>(1);
+	_pCharacter = std::make_shared<ResultCharacter>(1);
 
 	// 数字の作成
 	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,350 }, gameTime);
@@ -67,13 +67,13 @@ void SceneResult::StartUpdate()
 	}
 
 	// キャラクターの更新処理
-	_pCharactor->Update();
+	_pCharacter->Update();
 }
 
 void SceneResult::StartDraw() const
 {
 	// キャラクターの描画
-	_pCharactor->Draw();
+	_pCharacter->Draw();
 
 	// リザルトUIの描画
 	_pResultUi->Draw();

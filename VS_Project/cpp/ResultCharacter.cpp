@@ -1,7 +1,7 @@
-#include "ResultCharactor.h"
+#include "ResultCharacter.h"
 #include "DxLib.h"
 
-ResultCharactor::ResultCharactor(int plNum)
+ResultCharacter::ResultCharacter(int plNum)
 {
 	switch (plNum)
 	{
@@ -13,7 +13,7 @@ ResultCharactor::ResultCharactor(int plNum)
 		Angle = Vec3{ 0.0f,-1.5f,0.0f };	// 角度
 
 		// モデルの初期処理
-		InitModel(MV1LoadModel("data/model/ResultCharactor1.mv1"));
+		InitModel(MV1LoadModel("data/model/ResultCharacter1.mv1"));
 
 		// アニメーションの初期処理
 		InitAnimation(_modelHandle, 5, 0.1f);
@@ -30,7 +30,7 @@ ResultCharactor::ResultCharactor(int plNum)
 		Angle = Vec3{ 0.0f,-1.5f,0.0f };	// 角度
 
 		// モデルの初期処理
-		InitModel(MV1LoadModel("data/model/ResultCharactor2.mv1"));
+		InitModel(MV1LoadModel("data/model/ResultCharacter2.mv1"));
 
 		// アニメーションの初期処理
 		InitAnimation(_modelHandle, 0, 0.1f);
@@ -46,7 +46,7 @@ ResultCharactor::ResultCharactor(int plNum)
 		Angle = Vec3{ 0.0f,-1.5f,0.0f };	// 角度
 
 		// モデルの初期処理
-		InitModel(MV1LoadModel("data/model/ResultCharactor3.mv1"));
+		InitModel(MV1LoadModel("data/model/ResultCharacter3.mv1"));
 
 		// アニメーションの初期処理
 		InitAnimation(_modelHandle, 5, 0.1f);
@@ -62,7 +62,7 @@ ResultCharactor::ResultCharactor(int plNum)
 		Angle = Vec3{ 0.0f,-1.5f,0.0f };	// 角度
 
 		// モデルの初期処理
-		InitModel(MV1LoadModel("data/model/ResultCharactor4.mv1"));
+		InitModel(MV1LoadModel("data/model/ResultCharacter4.mv1"));
 
 		// アニメーションの初期処理
 		InitAnimation(_modelHandle, 5, 0.1f);
@@ -83,11 +83,11 @@ ResultCharactor::ResultCharactor(int plNum)
 	SetLightDirection(VGet(-1, 0, 0));
 }
 
-ResultCharactor::~ResultCharactor()
+ResultCharacter::~ResultCharacter()
 {
 }
 
-void ResultCharactor::Update()
+void ResultCharacter::Update()
 {
 
 	//// アニメーションが終了している場合の処理
@@ -125,7 +125,7 @@ void ResultCharactor::Update()
 	UpdateModel(GetTransformInstance());
 }
 
-void ResultCharactor::Draw() const
+void ResultCharacter::Draw() const
 {
 	DrawModel();
 }

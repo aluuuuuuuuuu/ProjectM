@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "Input.h"
 #include "PlayerManager.h"
+#include "SoundManager.h"
 
 NumSelectButton::NumSelectButton():
 	_selectNum(0)
@@ -14,9 +15,6 @@ NumSelectButton::NumSelectButton():
 
 	// 選択矢印のロード
 	_arrowHandle = LoadGraph("data/image/arrow.png");
-
-	// ゲーム終了画像のロード
-	_gameEndHandle = LoadGraph("");
 
 	_arrowPos = Vec2{ 690,875 };
 }
@@ -39,6 +37,10 @@ void NumSelectButton::Update()
 
 	// 右入力がされたときの動作
 	if (input.IsTrigger(INPUT_RIGHT, INPUT_PAD_1)) {
+
+		// 選択音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_NUM_SELECT);
+
 		switch (_arrowPos.intX())
 		{
 		case 690:
@@ -64,6 +66,10 @@ void NumSelectButton::Update()
 
 	// 左入力がされたときの動作
 	if (input.IsTrigger(INPUT_LEFT, INPUT_PAD_1)) {
+
+		// 選択音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_NUM_SELECT);
+
 		switch (_arrowPos.intX())
 		{
 		case 690:

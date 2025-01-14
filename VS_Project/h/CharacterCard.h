@@ -4,7 +4,7 @@
 #include "Constant.h"
 
 class SelectFinger;
-class CharactorCard:
+class CharacterCard:
 	public Constant
 {
 public:
@@ -13,12 +13,12 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="charNum">キャラクターナンバー</param>
-	CharactorCard(int charNum);
+	CharacterCard(int charNum);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~CharactorCard();
+	virtual ~CharacterCard();
 
 	/// <summary>
 	/// 更新処理
@@ -34,13 +34,13 @@ public:
 	/// 自身の選択フラグを立てる
 	/// </summary>
 	/// <param name="plNum">どのプレイヤーに選択されたか</param>
-	void SelectCharactor(int plNum);
+	void SelectCharacter(int plNum);
 
 	/// <summary>
 	/// 自身の選択フラグを下げる
 	/// </summary>
 	/// <param name="plNum">どのプレイヤーに選択解除されたか</param>
-	void RejectCharactor(int plNum);
+	void RejectCharacter(int plNum);
 
 	bool GetSelectFlag();
 
@@ -57,7 +57,7 @@ public:
 	/// 自身のキャラクターナンバーを返す
 	/// </summary>
 	/// <returns>キャラクターナンバー</returns>
-	int GetCharactorNum()const;
+	int GetCharacterNum()const;
 
 private:
 
@@ -74,6 +74,6 @@ private:
 	Vec2 _pos;
 
 	// 自身のキャラクターナンバー
-	int _charactorNum;
+	int _characterNum;
 };
 

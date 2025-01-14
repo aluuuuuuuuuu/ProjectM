@@ -29,8 +29,8 @@ MenuManager::MenuManager(int padNum) :
 	_backHandle = LoadGraph("data/image/backBloom.png");
 
 	// 基盤画像の座標を取得
-	_bordPos.x = Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2;
-	_bordPos.y = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2;
+	_bordPos.x = static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2);
+	_bordPos.y = static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2);
 
 	// 音量ボタン画像のロード
 	_volumeBGMGraph[ZERO_GRAPH] = LoadGraph("data/image/VolumeZeroBGM.png");
@@ -201,7 +201,7 @@ void MenuManager::StartUpdate()
 			break;
 		case END_BUTTON:
 			// ゲーム終了確認画面を開く
-			
+
 			break;
 		default:
 			break;

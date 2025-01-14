@@ -19,7 +19,7 @@
 SceneTest::SceneTest(PlayerData& data)
 {
 	// タイトルのBGMを止める
-	SoundManager::GetInstance().StopOp();
+	SoundManager::GetInstance().StopBGM(BGM_OPENING);
 
 	// 各クラスのインスタンス作成
 	{

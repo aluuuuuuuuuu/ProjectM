@@ -90,8 +90,8 @@ void Application::Run()
 	PlayerData data;
 
 	data.playerNum = 2;
-	data.charactor[0] = 1;
-	data.charactor[1] = 2;
+	data.character[0] = 1;
+	data.character[1] = 2;
 
 	//manager.ChangeScene(std::make_shared<SceneResult>(data,100));
 	//manager.ChangeScene(std::make_shared<SceneGrapple>());

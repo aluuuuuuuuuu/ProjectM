@@ -2,27 +2,24 @@
 #include <memory>
 #include "PlayerManager.h"
 #include "SceneSelect.h"
+#include "Vec2.h"
 
-class CharactorCard;
+class CharacterCard;
 class SelectFinger;
-class CharactorSelectManager
+class CharacterSelectManager
 {
 public:
 
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
 	/// <param name="plData">プレイヤーデータの参照</param>
-	CharactorSelectManager(PlayerData& plData);
+	CharacterSelectManager(PlayerData& plData);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~CharactorSelectManager();
+	virtual ~CharacterSelectManager();
 
 	/// <summary>
 	/// 更新処理
@@ -45,6 +42,12 @@ public:
 	/// </summary>
 	void CreateData();
 
+	/// <summary>
+	/// 戻るフラグを取得する
+	/// </summary>
+	/// <returns>true:戻る</returns>
+	bool GetReturnFlag();
+
 private:
 
 	/// <summary>
@@ -58,13 +61,13 @@ private:
 	/// <param name="fing">判定するfinger</param>
 	/// <param name="card">判定するcard</param>
 	/// <returns>カードの上にあればtrue</returns>
-	bool IsFingerOnCard(std::shared_ptr<SelectFinger>& fing, std::shared_ptr<CharactorCard>& card);
+	bool IsFingerOnCard(std::shared_ptr<SelectFinger>& fing, std::shared_ptr<CharacterCard>& card);
 
 	// 指ポインタ
 	std::shared_ptr<SelectFinger>_pFinger[4];
 
 	// カードポインタ
-	std::shared_ptr<CharactorCard> _pCard[4];
+	std::shared_ptr<CharacterCard> _pCard[4];
 
 	// プレイヤーデータの参照
 	PlayerData& _plData;
@@ -74,5 +77,16 @@ private:
 
 	// スタートボタンが押されたフラグ
 	bool _pushStart;
+
+	// 人数選択に戻るフラグ
+	bool _returnFlag;
+
+	// スタートボタン画像ハンドル
+	int _startButtonHandle;
+
+	// スタートボタン座標
+	Vec2 _startButtonPos;
+
+	bool _viewStartButtonFlag;
 };
 

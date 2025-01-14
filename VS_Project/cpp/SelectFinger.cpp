@@ -43,7 +43,7 @@ void SelectFinger::Update()
 {
 	// 左スティックで移動
 	Vec3 move;
-	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK,_padNum) >= 2000) {
+	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK,_padNum) >= 5000) {
 		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum) * 10;
 	}
 

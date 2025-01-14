@@ -147,7 +147,7 @@
     <ClCompile Include="cpp\BombBullet.cpp" />
     <ClCompile Include="cpp\BulletBase.cpp" />
     <ClCompile Include="cpp\BulletManager.cpp" />
-    <ClCompile Include="cpp\CharactorCard.cpp" />
+    <ClCompile Include="cpp\CharacterCard.cpp" />
     <ClCompile Include="cpp\CollisionManager.cpp" />
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
@@ -166,7 +166,7 @@
     <ClCompile Include="cpp\Player.cpp" />
     <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\PlayerManager.cpp" />
-    <ClCompile Include="cpp\ResultCharactor.cpp" />
+    <ClCompile Include="cpp\ResultCharacter.cpp" />
     <ClCompile Include="cpp\ResultLogo.cpp" />
     <ClCompile Include="cpp\ResultUi.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
@@ -177,7 +177,7 @@
     <ClCompile Include="cpp\SceneTest.cpp" />
     <ClCompile Include="cpp\SceneTitle.cpp" />
     <ClCompile Include="cpp\SelectFinger.cpp" />
-    <ClCompile Include="cpp\CharactorSelectManager.cpp" />
+    <ClCompile Include="cpp\CharacterSelectManager.cpp" />
     <ClCompile Include="cpp\SelectUI.cpp" />
     <ClCompile Include="cpp\SkyDome.cpp" />
     <ClCompile Include="cpp\SoundManager.cpp" />
@@ -193,7 +193,7 @@
     <ClInclude Include="h\BombBullet.h" />
     <ClInclude Include="h\BulletBase.h" />
     <ClInclude Include="h\BulletManager.h" />
-    <ClInclude Include="h\CharactorCard.h" />
+    <ClInclude Include="h\CharacterCard.h" />
     <ClInclude Include="h\CollisionManager.h" />
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
@@ -212,7 +212,7 @@
     <ClInclude Include="h\Player.h" />
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\PlayerManager.h" />
-    <ClInclude Include="h\ResultCharactor.h" />
+    <ClInclude Include="h\ResultCharacter.h" />
     <ClInclude Include="h\ResultLogo.h" />
     <ClInclude Include="h\ResultUi.h" />
     <ClInclude Include="h\SceneBase.h" />
@@ -223,7 +223,7 @@
     <ClInclude Include="h\SceneTest.h" />
     <ClInclude Include="h\SceneTitle.h" />
     <ClInclude Include="h\SelectFinger.h" />
-    <ClInclude Include="h\CharactorSelectManager.h" />
+    <ClInclude Include="h\CharacterSelectManager.h" />
     <ClInclude Include="h\SelectUI.h" />
     <ClInclude Include="h\Singleton.h" />
     <ClInclude Include="h\SkyDome.h" />
@@ -237,7 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
-    <None Include="data\constant\CharactorCard.csv" />
+    <None Include="data\constant\CharacterCard.csv" />
     <None Include="data\constant\Collision.csv" />
     <None Include="data\constant\Direction.csv" />
     <None Include="data\constant\Enemy.csv" />

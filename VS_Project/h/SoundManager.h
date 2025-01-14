@@ -1,10 +1,21 @@
 #pragma once
 #include "Singleton.h"
+#include <map>
 
-#define VOLUME_MIN 85
-#define VOLUME_MIDDLE 170
-#define VOLUME_MAX 255
-#define VOLUME_ZERO 0
+constexpr int  VOLUME_MIN = 85;
+constexpr int  VOLUME_MIDDLE = 170;
+constexpr int  VOLUME_MAX = 255;
+constexpr int  VOLUME_ZERO = 0;
+
+constexpr int BGM_OPENING = 0;
+
+constexpr int SE_NUM_SELECT = 0;
+constexpr int SE_TITLE_START = 1;
+constexpr int SE_CHARA_SELECT = 2;
+constexpr int SE_CHARA_CANCEL = 3;
+constexpr int SE_GAME_START = 4;
+
+
 
 class SoundManager:
 	public Singleton<SoundManager>
@@ -17,19 +28,22 @@ public:
 	void Init();
 
 	/// <summary>
-	/// オープニングのテーマを再生開始する
+	/// BGMをスタートさせる
 	/// </summary>
-	void StartOp();
+	/// <param name="bgm">bgm定数名</param>
+	void StartBGM(int bgm);
 
 	/// <summary>
-	/// オープニングのテーマを再生停止する
+	/// BGMをストップさせる
 	/// </summary>
-	void StopOp();
+	/// <param name="bgm">bgm定数名</param>
+	void StopBGM(int bgm);
 
 	/// <summary>
-	/// タイトル画面でボタンを押したときの音を鳴らす
+	/// SEを鳴らす
 	/// </summary>
-	void RingStartSE();
+	/// <param name="se">se定数名</param>
+	void RingSE(int se);
 
 	/// <summary>
 	/// BGMの音量を設定する
@@ -57,16 +71,16 @@ public:
 
 private:
 
-	// オープニングのテーマ
-	int _opBGM = 0;
-
-	// タイトル画面でボタンを押したときの音
-	int _startSE = 0;
-
 	// BGM音量
 	int _volumeBGM = VOLUME_MIDDLE;
 	
 	// SE音量
 	int _volumeSE = VOLUME_MIDDLE;
+
+	// BGMマップ
+	std::map<int, int> _bgmMap;
+
+	// SEマップ
+	std::map<int, int> _seMap;
 };
 

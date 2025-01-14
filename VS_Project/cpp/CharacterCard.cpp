@@ -1,14 +1,14 @@
-#include "CharactorCard.h"
+#include "CharacterCard.h"
 #include "DxLib.h"
 #include "SceneSelect.h"
 #include "PlayerManager.h"
 
-CharactorCard::CharactorCard(int charNum) :
+CharacterCard::CharacterCard(int charNum) :
 	_cardHandle(0),
-	_charactorNum(charNum)
+	_characterNum(charNum)
 {
 	// 定数ファイルの読み込み
-	ReadCSV("data/constant/CharactorCard.csv");
+	ReadCSV("data/constant/CharacterCard.csv");
 
 	// キャラ画像のロード
 	switch (charNum)
@@ -47,7 +47,7 @@ CharactorCard::CharactorCard(int charNum) :
 	}
 }
 
-CharactorCard::~CharactorCard()
+CharacterCard::~CharacterCard()
 {
 	// 画像のデリート
 	DeleteGraph(_cardHandle);
@@ -56,18 +56,17 @@ CharactorCard::~CharactorCard()
 	}
 }
 
-void CharactorCard::Update(std::shared_ptr<SelectFinger>& fing)
+void CharacterCard::Update(std::shared_ptr<SelectFinger>& fing)
 {
 }
 
-void CharactorCard::Draw() const
+void CharacterCard::Draw() const
 {
-
 	// ガードの描画
 	DrawGraph(_pos.intX(), _pos.intY(), _cardHandle, true);
 
 	// フラグに応じて選択後の画像を描画する
-	for (int i = 0; i < PLAYER_FORE; i++) {
+	for (int i = 0; i <= PLAYER_FORE; i++) {
 		if (_selectFlag[i]) {
 			DrawGraph(_pos.intX() + 10, _pos.intY() + 10, _cardSelectHandle[i], true);
 			break;
@@ -75,17 +74,17 @@ void CharactorCard::Draw() const
 	}
 }
 
-void CharactorCard::SelectCharactor(int plNum)
+void CharacterCard::SelectCharacter(int plNum)
 {
 	_selectFlag[plNum] = true;
 }
 
-void CharactorCard::RejectCharactor(int plNum)
+void CharacterCard::RejectCharacter(int plNum)
 {
 	_selectFlag[plNum] = false;
 }
 
-bool CharactorCard::GetSelectFlag()
+bool CharacterCard::GetSelectFlag()
 {
 	for (auto& flag : _selectFlag) {
 		if (flag) return true;
@@ -93,17 +92,17 @@ bool CharactorCard::GetSelectFlag()
 	return false;
 }
 
-bool CharactorCard::GetSelectFlag(int plNum)
+bool CharacterCard::GetSelectFlag(int plNum)
 {
 	return _selectFlag[plNum];
 }
 
-Vec2 CharactorCard::GetPos() const
+Vec2 CharacterCard::GetPos() const
 {
 	return _pos;
 }
 
-int CharactorCard::GetCharactorNum() const
+int CharacterCard::GetCharacterNum() const
 {
-	return _charactorNum;
+	return _characterNum;
 }

@@ -9,8 +9,8 @@ constexpr int CHARACTOR_3 = 3;
 constexpr int CHARACTOR_4 = 4;
 
 class SelectUI;
-class CharactorSelectManager;
-class CharactorCard;
+class CharacterSelectManager;
+class CharacterCard;
 class SelectFinger;
 class SceneSelect :
     public SceneBase
@@ -50,12 +50,12 @@ private:
 	/// <summary>
 	/// キャラクター選択時の更新処理
 	/// </summary>
-	void CharactorSelectUpdate();
+	void CharacterSelectUpdate();
 
 	/// <summary>
 	/// キャラクター選択時の描画処理
 	/// </summary>
-	void CharactorSelectDraw() const;
+	void CharacterSelectDraw() const;
 
 	/// <summary>
 	/// フェードイン更新処理
@@ -78,7 +78,7 @@ private:
 	void FadeOutDraw() const;
 
 	// キャラセレクトマネージャー
-	std::shared_ptr<CharactorSelectManager> _pSelectManager;
+	std::shared_ptr<CharacterSelectManager> _pSelectManager;
 
 	// フェード用フレームカウンタ
 	int _flame;

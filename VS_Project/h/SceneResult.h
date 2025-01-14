@@ -3,7 +3,7 @@
 #include <memory>
 #include "PlayerManager.h"
 
-class ResultCharactor;
+class ResultCharacter;
 class NumUtility;
 class ResultUi;
 class SceneResult :
@@ -70,7 +70,7 @@ private:
 	PlayerData _playerData;
 
 	// キャラクター
-	std::shared_ptr<ResultCharactor> _pCharactor;
+	std::shared_ptr<ResultCharacter> _pCharacter;
 
 	// フレームカウンタ
 	int _flame;

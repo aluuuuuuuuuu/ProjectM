@@ -3,8 +3,8 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "SelectFinger.h"
-#include "CharactorCard.h"
-#include "CharactorSelectManager.h"
+#include "CharacterCard.h"
+#include "CharacterSelectManager.h"
 #include "SelectUI.h"
 #include "SceneTitle.h"
 
@@ -17,16 +17,17 @@ SceneSelect::SceneSelect(int num) :
 	_drawFunc = &SceneSelect::FadeInDraw;
 
 	// プレイヤーデータの初期化
-	for (auto& pl : _plData.charactor) {
+	for (auto& pl : _plData.character) {
 		pl = -1;
 	}
 	_plData.playerNum = num;
 
-	// セレクトマネージャーの作成
-	_pSelectManager = std::make_shared<CharactorSelectManager>(_plData);
 
-	// uiインスタンスの作成
-	_pUi = std::make_shared<SelectUI>();
+	// インスタンスの作成
+	{
+		_pSelectManager = std::make_shared<CharacterSelectManager>(_plData);	// セレクトマネージャー
+		_pUi = std::make_shared<SelectUI>();	// ui
+	}
 
 	// 背景画像のロード
 	back = LoadGraph("data/image/back.jpg");
@@ -34,6 +35,7 @@ SceneSelect::SceneSelect(int num) :
 
 SceneSelect::~SceneSelect()
 {
+	DeleteGraph(back);
 }
 
 void SceneSelect::Update()
@@ -46,7 +48,7 @@ void SceneSelect::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneSelect::CharactorSelectUpdate()
+void SceneSelect::CharacterSelectUpdate()
 {
 	// セレクトマネージャーの更新
 	_pSelectManager->Update();
@@ -65,21 +67,19 @@ void SceneSelect::CharactorSelectUpdate()
 		_drawFunc = &SceneSelect::FadeOutDraw;
 	}
 
-	// Bボタンが押されたら人数選択に戻る
-	for (int i = 0; i < Input::GetInstance().GetPadNum(); i++) {
-		if (Input::GetInstance().IsTrigger(INPUT_B, i)) {
+	// マネージャーの戻るフラグが立っていたら人数選択に戻る
+	if (_pSelectManager->GetReturnFlag()) {
 
-			// 次のシーンをタイトルシーンに切り替える
-			_nextScene = SCENE_TITLE;
+		// 次のシーンをタイトルシーンに切り替える
+		_nextScene = SCENE_TITLE;
 
-			// フェードアウトに移行
-			_updateFunc = &SceneSelect::FadeOutUpdate;
-			_drawFunc = &SceneSelect::FadeOutDraw;
-		}
+		// フェードアウトに移行
+		_updateFunc = &SceneSelect::FadeOutUpdate;
+		_drawFunc = &SceneSelect::FadeOutDraw;
 	}
 }
 
-void SceneSelect::CharactorSelectDraw() const
+void SceneSelect::CharacterSelectDraw() const
 {
 	// 背景画像の描画
 	DrawGraph(0, 0, back, true);
@@ -95,8 +95,8 @@ void SceneSelect::FadeInUpdate()
 {
 	_flame--;
 	if (_flame <= 0) {
-		_updateFunc = &SceneSelect::CharactorSelectUpdate;
-		_drawFunc = &SceneSelect::CharactorSelectDraw;
+		_updateFunc = &SceneSelect::CharacterSelectUpdate;
+		_drawFunc = &SceneSelect::CharacterSelectDraw;
 	}
 }
 
@@ -122,7 +122,8 @@ void SceneSelect::FadeOutUpdate()
 
 void SceneSelect::FadeInDraw() const
 {
-	CharactorSelectDraw();
+	// 通常の描画も行う
+	CharacterSelectDraw();
 
 	//フェード暗幕
 	int alpha = (int)(255 * ((float)_flame / 60));
@@ -133,7 +134,8 @@ void SceneSelect::FadeInDraw() const
 
 void SceneSelect::FadeOutDraw() const
 {
-	CharactorSelectDraw();
+	// 通常の描画も行う
+	CharacterSelectDraw();
 
 	//フェード暗幕
 	int alpha = (int)(255 * ((float)_flame / 60));
