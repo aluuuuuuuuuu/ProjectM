@@ -4,13 +4,13 @@
 SkyDome::SkyDome()
 {
 	// ƒ‚ƒfƒ‹‚Ì‰Šúˆ—
-	InitModel(MV1LoadModel("data/model/Skydome.mv1"));
+	InitModel(MV1LoadModel("data/model/Dome.mv1"));
 
 	// Šg‘å—¦‚Ìİ’è
-	Scale = Vec3{ 0.1f, 0.1f, 0.1f };
+	Scale = 7.0f;
 
 	// À•W‚Ìİ’è
-	Position = Vec3{ 0.0f,-500.0f,0.0f };
+	Position = Vec3{ 100.0f,100.0f,0.0f };
 
 	// ˆê“xã‚Ìİ’è‚ğ”½‰f‚³‚¹‚é
 	UpdateModel(GetTransformInstance());
