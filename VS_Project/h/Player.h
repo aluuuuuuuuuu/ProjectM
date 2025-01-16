@@ -62,6 +62,12 @@ public:
 	/// </summary>
 	void KillPlayer();
 
+	/// <summary>
+	/// 自身のプレイヤーナンバーを返す
+	/// </summary>
+	/// <returns>プレイヤーナンバー</returns>
+	int GetPlayerNum() const;
+
 private:
 
 	/// <summary>

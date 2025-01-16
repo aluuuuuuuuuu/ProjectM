@@ -13,7 +13,7 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	ReadCSV("data/constant/Player.csv");
 
 	// モデルのロード
-	_modelHandle[0] = MV1LoadModel("data/model/Player1.mv1");
+	_modelHandle[0] = MV1LoadModel("data/model/Player11.mv1");
 	_modelHandle[1] = MV1LoadModel("data/model/Player2.mv1");
 	_modelHandle[2] = MV1LoadModel("data/model/Player3.mv1");
 	_modelHandle[3] = MV1LoadModel("data/model/Player4.mv1");
@@ -41,6 +41,8 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 		_cameraSenter[num] = CreateScreenCenter(num, _windowWidth, _windowHeight);	// カメラのセンター
 		num++;
 	}
+
+	_reticle = LoadGraph("data/image/circle.png");
 }
 
 PlayerManager::~PlayerManager()
@@ -88,7 +90,7 @@ void PlayerManager::Draw(int num) const
 		pl->Draw();
 	}
 
-	DrawCircle(_cameraSenter[num].a, _cameraSenter[num].b, 10, 0xff0f00);
+	DrawRotaGraph(_cameraSenter[num].a, _cameraSenter[num].b, 1.0, 0.0, _reticle, true);
 }
 
 VECTOR4 PlayerManager::GetArea(int num) const
@@ -131,6 +133,15 @@ int PlayerManager::GetAreAlivePlayerNum() const
 PlayerData PlayerManager::GetPlayerData() const
 {
 	return _playerData;
+}
+
+void PlayerManager::SetWinner()
+{
+	for (auto& pl : _pPlayer) {
+		if (!pl->GetDeadFlag()) {
+			_playerData.winner = _playerData.character[pl->GetPlayerNum()];
+		}
+	}
 }
 
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)

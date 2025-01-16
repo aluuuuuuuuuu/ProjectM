@@ -145,6 +145,7 @@ void MenuManager::StartUpdate()
 		{
 		case BATU_BUTTON:
 			// ×ボタンが押されたらウィンドウを閉じる
+			sound.RingSE(SE_CHARA_CANCEL);
 			_updateFunc = &MenuManager::SlideOutUpdate;
 			break;
 		case MANUAL_BUTTON:
@@ -157,19 +158,22 @@ void MenuManager::StartUpdate()
 			case VOLUME_ZERO:
 				sound.SetVolumeSE(VOLUME_MIN);
 				_pButton[2]->ChangeImage(_volumeSEGraph[MIN_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			case VOLUME_MIN:
 				sound.SetVolumeSE(VOLUME_MIDDLE);
 				_pButton[2]->ChangeImage(_volumeSEGraph[MIDDLE_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			case VOLUME_MIDDLE:
 				sound.SetVolumeSE(VOLUME_MAX);
 				_pButton[2]->ChangeImage(_volumeSEGraph[MAX_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			case VOLUME_MAX:
-				printfDx("unko");
 				sound.SetVolumeSE(VOLUME_ZERO);
 				_pButton[2]->ChangeImage(_volumeSEGraph[ZERO_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			default:
 				break;
@@ -182,18 +186,22 @@ void MenuManager::StartUpdate()
 			case VOLUME_ZERO:
 				sound.SetVolumeBGM(VOLUME_MIN);
 				_pButton[3]->ChangeImage(_volumeBGMGraph[MIN_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			case VOLUME_MIN:
 				sound.SetVolumeBGM(VOLUME_MIDDLE);
 				_pButton[3]->ChangeImage(_volumeBGMGraph[MIDDLE_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			case VOLUME_MIDDLE:
 				sound.SetVolumeBGM(VOLUME_MAX);
 				_pButton[3]->ChangeImage(_volumeBGMGraph[MAX_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			case VOLUME_MAX:
 				sound.SetVolumeBGM(VOLUME_ZERO);
 				_pButton[3]->ChangeImage(_volumeBGMGraph[ZERO_GRAPH]);
+				sound.RingSE(SE_NUM_SELECT);
 				break;
 			default:
 				break;

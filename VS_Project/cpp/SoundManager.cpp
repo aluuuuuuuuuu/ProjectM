@@ -8,6 +8,7 @@ void SoundManager::Init()
 	// BGM
 	{
 		_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/Title_BGM.mp3");
+		_bgmMap[BGM_BATTLE] = LoadSoundMem("data/BGM/intrusion_loop.ogg");
 	}
 
 	//SE
@@ -17,6 +18,7 @@ void SoundManager::Init()
 		_seMap[SE_CHARA_SELECT] = LoadSoundMem("data/SE/CharactorSelectSound.mp3");
 		_seMap[SE_CHARA_CANCEL] = LoadSoundMem("data/SE/CancelSound.mp3");
 		_seMap[SE_GAME_START] = LoadSoundMem("data/SE/GameStartSound.mp3");
+		_seMap[SE_RESULT] = LoadSoundMem("data/SE/Result_Victory.mp3");
 	}
 
 	// âπó ÇÃê›íË

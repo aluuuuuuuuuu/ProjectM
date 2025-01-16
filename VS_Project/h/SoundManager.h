@@ -8,12 +8,14 @@ constexpr int  VOLUME_MAX = 255;
 constexpr int  VOLUME_ZERO = 0;
 
 constexpr int BGM_OPENING = 0;
+constexpr int BGM_BATTLE = 1;
 
 constexpr int SE_NUM_SELECT = 0;
 constexpr int SE_TITLE_START = 1;
 constexpr int SE_CHARA_SELECT = 2;
 constexpr int SE_CHARA_CANCEL = 3;
 constexpr int SE_GAME_START = 4;
+constexpr int SE_RESULT = 5;
 
 
 

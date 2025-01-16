@@ -8,6 +8,7 @@
 #include "ResultUi.h"
 #include "NumUtility.h"
 #include "ResultCharacter.h"
+#include "SoundManager.h"
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
@@ -15,7 +16,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_nextScene(0)
 {
 	// キャラクターの作成
-	_pCharacter = std::make_shared<ResultCharacter>(1);
+	_pCharacter = std::make_shared<ResultCharacter>(data.winner);
 
 	// 数字の作成
 	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,350 }, gameTime);
@@ -23,8 +24,12 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	// リザルトUIの作成
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
 
+	// 関数ポインタの初期化
 	_updateFunc = &SceneResult::StartUpdate;
 	_drawFunc = &SceneResult::StartDraw;
+
+	// シングルの再生
+	SoundManager::GetInstance().RingSE(SE_RESULT);
 }
 
 SceneResult::~SceneResult()
@@ -107,7 +112,6 @@ void SceneResult::FadeOutUpdate()
 			break;
 		}
 	}
-
 }
 
 void SceneResult::FadeOutDraw() const

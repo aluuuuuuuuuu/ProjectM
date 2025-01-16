@@ -75,6 +75,8 @@ void SceneTest::Draw() const
 
 void SceneTest::StartUpdate()
 {
+	SoundManager::GetInstance().StartBGM(BGM_BATTLE);
+
 	// メニュー画面を開く
 	for (int num = 0; num < _pPlayerManager->GetPlayerNum(); num++) {
 		if (Input::GetInstance().IsTrigger(INPUT_START, num)) {
@@ -155,6 +157,7 @@ void SceneTest::EndUpdate()
 
 	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
 	if (_pGameFlowManager->GetFlameCount() >= 120) {
+		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(),_pGameFlowManager->GetGameTime()));
 	}
 }

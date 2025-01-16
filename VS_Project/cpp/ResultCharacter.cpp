@@ -5,7 +5,7 @@ ResultCharacter::ResultCharacter(int plNum)
 {
 	switch (plNum)
 	{
-	case 1:
+	case 0:
 
 		// トランスフォームの設定
 		Scale = Vec3{ 0.12f,0.12f,0.12f };	// 拡大率
@@ -22,11 +22,11 @@ ResultCharacter::ResultCharacter(int plNum)
 
 		break;
 
-	case 2:
+	case 1:
 
 		// トランスフォームの設定
 		Scale = Vec3{ 0.12f,0.12f,0.12f };	// 拡大率
-		Position = Vec3{ -20,-13,5 };	// 座標
+		Position = Vec3{ -20,-10,5 };	// 座標
 		Angle = Vec3{ 0.0f,-1.5f,0.0f };	// 角度
 
 		// モデルの初期処理
@@ -38,7 +38,7 @@ ResultCharacter::ResultCharacter(int plNum)
 		ChangeAnimation(_modelHandle, 1, false, 0.5f);
 		break;
 
-	case 3:
+	case 2:
 
 		// トランスフォームの設定
 		Scale = Vec3{ 0.12f,0.12f,0.12f };	// 拡大率
@@ -54,7 +54,7 @@ ResultCharacter::ResultCharacter(int plNum)
 		ChangeAnimation(_modelHandle, 0, false, 0.5f);
 		break;
 
-	case 4:
+	case 3:
 
 		// トランスフォームの設定
 		Scale = Vec3{ 0.12f,0.12f,0.12f };	// 拡大率
@@ -74,13 +74,13 @@ ResultCharacter::ResultCharacter(int plNum)
 	}
 
 	// カメラのニアファーのセット
-	SetCameraNearFar(1.0f, 100.0f);
+	DxLib::SetCameraNearFar(1.0f, 300.0f);
 
 	// カメラの座標のセット
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 0, 0), VGet(-1, 0, 0));
+	DxLib::SetCameraPositionAndTarget_UpVecY(VGet(0, 0, 0), VGet(-1, 0, 0));
 
 	// ライトの角度の調整
-	SetLightDirection(VGet(-1, 0, 0));
+	DxLib::SetLightDirection(VGet(-1, 0, 0));
 }
 
 ResultCharacter::~ResultCharacter()

@@ -307,6 +307,11 @@ void Player::KillPlayer()
 	_deadFlag = true;
 }
 
+int Player::GetPlayerNum() const
+{
+	return _padNum;
+}
+
 void Player::RotateAngleY(float targetAngle)
 {
 	// 平行移動ベクトルが0じゃないときだけ角度を計算する
@@ -397,28 +402,29 @@ void Player::AnimationContorol()
 	// 方向に対応するアニメーションを再生
 	switch (dir) {
 	case 0:
-		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
-		break;
-	case 1:
-		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
-		break;
-	case 2:
 		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
 		break;
-	case 3:
+	case 1:
 		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
 		break;
-	case 4:
+	case 2:
 		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
 		break;
-	case 5:
+	case 3:
 		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_FORWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
 		break;
-	case 6:
+	case 4:
 		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
 		break;
+	case 5:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
+	case 6:
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
 	case 7:
-		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_RIGHT"), true, _manager.GetConstantFloat("BLEND_RATE"));			break;
+		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_RUN_BACKWARD_LEFT"), true, _manager.GetConstantFloat("BLEND_RATE"));
+		break;
 	}
 }
 

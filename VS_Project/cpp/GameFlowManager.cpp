@@ -18,6 +18,10 @@ void GameFlowManager::Update()
 	// プレイヤーの生存数を調べて一人になったら終了フラグを立てる
 	if (_playerManager->GetAreAlivePlayerNum() == 1) {
 		_gameEndFlag = true;
+
+		// 勝利プレイヤーを確定する
+		_playerManager->SetWinner();
+
 	}
 
 	// ゲームが終了してからのフレーム数を数える

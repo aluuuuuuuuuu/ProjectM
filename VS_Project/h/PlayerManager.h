@@ -43,7 +43,18 @@ class PlayerManager :
 	public Constant
 {
 public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="stageManager">ステージの参照</param>
+	/// <param name="bullet">弾マネージャーの参照</param>
+	/// <param name="data">プレイヤーデータの参照</param>
 	PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~PlayerManager();
 
 	/// <summary>
@@ -100,6 +111,11 @@ public:
 	/// </summary>
 	PlayerData GetPlayerData() const;
 
+	/// <summary>
+	/// 勝利プレイヤーを設定する
+	/// </summary>
+	void SetWinner();
+
 private:
 
 	/// <summary>
@@ -142,5 +158,7 @@ private:
 	std::shared_ptr<CollisionManager> _pCollision;
 
 	PlayerData _playerData;
+
+	int _reticle;
 };
 

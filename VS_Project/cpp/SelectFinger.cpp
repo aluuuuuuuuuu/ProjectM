@@ -47,7 +47,21 @@ void SelectFinger::Update()
 		move = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum) * 10;
 	}
 
-	_pos += Vec2{ move.x,move.z * -1 };
+	_pos += Vec2{ static_cast<int>(move.x),static_cast<int>(move.z * -1) };
+
+	if (_pos.intX() >= 1920) {
+		_pos.x = 1920;
+	}
+	else if (_pos.intX() <= 0) {
+		_pos.x = 0;
+	}
+
+	if (_pos.intY() >= 1080) {
+		_pos.y = 1080;
+	}
+	else if (_pos.intY() <= 0) {
+		_pos.y = 0;
+	}
 }
 
 void SelectFinger::Draw() const
