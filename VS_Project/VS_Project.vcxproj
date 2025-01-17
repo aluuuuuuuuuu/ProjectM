@@ -166,6 +166,7 @@
     <ClCompile Include="cpp\Player.cpp" />
     <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\PlayerManager.cpp" />
+    <ClCompile Include="cpp\PlayerUi.cpp" />
     <ClCompile Include="cpp\ResultCharacter.cpp" />
     <ClCompile Include="cpp\ResultLogo.cpp" />
     <ClCompile Include="cpp\ResultUi.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="h\Player.h" />
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\PlayerManager.h" />
+    <ClInclude Include="h\PlayerUi.h" />
     <ClInclude Include="h\ResultCharacter.h" />
     <ClInclude Include="h\ResultLogo.h" />
     <ClInclude Include="h\ResultUi.h" />
