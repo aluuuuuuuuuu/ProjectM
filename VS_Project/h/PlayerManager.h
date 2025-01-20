@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include "Constant.h"
+#include "BulletManager.h"
 
 constexpr int PLAYER_ONE = 0;
 constexpr int PLAYER_TWO = 1;
@@ -35,6 +36,18 @@ struct PlayerData
 	int winner = 0;
 };
 
+// 弾のデータ
+struct BulletData
+{
+	// 選択している弾
+	int _selectBullet = NORMAL_BULLET;
+
+	// 弾ごとのクールタイム
+	int _bullletCoolTime[3];
+
+};
+
+class PlayerUi;
 class StageManager;
 class CollisionManager;
 class BulletManager;
@@ -65,7 +78,14 @@ public:
 	/// <summary>
 	/// 描画処理
 	/// </summary>
+	/// <param name="num">プレイヤーナンバー</param>
 	void Draw(int num) const;
+
+	/// <summary>
+	/// UIの描画
+	/// </summary>
+	/// <param name="num">プレイヤーナンバー</param>
+	void DrawUi(int num) const;
 
 	/// <summary>
 	/// 描画範囲を取得
@@ -154,11 +174,14 @@ private:
 	// プレイヤーの数の対応したモデルハンドル
 	int _modelHandle[4];
 
+	// プレイヤーごとの弾のデータ
+	BulletData _bulletData[4];
+
 	// コリジョンマネージャーのポインタ
 	std::shared_ptr<CollisionManager> _pCollision;
 
 	PlayerData _playerData;
 
-	int _reticle;
+	std::shared_ptr<PlayerUi> _pUi;
 };
 

@@ -53,5 +53,7 @@ private:
 
 	// ゲーム開始からのフレームを数える
 	int _gameTime;
+
+	bool aaa;
 };
 

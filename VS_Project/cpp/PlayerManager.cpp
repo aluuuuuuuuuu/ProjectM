@@ -1,10 +1,10 @@
 #include "PlayerManager.h"
-#include "BulletManager.h"
 #include "Player.h"
 #include "Application.h"
 #include "DxLib.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "PlayerUi.h"
 
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
 	_playerData(data)
@@ -28,6 +28,9 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 
 		// コリジョンマネージャーの作成
 		_pCollision = std::make_shared<CollisionManager>(stageManager);
+
+		// プレイヤーUIインスタンスの作成
+		_pUi = std::make_shared<PlayerUi>(_playerData.playerNum);
 	}
 
 	// ウィンドウの幅と高さを取得
@@ -41,8 +44,6 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 		_cameraSenter[num] = CreateScreenCenter(num, _windowWidth, _windowHeight);	// カメラのセンター
 		num++;
 	}
-
-	_reticle = LoadGraph("data/image/circle.png");
 }
 
 PlayerManager::~PlayerManager()
@@ -82,15 +83,14 @@ void PlayerManager::Update()
 
 void PlayerManager::Draw(int num) const
 {
-	// カメラのセット
-	//_pPlayer[num]->CameraSet();
-
 	// プレイヤーの描画
 	for (auto& pl : _pPlayer) {
 		pl->Draw();
 	}
 
-	DrawRotaGraph(_cameraSenter[num].a, _cameraSenter[num].b, 1.0, 0.0, _reticle, true);
+	// UIの描画
+	_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b });
+
 }
 
 VECTOR4 PlayerManager::GetArea(int num) const

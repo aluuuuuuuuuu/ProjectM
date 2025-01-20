@@ -7,6 +7,10 @@ GameFlowManager::GameFlowManager(std::shared_ptr<PlayerManager>& plMg) :
 	_flame(0),
 	_gameTime(0)
 {
+	aaa = false;
+	if (_playerManager->GetPlayerData().playerNum == PLAYER_ONE) {
+		aaa = true;
+	}
 }
 
 GameFlowManager::~GameFlowManager()
@@ -16,13 +20,17 @@ GameFlowManager::~GameFlowManager()
 void GameFlowManager::Update()
 {
 	// プレイヤーの生存数を調べて一人になったら終了フラグを立てる
-	if (_playerManager->GetAreAlivePlayerNum() == 1) {
-		_gameEndFlag = true;
+	if (!aaa) {
+		if (_playerManager->GetAreAlivePlayerNum() == 1) {
+			_gameEndFlag = true;
 
-		// 勝利プレイヤーを確定する
-		_playerManager->SetWinner();
+			// 勝利プレイヤーを確定する
+			_playerManager->SetWinner();
 
+		}
 	}
+
+
 
 	// ゲームが終了してからのフレーム数を数える
 	if (_gameEndFlag) {
