@@ -89,7 +89,7 @@ void PlayerManager::Draw(int num) const
 	}
 
 	// UI‚Ì•`‰æ
-	_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b });
+	_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b },_bulletData[num]);
 
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Vec2.h"
+#include "PlayerManager.h"
 
 class PlayerUi
 {
@@ -25,7 +26,7 @@ public:
 	/// 描画処理
 	/// </summary>
 	/// <param name="center">描画の中心座標</param>
-	void Draw(Vec2 center) const;
+	void Draw(Vec2 center, BulletData data) const;
 private:
 
 	/// <summary>
@@ -49,6 +50,11 @@ private:
 	int _reticleHandle;
 
 	/// <summary>
+	/// アイコンフレーム画像ハンドル
+	/// </summary>
+	int _frameHandle;
+
+	/// <summary>
 	/// 画面中心からの描画余白
 	/// </summary>
 	Vec2 _drawMargin;
@@ -62,6 +68,11 @@ private:
 	/// 画像の拡大率
 	/// </summary>
 	double _exRate;
+
+	/// <summary>
+	/// フレームの描画座標
+	/// </summary>
+	Vec2 _framePos;
 
 };
 
