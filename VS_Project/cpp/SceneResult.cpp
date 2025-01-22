@@ -106,7 +106,7 @@ void SceneResult::FadeOutUpdate()
 			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_playerData));
 			break;
 		case SCENE_TITLE:
-			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>());
+			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
 			break;
 		default:
 			break;

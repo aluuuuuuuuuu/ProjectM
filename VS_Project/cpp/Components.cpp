@@ -279,7 +279,7 @@ int Animation::GetAnimTag()
 
 int Animation::GetAnimeFlame()
 {
-	return _flameCount;
+	return static_cast<float>(_flameCount);
 }
 
 // ƒJƒvƒZƒ‹

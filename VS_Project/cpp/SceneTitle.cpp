@@ -8,17 +8,31 @@
 #include "AnyPushButton.h"
 #include "SceneTest.h"
 #include "NumSelectButton.h"
+#include "FallCharactor.h"
+#include "SkyDome.h"
 
-SceneTitle::SceneTitle() :
-	_flame(110)
+SceneTitle::SceneTitle(bool slidInFlag):
+	_flame(110),
+	_selectDrawFlag(false)
 {
 	// 定数ファイルの読み込み
 	ReadCSV("data/constant/SceneTitle.csv");
 
+	// カメラの初期化
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 200.0f, 0.0f }, VECTOR{ 150.0f, 200.0f, 0.0f });
+
 	// 関数ポインタの初期化
 	{
-		_updateFunc = &SceneTitle::FadeInUpdate;
-		_drawFunc = &SceneTitle::FadeInDraw;
+		if (slidInFlag) {
+			_slidePos.x = -300;
+			_updateFunc = &SceneTitle::SlideInUpdate;
+			_drawFunc = &SceneTitle::SlideInDraw;
+		}
+		else {
+			_slidePos.x = 2000;
+			_updateFunc = &SceneTitle::FadeInUpdate;
+			_drawFunc = &SceneTitle::FadeInDraw;
+		}
 	}
 
 	// 各インスタンスの作成
@@ -27,10 +41,15 @@ SceneTitle::SceneTitle() :
 		_pLogo = std::make_shared <Logo>(*this);	// ロゴ
 		_pText = std::make_shared<AnyPushButton>(*this);	// 文章
 		_pNum = std::make_shared<NumSelectButton>(); // 人数
+		_pFallCharactor = std::make_shared<FallCharactor>(); // 落下キャラクター
+		_pSkyDome = std::make_shared<SkyDome>(); // スカイドーム
 	}
 
 	// 背景画像のロード
-	_backgroundHandle = LoadGraph("data/image/back.jpg");
+	_backHandle = LoadGraph("data/image/TitleBack.png");
+
+	// スライド画像のロード
+	_slideHandle = LoadGraph("data/image/Slide.png");
 
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
@@ -38,7 +57,7 @@ SceneTitle::SceneTitle() :
 
 SceneTitle::~SceneTitle()
 {
-	DeleteGraph(_backgroundHandle);
+	DeleteGraph(_backHandle);
 }
 
 void SceneTitle::Update()
@@ -53,11 +72,17 @@ void SceneTitle::Draw() const
 
 void SceneTitle::StartUpdate()
 {
+	// 落下キャラクターの更新処理
+	_pFallCharactor->Update();
+
 	// 王冠の更新処理
 	_pCrown->Update();
 
 	// 文章の更新処理
 	_pText->Update();
+
+	// スカイドームの更新処理
+	_pSkyDome->Update();
 
 	// いずれかのボタンが押されたら人数選択へ
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
@@ -73,8 +98,14 @@ void SceneTitle::StartUpdate()
 
 void SceneTitle::StartDraw() const
 {
+	// スカイドームの描画
+	_pSkyDome->Draw();
+
 	// 背景画像の描画
-	DrawGraph(0, 0, _backgroundHandle, true);
+	DrawGraph(0, 0, _backHandle, true);
+
+	// 落下キャラクターの描画
+	_pFallCharactor->Draw();
 
 	// ロゴの描画
 	_pLogo->Draw();
@@ -86,8 +117,61 @@ void SceneTitle::StartDraw() const
 	_pText->Draw();
 }
 
+void SceneTitle::SlideInUpdate()
+{
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	// スライド画像の移動
+	_slidePos.x += 80;
+
+	// 移動が終わったら通常の状態に遷移
+	if (_slidePos.x >= 2000) {
+		_updateFunc = &SceneTitle::NumSelectUpdate;
+		_drawFunc = &SceneTitle::NumSelectDraw;
+	}
+}
+
+void SceneTitle::SlideOutUpdate()
+{
+	// スライド画像の移動
+	_slidePos.x -= 80;
+
+	// 移動が終わったらシーン遷移
+	if (_slidePos.x <= -300) {
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));
+	}
+}
+
+void SceneTitle::SlideInDraw() const
+{
+	// 通常の描画も行う
+	NumSelectDraw();
+
+	// スライド画像の描画
+	DrawGraph(_slidePos.intX(), _slidePos.intY(), _slideHandle, true);
+}
+
+void SceneTitle::SlideOutDraw() const
+{
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	// 人数選択の描画
+	NumSelectDraw();
+
+	// スライド画像の描画
+	DrawGraph(_slidePos.intX(), _slidePos.intY(), _slideHandle, true);
+}
+
 void SceneTitle::FadeInUpdate()
 {
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	// 背景画像の描画
+	DrawGraph(0, 0, _backHandle, true);
+
 	// 王冠の更新処理
 	_pCrown->Update();
 
@@ -133,6 +217,9 @@ void SceneTitle::FadeOutDraw() const
 
 void SceneTitle::NumSelectUpdate()
 {
+	// 落下キャラクターの更新処理
+	_pFallCharactor->Update();
+
 	// 王冠の更新処理
 	_pCrown->Update();
 
@@ -142,21 +229,30 @@ void SceneTitle::NumSelectUpdate()
 	// 人数選択の更新処理
 	_pNum->Update();
 
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
 	// Aボタンが押されたら状態遷移
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 
 		// 決定音を鳴らす
 		SoundManager::GetInstance().RingSE(SE_TITLE_START);
 
-		_updateFunc = &SceneTitle::FadeOutUpdate;
-		_drawFunc = &SceneTitle::FadeOutDraw;
+		_updateFunc = &SceneTitle::SlideOutUpdate;
+		_drawFunc = &SceneTitle::SlideOutDraw;
 	}
 }
 
 void SceneTitle::NumSelectDraw() const
 {
+	// スカイドームの描画
+	_pSkyDome->Draw();
+
 	// 背景画像の描画
-	DrawGraph(0, 0, _backgroundHandle, true);
+	DrawGraph(0, 0, _backHandle, true);
+
+	// 落下キャラクターの描画
+	_pFallCharactor->Draw();
 
 	// ロゴの描画
 	_pLogo->Draw();

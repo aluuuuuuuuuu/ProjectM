@@ -3,7 +3,10 @@
 #include "Components.h"
 #include <memory>
 #include "Constant.h"
+#include "Vec2.h"
 
+class SkyDome;
+class FallCharactor;
 class NumSelectButton;
 class AnyPushButton;
 class Logo;
@@ -13,25 +16,25 @@ class SceneTitle :
 	public Constant
 {
 public:
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    SceneTitle();
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	SceneTitle(bool slidInFlag);
 
-    /// <summary>
-    /// デストラクタ
-    /// </summary>
-    virtual ~SceneTitle();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~SceneTitle();
 
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    void Update();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update();
 
-    /// <summary>
-    /// 描画処理
-    /// </summary>
-    void Draw() const;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() const;
 private:
 
 	// 関数ポインタ
@@ -51,6 +54,26 @@ private:
 	/// 通常の描画処理
 	/// </summary>
 	void StartDraw() const;
+
+	/// <summary>
+	/// スライドインの更新処理
+	/// </summary>
+	void SlideInUpdate();
+
+	/// <summary>
+	/// スライドアウトの更新処理
+	/// </summary>
+	void SlideOutUpdate();
+
+	/// <summary>
+	///	スライドインの描画処理
+	/// </summary>
+	void SlideInDraw() const;
+
+	/// <summary>
+	/// スライドアウトの描画処理
+	/// </summary>
+	void SlideOutDraw() const;
 
 	/// <summary>
 	/// フェードイン更新処理
@@ -94,12 +117,26 @@ private:
 	// 人数セレクトポインタ
 	std::shared_ptr<NumSelectButton> _pNum;
 
+	// 落下キャラクターポインタ
+	std::shared_ptr<FallCharactor> _pFallCharactor;
+
+	// スカイドームポインタ
+	std::shared_ptr<SkyDome> _pSkyDome;
+
 	// フェード用フレームカウンタ
 	int _flame;
 
-	// 背景画像
-	int _backgroundHandle;
+	// スライド画像ハンドル
+	int _slideHandle;
 
+	// スライドイン画像の座標
+	Vec2 _slidePos;
+
+	// スライドインフラグ
+	bool _selectDrawFlag;
+
+	// 背景画像ハンドル
+	int _backHandle;
 
 };
 

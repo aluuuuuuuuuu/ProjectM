@@ -96,7 +96,7 @@ void Application::Run()
 	//manager.ChangeScene(std::make_shared<SceneResult>(data,100));
 	//manager.ChangeScene(std::make_shared<SceneGrapple>());
 	//manager.ChangeScene(std::make_shared <SceneTest>(data));
-	manager.ChangeScene(std::make_shared <SceneTitle>());
+	manager.ChangeScene(std::make_shared <SceneTitle>(false));
 	//manager.ChangeScene(std::make_shared <SceneSelect>());
 
 	// インプットのインスタンスを取得

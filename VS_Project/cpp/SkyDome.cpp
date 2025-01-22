@@ -18,12 +18,13 @@ SkyDome::SkyDome()
 
 SkyDome::~SkyDome()
 {
+	int a = 0;
 }
 
 void SkyDome::Update()
 {
 	// 少しづつドームをy軸させて雲が動いてるふうに見せる
-	Angle.y += 0.0001f;
+	Angle.y += 0.0005f;
 
 	// モデルの更新処理
 	UpdateModel(GetTransformInstance());

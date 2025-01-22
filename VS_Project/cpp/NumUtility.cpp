@@ -109,13 +109,13 @@ void NumUtility::Draw() const
 	int i = 1;
 	while (i <= 8) {
 		//DrawGraph(_drawPos.intX() + 100 * i , _drawPos.intY(), _drawNumHandle[n], true);
-		DrawRotaGraph(_drawPos.x + (100 * _size) * i, _drawPos.intY(), _size, 0.0, _drawNumHandle[n], true);
+		DrawRotaGraph(static_cast<int>(_drawPos.x + (100 * _size) * i), static_cast<int>(_drawPos.y), _size, 0.0, _drawNumHandle[n], true);
 		n++;
 
 		if (n % 2 == 0 && n != 6) {
 			i++;
 			//DrawGraph(_drawPos.intX() + 100 * i, _drawPos.intY(), _numHandle[NUM_DOT], true);
-			DrawRotaGraph(_drawPos.x + (100 * _size) * i, _drawPos.intY(), _size, 0.0, _numHandle[NUM_DOT], true);
+			DrawRotaGraph(static_cast<int>(_drawPos.x + (100 * _size) * i), static_cast<int>(_drawPos.y), _size, 0.0, _numHandle[NUM_DOT], true);
 		}
 		i++;
 	}

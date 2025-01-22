@@ -22,19 +22,21 @@ PlayerUi::PlayerUi(int playerNum)
 		_exRate = 0.2;
 		break;
 	case PLAYER_TWO:
-		_drawMargin.x = 270;
+		_drawMargin.x = 80;
 		_drawMargin.y = 405;
 		_margin = 150;
 		_exRate = 0.2;
 		break;
 	case PLAYER_THREE:
 	case PLAYER_FORE:
-		_drawMargin.x = 270;
+		_drawMargin.x = 80;
 		_drawMargin.y = 202;
 		_margin = 150;
 		_exRate = 0.2;
 		break;
 	default:
+		_exRate = 0.2;
+		_margin = 150;
 		break;
 	}
 }
@@ -56,26 +58,33 @@ void PlayerUi::Update()
 void PlayerUi::Draw(Vec2 center, BulletData data) const
 {
 	// アイコンの描画
-	DrawRotaGraph(center.x + _drawMargin.x, center.y + _drawMargin.y, _exRate, 0.0, _normalBulletHandle, true);
-	DrawRotaGraph(center.x + _drawMargin.x + _margin, center.y + _drawMargin.y, _exRate, 0.0, _grappleBulletHandle, true);
-	DrawRotaGraph(center.x + _drawMargin.x + _margin * 2, center.y + _drawMargin.y, _exRate, 0.0, _bombBulletHandle, true);
+	DrawRotaGraph(center.intX() + _drawMargin.intX(), center.intY() + _drawMargin.intY(), _exRate, 0.0, _normalBulletHandle, true);
+	DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin, center.intY() + _drawMargin.intY(), _exRate, 0.0, _grappleBulletHandle, true);
+	DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin * 2, center.intY() + _drawMargin.intY(), _exRate, 0.0, _bombBulletHandle, true);
 
 	// アイコンフレームの描画
 	switch (data._selectBullet)
 	{
 	case NORMAL_BULLET:
-		DrawRotaGraph(center.x + _drawMargin.x, center.y + _drawMargin.y, _exRate, 0.0, _frameHandle, true);
+		DrawRotaGraph(center.intX() + _drawMargin.intX(), center.intY() + _drawMargin.intY(), _exRate, 0.0, _frameHandle, true);
 		break;
 	case GRAPPLER_BULLET:
-		DrawRotaGraph(center.x + _drawMargin.x + _margin, center.y + _drawMargin.y, _exRate, 0.0, _frameHandle, true);
+		DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin, center.intY() + _drawMargin.intY(), _exRate, 0.0, _frameHandle, true);
 		break;
 	case BOMB_BULLET:
-		DrawRotaGraph(center.x + _drawMargin.x + _margin * 2, center.y + _drawMargin.y, _exRate, 0.0, _frameHandle, true);
+		DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin * 2, center.intY() + _drawMargin.intY(), _exRate, 0.0, _frameHandle, true);
 		break;
 	default:
 		break;
 	}
 
+	// クールタイムを四角形で描画
+
+	//フェード暗幕
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 127);
+	DrawBox(center.intX() - 50 + _drawMargin.intX(), center.intY() - 50 + _drawMargin.intY(), center.intX() + 50 + _drawMargin.intX(), center.intY() + 50 + _drawMargin.intY(), 0xd7fffe, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	
 
 	//レティクルの描画
 	DrawRotaGraph(center.intX(), center.intY(), 1.0, 0.0, _reticleHandle, true);

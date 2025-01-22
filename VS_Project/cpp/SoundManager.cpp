@@ -19,6 +19,7 @@ void SoundManager::Init()
 		_seMap[SE_CHARA_CANCEL] = LoadSoundMem("data/SE/CancelSound.mp3");
 		_seMap[SE_GAME_START] = LoadSoundMem("data/SE/GameStartSound.mp3");
 		_seMap[SE_RESULT] = LoadSoundMem("data/SE/Result_Victory.mp3");
+		_seMap[SE_SHOUT] = LoadSoundMem("data/SE/TitleShout.mp3");
 	}
 
 	// âπó ÇÃê›íË

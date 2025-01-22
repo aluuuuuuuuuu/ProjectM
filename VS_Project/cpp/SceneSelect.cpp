@@ -7,14 +7,15 @@
 #include "CharacterSelectManager.h"
 #include "SelectUI.h"
 #include "SceneTitle.h"
+#include "SoundManager.h"
+#include "SkyDome.h"
 
 SceneSelect::SceneSelect(int num) :
-	_flame(60),
-	_nextScene(0)
+	_flame(60)
 {
 	// 関数ポインタの初期化
-	_updateFunc = &SceneSelect::FadeInUpdate;
-	_drawFunc = &SceneSelect::FadeInDraw;
+	_updateFunc = &SceneSelect::SlideInUpdate;
+	_drawFunc = &SceneSelect::SlideInDraw;
 
 	// プレイヤーデータの初期化
 	for (auto& pl : _plData.character) {
@@ -22,20 +23,22 @@ SceneSelect::SceneSelect(int num) :
 	}
 	_plData.playerNum = num;
 
-
 	// インスタンスの作成
 	{
 		_pSelectManager = std::make_shared<CharacterSelectManager>(_plData);	// セレクトマネージャー
 		_pUi = std::make_shared<SelectUI>();	// ui
+		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 	}
 
-	// 背景画像のロード
-	back = LoadGraph("data/image/back.jpg");
+	// スライド画像のロード
+	_slideHandle = LoadGraph("data/image/Slide.png");
+
+	_slidePos = Vec2{ -300,0 };
 }
 
 SceneSelect::~SceneSelect()
 {
-	DeleteGraph(back);
+	DeleteGraph(_slideHandle);
 }
 
 void SceneSelect::Update()
@@ -50,6 +53,9 @@ void SceneSelect::Draw() const
 
 void SceneSelect::CharacterSelectUpdate()
 {
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
 	// セレクトマネージャーの更新
 	_pSelectManager->Update();
 
@@ -59,9 +65,6 @@ void SceneSelect::CharacterSelectUpdate()
 		// プレイヤーデータを作成する
 		_pSelectManager->CreateData();
 
-		// 次のシーンをセレクトシーンに切り替える
-		_nextScene = SCENE_TEST;
-
 		// フェードアウトに移行
 		_updateFunc = &SceneSelect::FadeOutUpdate;
 		_drawFunc = &SceneSelect::FadeOutDraw;
@@ -70,19 +73,19 @@ void SceneSelect::CharacterSelectUpdate()
 	// マネージャーの戻るフラグが立っていたら人数選択に戻る
 	if (_pSelectManager->GetReturnFlag()) {
 
-		// 次のシーンをタイトルシーンに切り替える
-		_nextScene = SCENE_TITLE;
+		// キャンセル音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_CHARA_CANCEL);
 
 		// フェードアウトに移行
-		_updateFunc = &SceneSelect::FadeOutUpdate;
-		_drawFunc = &SceneSelect::FadeOutDraw;
+		_updateFunc = &SceneSelect::SlideOutUpdate;
+		_drawFunc = &SceneSelect::SlideOutDraw;
 	}
 }
 
 void SceneSelect::CharacterSelectDraw() const
 {
-	// 背景画像の描画
-	DrawGraph(0, 0, back, true);
+	// スカイドームの描画
+	_pSkyDome->Draw();
 
 	// uiの描画
 	_pUi->Draw();
@@ -91,45 +94,60 @@ void SceneSelect::CharacterSelectDraw() const
 	_pSelectManager->Draw();
 }
 
-void SceneSelect::FadeInUpdate()
+void SceneSelect::SlideInUpdate()
 {
-	_flame--;
-	if (_flame <= 0) {
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	// スライド画像の移動
+	_slidePos.x -= 80;
+	if (_slidePos.x <= -3840) {
 		_updateFunc = &SceneSelect::CharacterSelectUpdate;
 		_drawFunc = &SceneSelect::CharacterSelectDraw;
 	}
 }
 
-void SceneSelect::FadeOutUpdate()
-{
-	_flame++;
-	if (_flame >= 60) {
-
-		// 次のシーンに移行する
-		switch (_nextScene)
-		{
-		case SCENE_TITLE:
-			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>());
-			break;
-		case SCENE_TEST:
-			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_plData));
-			break;
-		default:
-			break;
-		}
-	}
-}
-
-void SceneSelect::FadeInDraw() const
+void SceneSelect::SlideInDraw() const
 {
 	// 通常の描画も行う
 	CharacterSelectDraw();
 
-	//フェード暗幕
-	int alpha = (int)(255 * ((float)_flame / 60));
-	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
-	DrawBox(0, 0, 1980, 1080, 0x000000, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// スライド画像の描画
+	DrawGraph(_slidePos.intX(), _slidePos.intY(), _slideHandle, true);
+}
+
+void SceneSelect::SlideOutUpdate()
+{
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	_slidePos.x += 80;
+	if (_slidePos.x >= -300) {
+		// 次のシーンに移行する
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(true));
+	}
+}
+
+void SceneSelect::SlideOutDraw() const
+{
+	// 通常の描画も行う
+	CharacterSelectDraw();
+
+	// スライド画像の描画
+	DrawGraph(_slidePos.intX(), _slidePos.intY(), _slideHandle, true);
+}
+
+void SceneSelect::FadeOutUpdate()
+{
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	_flame++;
+	if (_flame >= 60) {
+
+		// 次のシーンに移行する
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_plData));
+	}
 }
 
 void SceneSelect::FadeOutDraw() const

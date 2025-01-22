@@ -82,12 +82,6 @@ public:
 	void Draw(int num) const;
 
 	/// <summary>
-	/// UIの描画
-	/// </summary>
-	/// <param name="num">プレイヤーナンバー</param>
-	void DrawUi(int num) const;
-
-	/// <summary>
 	/// 描画範囲を取得
 	/// </summary>
 	/// <param name="num">プレイヤーのナンバー</param>

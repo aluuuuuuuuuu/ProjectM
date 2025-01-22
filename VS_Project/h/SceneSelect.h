@@ -2,12 +2,14 @@
 #include "SceneBase.h"
 #include "PlayerManager.h"
 #include <memory>
+#include "Vec2.h"
 
 constexpr int CHARACTOR_1 = 1;
 constexpr int CHARACTOR_2 = 2;
 constexpr int CHARACTOR_3 = 3;
 constexpr int CHARACTOR_4 = 4;
 
+class SkyDome;
 class SelectUI;
 class CharacterSelectManager;
 class CharacterCard;
@@ -58,27 +60,40 @@ private:
 	void CharacterSelectDraw() const;
 
 	/// <summary>
-	/// フェードイン更新処理
-	/// </summary>
-	void FadeInUpdate();
-
-	/// <summary>
 	/// フェードアウト更新処理
 	/// </summary>
 	void FadeOutUpdate();
-
-	/// <summary>
-	/// フェードイン描画処理
-	/// </summary>
-	void FadeInDraw	() const;
 
 	/// <summary>
 	/// フェードアウト描画処理
 	/// </summary>
 	void FadeOutDraw() const;
 
+	/// <summary>
+	/// スライドイン更新処理
+	/// </summary>
+	void SlideInUpdate();
+
+	/// <summary>
+	/// スライドイン描画処理
+	/// </summary>
+	void SlideInDraw() const;
+
+	/// <summary>
+	/// スライドアウト更新処理
+	/// </summary>
+	void SlideOutUpdate();
+
+	/// <summary>
+	/// スライドアウト描画処理
+	///	</summary>
+	void SlideOutDraw() const;
+
 	// キャラセレクトマネージャー
 	std::shared_ptr<CharacterSelectManager> _pSelectManager;
+
+	// スカイドームの参照
+	std::shared_ptr<SkyDome> _pSkyDome;
 
 	// フェード用フレームカウンタ
 	int _flame;
@@ -89,10 +104,11 @@ private:
 	// uiクラスポインタ
 	std::shared_ptr<SelectUI> _pUi;
 
-	int back;
+	// スライド画像
+	int _slideHandle;
 
-	// 次にロードするシーン
-	int _nextScene;
+	// スライド画像の座標
+	Vec2 _slidePos;
 
 };
 

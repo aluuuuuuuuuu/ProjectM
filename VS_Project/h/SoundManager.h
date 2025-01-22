@@ -16,6 +16,7 @@ constexpr int SE_CHARA_SELECT = 2;
 constexpr int SE_CHARA_CANCEL = 3;
 constexpr int SE_GAME_START = 4;
 constexpr int SE_RESULT = 5;
+constexpr int SE_SHOUT = 6;
 
 
 

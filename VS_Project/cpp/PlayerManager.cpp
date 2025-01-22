@@ -22,8 +22,37 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	{
 		// プレイヤーインスタンスの作成
 		for (int num = 0; num <= _playerData.playerNum; num++) {
-			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num));
-			_pPlayer[num]->Position = Vec3{ num * 10.0f,0.0f,0.0f };
+			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num,_bulletData[num]));
+
+			switch (num)
+			{
+			case 0:
+				_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,0.0f };
+				
+				// プレイヤーの角度をラジアンで-45度に設定
+				_pPlayer[num]->Angle.y = DX_PI_F / -4;
+				break;
+			case 1:
+				_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,180.0f };
+
+				// プレイヤーの角度をラジアンで-180度に設定
+				_pPlayer[num]->Angle.y = DX_PI_F / -4 * 5;
+				break;
+			case 2:
+				_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,180.0f };
+
+				// プレイヤーの角度をラジアンで-135度に設定
+				_pPlayer[num]->Angle.y = DX_PI_F / -4 * 3;
+				break;
+			case 3:
+				_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,0.0f };
+
+				// プレイヤーの角度をラジアンで-90度に設定
+				_pPlayer[num]->Angle.y = DX_PI_F / -4 * 7;
+				break;
+			default:
+				break;
+			}
 		}
 
 		// コリジョンマネージャーの作成

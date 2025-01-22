@@ -7,7 +7,7 @@
 #include "BulletBase.h"
 #include "PlayerManager.h"
 
-Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum) :
+Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
 	_moveScaleY(0),
 	_groundFlag(false),
 	_bulletManager(bullet),
@@ -15,11 +15,8 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_padNum(padNum),
 	_manager(manager),
 	_grapplerScale(0),
-	_selectBullet(NORMAL_BULLET),
 	_deadFlag(false),
-	_normalCoolTime(0),
-	_bombCoolTime(0),
-	_grappleCoolTime(0)
+	_bulletData(data)
 {
 	// 拡大の設定
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
@@ -38,6 +35,15 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 
 	// カメラの作成
 	_pCamera = std::make_shared<PlayerCamera>(Position, _padNum, _forwardVec);
+
+	// バレットデータの初期化
+	// クールタイムの初期化
+	for (auto& time : _bulletData._bullletCoolTime) {
+		time = 0;
+	}
+
+	// 選択している弾の初期化
+	_bulletData._selectBullet = NORMAL_BULLET;
 }
 
 Player::~Player()
@@ -55,40 +61,40 @@ void Player::Control()
 	}
 
 	// クールタイムの計算
-	if (_normalCoolTime != 0) {
-		_normalCoolTime--;
+	if (_bulletData._bullletCoolTime[NORMAL_BULLET] != 0) {
+		_bulletData._bullletCoolTime[NORMAL_BULLET]--;
 	}
 	else {
-		_normalCoolTime = 0;
+		_bulletData._bullletCoolTime[NORMAL_BULLET] = 0;
 	}
-	if (_grappleCoolTime != 0) {
-		_grappleCoolTime--;
-	}
-	else {
-		_grappleCoolTime = 0;
-	}
-	if (_bombCoolTime != 0) {
-		_bombCoolTime--;
+	if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] != 0) {
+		_bulletData._bullletCoolTime[GRAPPLER_BULLET]--;
 	}
 	else {
-		_bombCoolTime = 0;
+		_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 0;
+	}
+	if (_bulletData._bullletCoolTime[BOMB_BULLET] != 0) {
+		_bulletData._bullletCoolTime[BOMB_BULLET]--;
+	}
+	else {
+		_bulletData._bullletCoolTime[BOMB_BULLET] = 0;
 	}
 
 	// 弾の種類のの切り替え
 	if (input.IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
-		if (_selectBullet == MAX_TYPE_NUM - 1) {
-			_selectBullet = MIN_TYPE_NUM;
+		if (_bulletData._selectBullet == MAX_TYPE_NUM - 1) {
+			_bulletData._selectBullet = MIN_TYPE_NUM;
 		}
 		else {
-			_selectBullet++;
+			_bulletData._selectBullet++;
 		}
 	}
 	if (input.IsTrigger(INPUT_LEFT_SHOULDER, _padNum)) {
-		if (_selectBullet == MIN_TYPE_NUM) {
-			_selectBullet = MAX_TYPE_NUM - 1;
+		if (_bulletData._selectBullet == MIN_TYPE_NUM) {
+			_bulletData._selectBullet = MAX_TYPE_NUM - 1;
 		}
 		else {
-			_selectBullet--;
+			_bulletData._selectBullet--;
 		}
 	}
 
@@ -433,33 +439,33 @@ void Player::BulletTrigger()
 	// 発射する座標
 	Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
 
-	switch (_selectBullet)
+	switch (_bulletData._selectBullet)
 	{
 	case NORMAL_BULLET:
-		if (_normalCoolTime == 0) {
+		if (_bulletData._bullletCoolTime[NORMAL_BULLET] == 0) {
 			// 弾を生成
 			_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_normalCoolTime = 30;
+			_bulletData._bullletCoolTime[NORMAL_BULLET] = 30;
 		}
 		break;
 	case GRAPPLER_BULLET:
-		if (_grappleCoolTime == 0) {
+		if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] == 0) {
 			// 弾を生成
 			_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_grappleCoolTime = 1200;
+			_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 1200;
 		}
 		break;
 	case BOMB_BULLET:
-		if (_bombCoolTime == 0) {
+		if (_bulletData._bullletCoolTime[BOMB_BULLET] == 0) {
 			// 弾を生成
 			_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bombCoolTime = 300;
+			_bulletData._bullletCoolTime[BOMB_BULLET] = 300;
 		}
 		break;
 	default:

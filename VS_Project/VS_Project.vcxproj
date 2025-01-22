@@ -152,6 +152,7 @@
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Crown.cpp" />
+    <ClCompile Include="cpp\FallCharactor.cpp" />
     <ClCompile Include="cpp\GameFlowManager.cpp" />
     <ClCompile Include="cpp\GrapplerBullet.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Crown.h" />
+    <ClInclude Include="h\FallCharactor.h" />
     <ClInclude Include="h\GameFlowManager.h" />
     <ClInclude Include="h\GrapplerBullet.h" />
     <ClInclude Include="h\Input.h" />

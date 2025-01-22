@@ -3,8 +3,8 @@
 #include <memory>
 #include "Constant.h"
 #include "Vec2.h"
+#include "PlayerManager.h"
 
-class PlayerManager;
 class BulletManager;
 class PlayerCamera;
 class Player:
@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum);
+	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum,BulletData& data);
 
 	/// <summary>
 	/// デストラクタ
@@ -128,19 +128,10 @@ private:
 	// グラップラー用移動量
 	float _grapplerScale;
 
-	// 選択している弾の要素番号
-	int _selectBullet;
-
 	// 死亡フラグ
 	bool _deadFlag;
 
-	// 通常弾クールタイム　
-	int _normalCoolTime;
-
-	// 爆弾クールタイム
-	int _bombCoolTime;
-
-	// グラップルクールタイム
-	int _grappleCoolTime;
+	// バレットデータの参照
+	BulletData& _bulletData;
 };
 
