@@ -10,16 +10,20 @@
 #include "NumSelectButton.h"
 #include "FallCharactor.h"
 #include "SkyDome.h"
+#include "StageManager.h"
 
 SceneTitle::SceneTitle(bool slidInFlag):
 	_flame(110),
 	_selectDrawFlag(false)
 {
+	// 乱数生成器の初期化
+	srand(static_cast<unsigned int>(time(nullptr)));
+
 	// 定数ファイルの読み込み
 	ReadCSV("data/constant/SceneTitle.csv");
 
 	// カメラの初期化
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 200.0f, 0.0f }, VECTOR{ 150.0f, 200.0f, 0.0f });
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{150.0f, 250.0f, 0.0f });
 
 	// 関数ポインタの初期化
 	{
@@ -43,10 +47,30 @@ SceneTitle::SceneTitle(bool slidInFlag):
 		_pNum = std::make_shared<NumSelectButton>(); // 人数
 		_pFallCharactor = std::make_shared<FallCharactor>(); // 落下キャラクター
 		_pSkyDome = std::make_shared<SkyDome>(); // スカイドーム
+		_pStage = std::make_shared<StageManager>(); // ステージマネージャ
 	}
 
 	// 背景画像のロード
-	_backHandle = LoadGraph("data/image/TitleBack.png");
+
+	switch (rand() % 4)
+	{
+	case 0:
+		_backHandle = LoadGraph("data/image/taitkeBack1.png");
+		break;
+	case 1:
+		_backHandle = LoadGraph("data/image/taitkeBack2.png");
+		break;
+	case 2:
+		_backHandle = LoadGraph("data/image/taitkeBack3.png");
+		break;
+	case 3:
+		_backHandle = LoadGraph("data/image/taitkeBack4.png");
+		break;
+	default:
+		break;
+	}
+
+
 
 	// スライド画像のロード
 	_slideHandle = LoadGraph("data/image/Slide.png");
@@ -70,7 +94,7 @@ void SceneTitle::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneTitle::StartUpdate()
+void SceneTitle::NomalUpdate()
 {
 	// 落下キャラクターの更新処理
 	_pFallCharactor->Update();
@@ -96,16 +120,16 @@ void SceneTitle::StartUpdate()
 	}
 }
 
-void SceneTitle::StartDraw() const
+void SceneTitle::NormalDraw() const
 {
 	// スカイドームの描画
 	_pSkyDome->Draw();
 
-	// 背景画像の描画
-	DrawGraph(0, 0, _backHandle, true);
-
 	// 落下キャラクターの描画
 	_pFallCharactor->Draw();
+
+	// 背景画像の描画
+	DrawGraph(0, 0, _backHandle, true);
 
 	// ロゴの描画
 	_pLogo->Draw();
@@ -169,8 +193,6 @@ void SceneTitle::FadeInUpdate()
 	// スカイドームの更新処理
 	_pSkyDome->Update();
 
-	// 背景画像の描画
-	DrawGraph(0, 0, _backHandle, true);
 
 	// 王冠の更新処理
 	_pCrown->Update();
@@ -180,8 +202,8 @@ void SceneTitle::FadeInUpdate()
 
 	_flame--;
 	if (_flame <= 0) {
-		_updateFunc = &SceneTitle::StartUpdate;
-		_drawFunc = &SceneTitle::StartDraw;
+		_updateFunc = &SceneTitle::NomalUpdate;
+		_drawFunc = &SceneTitle::NormalDraw;
 	}
 }
 
@@ -195,7 +217,7 @@ void SceneTitle::FadeOutUpdate()
 
 void SceneTitle::FadeInDraw() const
 {
-	StartDraw();
+	NormalDraw();
 
 	//フェード暗幕
 	int alpha = static_cast<int>(255 * ((float)_flame / 110));
@@ -248,11 +270,11 @@ void SceneTitle::NumSelectDraw() const
 	// スカイドームの描画
 	_pSkyDome->Draw();
 
-	// 背景画像の描画
-	DrawGraph(0, 0, _backHandle, true);
-
 	// 落下キャラクターの描画
 	_pFallCharactor->Draw();
+
+	// 背景画像の描画
+	DrawGraph(0, 0, _backHandle, true);
 
 	// ロゴの描画
 	_pLogo->Draw();

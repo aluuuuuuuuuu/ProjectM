@@ -14,7 +14,7 @@ MenuManager::MenuManager(int padNum) :
 {
 	// 関数ポインタの初期化
 	_updateFunc = &MenuManager::SlideInUpdate;
-	_drawFunc = &MenuManager::StartDraw;
+	_drawFunc = &MenuManager::NormalDraw;
 
 	// コリジョンマネージャーの作成
 	_pCollisionManager = std::make_shared<MenuCollisionManager>(*this);
@@ -117,7 +117,7 @@ Vec2 MenuManager::GetRange(int buttonNum)
 	return _pButton[buttonNum]->GetRange();
 }
 
-void MenuManager::StartUpdate()
+void MenuManager::NomalUpdate()
 {
 	// 指の更新処理
 	_pFinger->Update();
@@ -217,7 +217,7 @@ void MenuManager::StartUpdate()
 	}
 }
 
-void MenuManager::StartDraw() const
+void MenuManager::NormalDraw() const
 {
 	// ぼかしの描画
 	DrawGraph(1, 0, _backHandle, true);
@@ -243,7 +243,7 @@ void MenuManager::SlideInUpdate()
 		}
 	}
 	else {
-		_updateFunc = &MenuManager::StartUpdate;
+		_updateFunc = &MenuManager::NomalUpdate;
 	}
 
 	// 指の更新処理

@@ -56,4 +56,3 @@ private:
 
 	bool aaa;
 };
-

@@ -42,12 +42,12 @@ private:
     /// <summary>
     /// 通常の更新処理
     /// </summary>
-    void StartUpdate();
+    void NomalUpdate();
 
     /// <summary>
     /// 通常の描画処理
     /// </summary>
-    void StartDraw() const;
+    void NormalDraw() const;
 
     // メニューマネージャーのポインタ
     std::shared_ptr<MenuManager> _manager;

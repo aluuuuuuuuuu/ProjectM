@@ -6,8 +6,8 @@
 #include "PlayerManager.h"
 
 class BulletManager;
-class PlayerCamera;
-class Player:
+class BulletManager;
+class AIEnemy :
 	public Transform,
 	public CapsuleCollision,
 	public Model,
@@ -15,20 +15,18 @@ class Player:
 {
 public:
 
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum,BulletData& data);
+
+    AIEnemy(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data);
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual ~Player();
+	virtual ~AIEnemy();
 
 	/// <summary>
 	/// 移動などの処理
 	/// </summary>
-	void Control() ;
+	void Control();
 
 	/// <summary>
 	/// 更新処理
@@ -39,11 +37,6 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() const;
-
-	/// <summary>
-	/// カメラの座標をセットする
-	/// </summary>
-	void CameraSet() const;
 
 	/// <summary>
 	/// 地上フラグを入手する
@@ -62,14 +55,7 @@ public:
 	/// </summary>
 	void KillPlayer();
 
-	/// <summary>
-	/// 自身のプレイヤーナンバーを返す
-	/// </summary>
-	/// <returns>プレイヤーナンバー</returns>
-	int GetPlayerNum() const;
-
 private:
-
 	/// <summary>
 	/// Y軸の回転値を引数の値に徐々に近づけていく
 	/// </summary>
@@ -109,9 +95,6 @@ private:
 
 	// バレットマネージャーの参照
 	std::shared_ptr<BulletManager>& _bulletManager;
-
-	// カメラポインタ
-	std::shared_ptr<PlayerCamera> _pCamera;
 
 	// 使用するパッドのナンバー
 	int _padNum;

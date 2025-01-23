@@ -5,6 +5,7 @@
 #include "Constant.h"
 #include "Vec2.h"
 
+class StageManager;
 class SkyDome;
 class FallCharactor;
 class NumSelectButton;
@@ -48,12 +49,12 @@ private:
 	/// <summary>
 	/// 通常の更新処理
 	/// </summary>
-	void StartUpdate();
+	void NomalUpdate();
 
 	/// <summary>
 	/// 通常の描画処理
 	/// </summary>
-	void StartDraw() const;
+	void NormalDraw() const;
 
 	/// <summary>
 	/// スライドインの更新処理
@@ -122,6 +123,9 @@ private:
 
 	// スカイドームポインタ
 	std::shared_ptr<SkyDome> _pSkyDome;
+
+	// ステージマネージャポインタ
+	std::shared_ptr<StageManager> _pStage;
 
 	// フェード用フレームカウンタ
 	int _flame;

@@ -66,9 +66,9 @@ private:
 	_UpdateFunc_t _updateFunc = nullptr;
 	_DrawFunc_t _drawFunc = nullptr;
 
-	void StartUpdate();
+	void NomalUpdate();
 
-	void StartDraw() const;
+	void NormalDraw() const;
 
 	void SlideInUpdate();
 

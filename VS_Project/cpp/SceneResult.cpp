@@ -3,7 +3,7 @@
 #include "Input.h"
 #include "SceneMenu.h"
 #include "SceneTitle.h"
-#include "SceneTest.h"
+#include "ScenePvp.h"
 #include "SceneManager.h"
 #include "ResultUi.h"
 #include "NumUtility.h"
@@ -25,8 +25,8 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
 
 	// 関数ポインタの初期化
-	_updateFunc = &SceneResult::StartUpdate;
-	_drawFunc = &SceneResult::StartDraw;
+	_updateFunc = &SceneResult::NomalUpdate;
+	_drawFunc = &SceneResult::NormalDraw;
 
 	// シングルの再生
 	SoundManager::GetInstance().RingSE(SE_RESULT);
@@ -46,7 +46,7 @@ void SceneResult::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneResult::StartUpdate()
+void SceneResult::NomalUpdate()
 {
 
 	for (int num = 0; num <= _playerData.playerNum; num++) {
@@ -75,7 +75,7 @@ void SceneResult::StartUpdate()
 	_pCharacter->Update();
 }
 
-void SceneResult::StartDraw() const
+void SceneResult::NormalDraw() const
 {
 	// キャラクターの描画
 	_pCharacter->Draw();
@@ -103,7 +103,7 @@ void SceneResult::FadeOutUpdate()
 		switch (_nextScene)
 		{
 		case SCENE_TEST:
-			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_playerData));
+			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_playerData));
 			break;
 		case SCENE_TITLE:
 			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
@@ -116,7 +116,7 @@ void SceneResult::FadeOutUpdate()
 
 void SceneResult::FadeOutDraw() const
 {
-	StartDraw();
+	NormalDraw();
 
 	//フェード暗幕
 	int alpha = static_cast<int>(255 * ((float)_flame / 110));

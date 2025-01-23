@@ -44,6 +44,7 @@ StageManager::StageManager() :
 
 StageManager::~StageManager()
 {
+	MV1DeleteModel(_modelHandle);
 }
 
 void StageManager::DrawStage() const

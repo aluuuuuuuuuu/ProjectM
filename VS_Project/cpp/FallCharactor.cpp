@@ -42,7 +42,7 @@ void FallCharactor::Update()
 
 			// —Ž‰ºƒLƒƒƒ‰‚ð’Ç‰Á
 			_fallCharactors.push_back({ _fallCharactorHandle[rand() % 4],Vec2{rand() % 1920,-100},randomAngle,rotateFlag });
-			//SoundManager::GetInstance().RingSE(SE_SHOUT);
+			SoundManager::GetInstance().RingSE(SE_SHOUT);
 		}
 	}
 

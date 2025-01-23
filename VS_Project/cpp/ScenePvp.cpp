@@ -1,4 +1,4 @@
-#include "SceneTest.h"
+#include "ScenePvp.h"
 #include "StageManager.h"
 #include "Player.h"
 #include "StageCollisionManager.h"
@@ -16,7 +16,7 @@
 #include "NumUtility.h"
 #include "SoundManager.h"
 
-SceneTest::SceneTest(PlayerData& data)
+ScenePvp::ScenePvp(PlayerData& data)
 {
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
@@ -24,14 +24,14 @@ SceneTest::SceneTest(PlayerData& data)
 	// 各クラスのインスタンス作成
 	{
 		_pWedgewormManager = std::make_shared<WedgewormManager>();	// 禊虫マネージャー
-		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager,_pWedgewormManager);				// バレットマネージャー
+		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager, _pWedgewormManager);				// バレットマネージャー
 		_pStage = std::make_shared<StageManager>();													// ステージマネージャー
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
-		_pNum = std::make_shared<NumUtility>(0.5f,Vec2{ 734,100 });	// 数字ユーティリティ
+		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
 	}
 
 	// ライトの設定
@@ -48,12 +48,12 @@ SceneTest::SceneTest(PlayerData& data)
 
 	// 関数ポインタの初期化
 	{
-		_updateFunc = &SceneTest::NomalUpdate;
-		_drawFunc = &SceneTest::NormalDraw;
+		_updateFunc = &ScenePvp::NomalUpdate;
+		_drawFunc = &ScenePvp::NormalDraw;
 	}
 }
 
-SceneTest::~SceneTest()
+ScenePvp::~ScenePvp()
 {
 	// ライトの削除
 	DeleteLightHandleAll();
@@ -63,18 +63,19 @@ SceneTest::~SceneTest()
 	SetCameraScreenCenter(static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2), static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2));
 }
 
-void SceneTest::Update()
+void ScenePvp::Update()
 {
 	(this->*_updateFunc)();
 }
 
-void SceneTest::Draw() const
+void ScenePvp::Draw() const
 {
 	(this->*_drawFunc)();
 }
 
-void SceneTest::NomalUpdate()
+void ScenePvp::NomalUpdate()
 {
+	// BGMを再生	
 	SoundManager::GetInstance().StartBGM(BGM_BATTLE);
 
 	// メニュー画面を開く
@@ -101,15 +102,15 @@ void SceneTest::NomalUpdate()
 
 	// ゲームが終了していたら終了時の処理に移る
 	if (_pGameFlowManager->GetGameEnd()) {
-		_updateFunc = &SceneTest::EndUpdate;
-		_drawFunc = &SceneTest::EndDraw;
+		_updateFunc = &ScenePvp::EndUpdate;
+		_drawFunc = &ScenePvp::EndDraw;
 	}
 
 	// 時間の更新処理
 	_pNum->Update(_pGameFlowManager->GetGameTime());
 }
 
-void SceneTest::NormalDraw() const
+void ScenePvp::NormalDraw() const
 {
 	// プレイヤーの画面の数だけ描画する
 	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
@@ -138,31 +139,21 @@ void SceneTest::NormalDraw() const
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);
 	}
-
-	// 描画範囲の設定
-	SetDrawArea(0, 0, 1920, 1080);
-
-	// 描画先の中心を設定
-	SetCameraScreenCenter(static_cast<float>(1920 / 2), static_cast<float>(1080 / 2));
-
-	// 数字の描画
-	_pNum->Draw();
-
 }
 
-void SceneTest::EndUpdate()
-{	
+void ScenePvp::EndUpdate()
+{
 	// ゲームフローマネージャーの更新
 	_pGameFlowManager->Update();
 
 	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
 	if (_pGameFlowManager->GetFlameCount() >= 120) {
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(),_pGameFlowManager->GetGameTime()));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
 	}
 }
 
-void SceneTest::EndDraw() const
+void ScenePvp::EndDraw() const
 {
 	// プレイヤーの画面の数だけ描画する
 	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {

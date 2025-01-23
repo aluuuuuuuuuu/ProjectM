@@ -1,5 +1,4 @@
 #include "SceneSelect.h"
-#include "SceneTest.h"
 #include "Input.h"
 #include "SceneManager.h"
 #include "SelectFinger.h"
@@ -9,6 +8,7 @@
 #include "SceneTitle.h"
 #include "SoundManager.h"
 #include "SkyDome.h"
+#include "ScenePvp.h"
 
 SceneSelect::SceneSelect(int num) :
 	_flame(60)
@@ -146,7 +146,7 @@ void SceneSelect::FadeOutUpdate()
 	if (_flame >= 60) {
 
 		// Ÿ‚ÌƒV[ƒ“‚ÉˆÚs‚·‚é
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTest>(_plData));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_plData));
 	}
 }
 

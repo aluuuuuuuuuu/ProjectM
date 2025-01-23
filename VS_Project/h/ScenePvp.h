@@ -2,9 +2,7 @@
 #include "SceneBase.h"
 #include "Constant.h"
 #include <memory>
-#include "Components.h"
 #include <vector>
-#include "PlayerManager.h"
 
 class NumUtility;
 class GameFlowManager;
@@ -15,38 +13,37 @@ class MapBulletCollisionManager;
 class BulletManager;
 class StageCollisionManager;
 class StageManager;
-class SceneTest :
-    public SceneBase,
-    public Constant
+struct PlayerData;
+class ScenePvp :
+	public SceneBase,
+	public Constant
 {
 public:
 
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    /// <param name="data">プレイヤーデータ</param>
-    SceneTest(PlayerData& data);
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="data">プレイヤーデータ</param>
+	ScenePvp(PlayerData& data);
 
-    /// <summary>
-    /// デストラクタ
-    /// </summary>
-    virtual ~SceneTest();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	virtual ~ScenePvp();
 
-    /// <summary>
-    /// 更新処理
-    /// </summary>
-    void Update();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update();
 
-    /// <summary>
-    /// 描画処理
-    /// </summary>
-    void Draw() const;
-
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() const;
 private:
-
     // 関数ポインタ
-    using m_updateFunc_t = void (SceneTest::*)();
-    using m_drawFunc_t = void (SceneTest::*)() const;
+    using m_updateFunc_t = void (ScenePvp::*)();
+    using m_drawFunc_t = void (ScenePvp::*)() const;
     m_updateFunc_t _updateFunc = nullptr;
     m_drawFunc_t _drawFunc = nullptr;
 
@@ -96,6 +93,5 @@ private:
 
     // 数字クラスポインタ
     std::shared_ptr<NumUtility> _pNum;
-
 };
 

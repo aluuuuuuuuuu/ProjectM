@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "AIEnemy.h"
 #include "DxLib.h"
 #include "Input.h"
 #include "PlayerCamera.h"
@@ -7,7 +7,7 @@
 #include "BulletBase.h"
 #include "PlayerManager.h"
 
-Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
+AIEnemy::AIEnemy(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
 	_moveScaleY(0),
 	_groundFlag(false),
 	_bulletManager(bullet),
@@ -33,9 +33,6 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	// アニメーションの初期処理
 	InitAnimation(_modelHandle, _manager.GetConstantInt("ANIM_AIMING_IDLE"), _manager.GetConstantFloat("BLEND_RATE"));
 
-	// カメラの作成
-	_pCamera = std::make_shared<PlayerCamera>(Position, _padNum, _forwardVec);
-
 	// バレットデータの初期化
 	// クールタイムの初期化
 	for (auto& time : _bulletData._bullletCoolTime) {
@@ -46,133 +43,15 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_bulletData._selectBullet = NORMAL_BULLET;
 }
 
-Player::~Player()
+AIEnemy::~AIEnemy()
 {
 }
 
-void Player::Control()
+void AIEnemy::Control()
 {
-	// インプットのインスタンスを取得
-	auto& input = Input::GetInstance();
-
-	// 弾を発射する
-	if (input.IsHold(INPUT_RIGHT_TRIGGER, _padNum)) {
-		BulletTrigger();
-	}
-
-	// クールタイムの計算
-	if (_bulletData._bullletCoolTime[NORMAL_BULLET] != 0) {
-		_bulletData._bullletCoolTime[NORMAL_BULLET]--;
-	}
-	else {
-		_bulletData._bullletCoolTime[NORMAL_BULLET] = 0;
-	}
-	if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] != 0) {
-		_bulletData._bullletCoolTime[GRAPPLER_BULLET]--;
-	}
-	else {
-		_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 0;
-	}
-	if (_bulletData._bullletCoolTime[BOMB_BULLET] != 0) {
-		_bulletData._bullletCoolTime[BOMB_BULLET]--;
-	}
-	else {
-		_bulletData._bullletCoolTime[BOMB_BULLET] = 0;
-	}
-
-	// 弾の種類のの切り替え
-	if (input.IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
-		if (_bulletData._selectBullet == MAX_TYPE_NUM - 1) {
-			_bulletData._selectBullet = MIN_TYPE_NUM;
-		}
-		else {
-			_bulletData._selectBullet++;
-		}
-	}
-	if (input.IsTrigger(INPUT_LEFT_SHOULDER, _padNum)) {
-		if (_bulletData._selectBullet == MIN_TYPE_NUM) {
-			_bulletData._selectBullet = MAX_TYPE_NUM - 1;
-		}
-		else {
-			_bulletData._selectBullet--;
-		}
-	}
-
-	// 右スティックで回転
-	if (input.GetStickVectorLength(INPUT_RIGHT_STICK, _padNum) > 3000) {
-
-		// スティックを傾けた方向の回転の値を増減させる
-		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).x != 0) {
-			Angle.y += 0.000001f * (input.GetStickThumbX(INPUT_RIGHT_STICK, _padNum));
-
-			// ラジアン角を正規化する
-			Angle.y = fmodf(Angle.y, static_cast<float>(DX_TWO_PI));
-			if (Angle.y < 0.0f) Angle.y += static_cast<float>(DX_TWO_PI);
-		}
-		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).z != 0) {
-			Angle.z += 0.000001f * (input.GetStickThumbY(INPUT_RIGHT_STICK, _padNum));
-
-			// 最大値と最低値を調整する
-			if (Angle.z <= -0.9f) {
-				Angle.z = -0.9f;
-			}
-			else if (Angle.z >= 0.9f) {
-				Angle.z = 0.9f;
-			}
-		}
-	}
-
-	// コリジョン前の移動
-
-	// 移動ベクトルの初期化
-	_moveVec = 0;
-
-	// スティックの入力値を移動ベクトルに代入する
-	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, _padNum) > 3000) {
-		_moveVec = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum);
-
-		// 単位ベクトルの方向に移動速度分移動するベクトルを作成する
-		_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED");
-	}
-
-	// Aボタンでジャンプ
-	if (Input::GetInstance().IsTrigger(INPUT_A, _padNum) && _groundFlag) {
-
-		// ジャンプ力を与える
-		_moveScaleY = 2.0f;
-
-		// ジャンプの開始アニメーションを再生
-		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_JUMP_UP"), false, _manager.GetConstantFloat("BLEND_RATE"));
-	}
-
-	// y軸の移動も足す
-	_moveVec.y += _moveScaleY;
-
-	// 移動ベクトルをy軸回転させる
-
-	// 角度のずれを修正する
-	float angle = Angle.y - 1.5708f;
-
-	// Y軸回転行列に変換
-	MATRIX rotaMtx = MGetRotY(angle);
-
-	// スティック入力は逆になるから修正する
-	_moveVec = Vec3{ _moveVec.x * -1, _moveVec.y, _moveVec.z * -1 };
-
-	// 移動ベクトルを回転値に合わせてY軸回転させる
-	_moveVec = VTransform(_moveVec.VGet(), rotaMtx);
-
-	// グラップラーの移動
-	_moveVec += _grapplerUnitVec * _grapplerScale;
-
-	// 座標に移動ベクトルを足す
-	Position += _moveVec;
-
-	// カプセルに座標を渡す
-	Set(Position);
 }
 
-void Player::Update()
+void AIEnemy::Update()
 {
 	// カプセルに座標を渡す
 	Set(Position);
@@ -241,9 +120,6 @@ void Player::Update()
 		}
 	}
 
-	// カメラの更新
-	_pCamera->Update(Position, _forwardVec, Angle);
-
 	// アニメーションコントロール                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 	AnimationContorol();
 
@@ -260,66 +136,30 @@ void Player::Update()
 	UpdateModel(trans);
 }
 
-void Player::Draw() const
+void AIEnemy::Draw() const
 {
-
-#ifdef _DEBUG
-	//DrawCapsule();
-	//DrawLine3D(Position.VGet(), (Position + _forwardVec * 20).VGet(), 0x00ffff);
-	//DrawFormatString(10, 20, 0xff0000, "x:%f y:%f z:%f angleY:%f angleZ:%f", Position.x, Position.y, Position.z, Angle.y, Angle.z);
-	//if (_groundFlag) {
-	//	DrawString(10, 40, "OnGrround", 0xff0000);
-	//}
-	//DrawFormatString(10, 60, 0xff0000, "GrapplerScale:%f", _grapplerScale);
-	//if (_selectBullet == NORMAL_BULLET) {
-	//	DrawString(10, 80, "NormalBullet", 0xff0000);
-	//}
-	//else if (_selectBullet == GRAPPLER_BULLET) {
-	//	DrawString(10, 80, "GrapplerBullet", 0xff0000);
-	//}
-	//else if (_selectBullet == BOMB_BULLET) {
-	//	DrawString(10, 80, "bombBullet", 0xff0000);
-	//}
-	//if (_bulletManager->GetBulletExist(_padNum)) {
-	//	DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff0000);
-	//}
-	//if (_deadFlag) {
-	//	DrawString(10, 100, "dead", 0xff0000);
-	//}
-#endif // DEBUG
-
 	// モデルの描画
 	DrawModel();
 }
 
-void Player::CameraSet() const
-{
-	// カメラのターゲットと座標を設定する
-	SetCameraPositionAndTarget_UpVecY(_pCamera->Position.VGet(), _pCamera->GetTarget().VGet());
-}
-
-bool Player::GetGroundFlag() const
+bool AIEnemy::GetGroundFlag() const
 {
 	return _groundFlag;
 }
 
-bool Player::GetDeadFlag() const
+bool AIEnemy::GetDeadFlag() const
 {
 	return _deadFlag;
 }
 
-void Player::KillPlayer()
+void AIEnemy::KillPlayer()
 {
 	_deadFlag = true;
 }
 
-int Player::GetPlayerNum() const
+void AIEnemy::RotateAngleY(float targetAngle)
 {
-	return _padNum;
-}
 
-void Player::RotateAngleY(float targetAngle)
-{
 	// 平行移動ベクトルが0じゃないときだけ角度を計算する
 	if (_moveVec.x != 0.0f && _moveVec.z != 0.0f) {
 		// 移動する方向に徐々に回転する
@@ -349,7 +189,7 @@ void Player::RotateAngleY(float targetAngle)
 	}
 }
 
-int Player::ClassifyDirection()
+int AIEnemy::ClassifyDirection()
 {
 	// キャラクターの向きに合わせて移動ベクトルを回転
 	float rotatedX = _moveVec.x * cos(Angle.y) - _moveVec.z * sin(Angle.y);
@@ -386,7 +226,7 @@ int Player::ClassifyDirection()
 	return 0;  // デフォルトは前
 }
 
-void Player::AnimationContorol()
+void AIEnemy::AnimationContorol()
 {
 	// 地面についていないとき
 	if (!_groundFlag) {
@@ -434,7 +274,7 @@ void Player::AnimationContorol()
 	}
 }
 
-void Player::BulletTrigger()
+void AIEnemy::BulletTrigger()
 {
 	// 発射する座標
 	Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
