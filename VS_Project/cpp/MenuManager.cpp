@@ -97,7 +97,7 @@ MenuManager::~MenuManager()
 	}
 }
 
-void MenuManager::UpdatePl()
+void MenuManager::Update()
 {
 	(this->*_updateFunc)();
 }
@@ -120,7 +120,7 @@ Vec2 MenuManager::GetRange(int buttonNum)
 void MenuManager::NomalUpdate()
 {
 	// 指の更新処理
-	_pFinger->UpdatePl();
+	_pFinger->Update();
 
 	// Bボタンが押されたらウィンドウを閉じる
 	if (Input::GetInstance().IsTrigger(INPUT_B, _pFinger->GetPadNum())) {
@@ -247,7 +247,7 @@ void MenuManager::SlideInUpdate()
 	}
 
 	// 指の更新処理
-	_pFinger->UpdatePl();
+	_pFinger->Update();
 
 }
 

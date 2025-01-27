@@ -27,7 +27,7 @@ public:
 	/// </summary>
 	/// <param name="pos">プレイヤーの座標</param>
 	/// <param name="forward">プレイヤーの方向ベクトル</param>
-	void UpdatePl(Vec3 pos, Vec3 forward, Vec3 angle);
+	void Update(Vec3 pos, Vec3 forward, Vec3 angle);
 
 	/// <summary>
 	/// ターゲットの座標を取得する

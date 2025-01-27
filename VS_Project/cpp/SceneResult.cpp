@@ -9,6 +9,7 @@
 #include "NumUtility.h"
 #include "ResultCharacter.h"
 #include "SoundManager.h"
+#include "ScenePve.h"
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
@@ -19,7 +20,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_pCharacter = std::make_shared<ResultCharacter>(data.winner);
 
 	// 数字の作成
-	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,350 }, gameTime);
+	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,400 }, gameTime);
 
 	// リザルトUIの作成
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
@@ -36,7 +37,7 @@ SceneResult::~SceneResult()
 {
 }
 
-void SceneResult::UpdatePl()
+void SceneResult::Update()
 {
 	(this->*_updateFunc)();
 }
@@ -53,7 +54,15 @@ void SceneResult::NomalUpdate()
 
 		// Aボタンが押されたらリスタート
 		if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
-			_nextScene = SCENE_TEST;
+
+			// AI戦であればPVEシーンに戻る
+			if (_playerData.aiFlag) {
+				_nextScene = SCENE_PVE;
+			}
+			else {
+				_nextScene = SCENE_PVP;
+			}
+
 			_updateFunc = &SceneResult::FadeOutUpdate;
 			_drawFunc = &SceneResult::FadeOutDraw;
 		}
@@ -72,7 +81,7 @@ void SceneResult::NomalUpdate()
 	}
 
 	// キャラクターの更新処理
-	_pCharacter->UpdatePl();
+	_pCharacter->Update();
 }
 
 void SceneResult::NormalDraw() const
@@ -102,8 +111,11 @@ void SceneResult::FadeOutUpdate()
 		// 次のシーンに切り替える
 		switch (_nextScene)
 		{
-		case SCENE_TEST:
+		case SCENE_PVP:
 			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_playerData));
+			break;
+		case SCENE_PVE:
+			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePve>(_playerData));
 			break;
 		case SCENE_TITLE:
 			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));

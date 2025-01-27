@@ -34,6 +34,8 @@ struct PlayerData
 
 	// 勝利したプレイヤー
 	int winner = 0;
+
+	bool aiFlag = false;
 };
 
 // 弾のデータ
@@ -73,7 +75,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void UpdatePl();
+	void Update();
 
 	/// <summary>
 	/// 描画処理
@@ -140,6 +142,17 @@ public:
 	/// </summary>
 	/// <returns>プレイヤーの座標</returns>
 	Vec3 GetPlayerPos() const;
+
+	/// <summary>
+	/// aiフラグを取得する
+	/// </summary>
+	/// <returns>trueであればAI戦</returns>
+	bool GetAiFlag();
+
+	/// <summary>
+	/// AIキャラを削除する
+	/// </summary>
+	void DeleteAi();
 
 private:
 

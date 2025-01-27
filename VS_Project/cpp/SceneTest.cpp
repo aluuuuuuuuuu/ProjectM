@@ -63,7 +63,7 @@ SceneTest::~SceneTest()
 	SetCameraScreenCenter(static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2), static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2));
 }
 
-void SceneTest::UpdatePl()
+void SceneTest::Update()
 {
 	(this->*_updateFunc)();
 }
@@ -85,19 +85,19 @@ void SceneTest::NomalUpdate()
 	}
 
 	// スカイドームの更新処理
-	_pSkyDome->UpdatePl();
+	_pSkyDome->Update();
 
 	// プレイヤーの更新処理
-	_pPlayerManager->UpdatePl();
+	_pPlayerManager->Update();
 
 	// ゲームフローの更新処理
-	_pGameFlowManager->UpdatePl();
+	_pGameFlowManager->Update();
 
 	// バレットの更新
-	_pBulletManager->UpdatePl();
+	_pBulletManager->Update();
 
 	// 禊虫の更新
-	_pWedgewormManager->UpdatePl();
+	_pWedgewormManager->Update();
 
 	// ゲームが終了していたら終了時の処理に移る
 	if (_pGameFlowManager->GetGameEnd()) {
@@ -106,7 +106,7 @@ void SceneTest::NomalUpdate()
 	}
 
 	// 時間の更新処理
-	_pNum->UpdatePl(_pGameFlowManager->GetGameTime());
+	_pNum->Update(_pGameFlowManager->GetGameTime());
 }
 
 void SceneTest::NormalDraw() const
@@ -153,7 +153,7 @@ void SceneTest::NormalDraw() const
 void SceneTest::EndUpdate()
 {	
 	// ゲームフローマネージャーの更新
-	_pGameFlowManager->UpdatePl();
+	_pGameFlowManager->Update();
 
 	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
 	if (_pGameFlowManager->GetFlameCount() >= 120) {

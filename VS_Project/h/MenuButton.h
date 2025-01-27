@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
-	void UpdatePl();
+	void Update();
 
 	/// <summary>
 	/// •`‰æˆ—

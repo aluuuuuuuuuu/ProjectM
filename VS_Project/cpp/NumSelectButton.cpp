@@ -30,7 +30,7 @@ NumSelectButton::~NumSelectButton()
 
 }
 
-void NumSelectButton::UpdatePl()
+void NumSelectButton::Update()
 {
 	// インプットインスタンスを取得
 	auto& input = Input::GetInstance();

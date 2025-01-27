@@ -84,7 +84,7 @@ PlayerManager::~PlayerManager()
 	}
 }
 
-void PlayerManager::UpdatePl()
+void PlayerManager::Update()
 {
 	// ƒvƒŒƒCƒ„[‚ÌˆÚ“®‚È‚Ç
 	for (auto& pl : _pPlayer) {
@@ -187,6 +187,17 @@ void PlayerManager::AddAi()
 Vec3 PlayerManager::GetPlayerPos() const
 {
 	return _pPlayer[0]->Position;
+}
+
+bool PlayerManager::GetAiFlag()
+{
+	return _playerData.aiFlag;
+}
+
+void PlayerManager::DeleteAi()
+{
+	_playerData.playerNum--;
+	_playerData.character[1] = -1;
 }
 
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)

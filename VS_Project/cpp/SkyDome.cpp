@@ -21,7 +21,7 @@ SkyDome::~SkyDome()
 	int a = 0;
 }
 
-void SkyDome::UpdatePl()
+void SkyDome::Update()
 {
 	// ­‚µ‚Ã‚Âƒh[ƒ€‚ğy²‚³‚¹‚Ä‰_‚ª“®‚¢‚Ä‚é‚Ó‚¤‚ÉŒ©‚¹‚é
 	Angle.y += 0.0005f;

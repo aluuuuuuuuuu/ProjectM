@@ -16,7 +16,7 @@ public:
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
-	virtual void UpdatePl() = 0;
+	virtual void Update() = 0;
 
 	/// <summary>
 	/// •`‰æˆ—

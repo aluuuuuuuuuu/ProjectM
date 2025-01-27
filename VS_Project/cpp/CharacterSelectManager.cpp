@@ -32,11 +32,11 @@ CharacterSelectManager::~CharacterSelectManager()
 	DeleteGraph(_startButtonHandle);
 }
 
-void CharacterSelectManager::UpdatePl()
+void CharacterSelectManager::Update()
 {
 	// 全指の更新処理
 	for (int num = 0; num <= _plData.playerNum; num++) {
-		_pFinger[num]->UpdatePl();
+		_pFinger[num]->Update();
 	}
 
 	// 指とカードの判定をとる

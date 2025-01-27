@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void UpdatePl();
+	void Update();
 
 	/// <summary>
 	/// ゲーム終了フラグを返す
@@ -53,6 +53,4 @@ private:
 
 	// ゲーム開始からのフレームを数える
 	int _gameTime;
-
-	bool aaa;
 };

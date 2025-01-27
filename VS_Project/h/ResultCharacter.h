@@ -10,7 +10,7 @@ public:
 	ResultCharacter(int plNum);
 	virtual ~ResultCharacter();
 
-	void UpdatePl();
+	void Update();
 
 	void Draw() const;
 

@@ -22,10 +22,15 @@ ScenePve::ScenePve(PlayerData& data)
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
 
+	if (_pPlayerManager->GetAiFlag()) {
+		data.playerNum--;
+		data.character[1] = -1;
+	}
+
 	// 各クラスのインスタンス作成
 	{
 		_pWedgewormManager = std::make_shared<WedgewormManager>();	// 禊虫マネージャー
-		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager, _pWedgewormManager);				// バレットマネージャー
+		_pBulletManager = std::make_shared <BulletManager>(_pBulletCollsionManager, _pWedgewormManager);	// バレットマネージャー
 		_pStage = std::make_shared<StageManager>();													// ステージマネージャー
 		_pBulletCollsionManager = std::make_shared<MapBulletCollisionManager>(_pStage);				// バレットコリジョンマネージャー
 		_pStageCollisionManager = std::make_shared<StageCollisionManager>(_pStage);					// ステージコリジョンマネージャー
@@ -67,7 +72,7 @@ ScenePve::~ScenePve()
 	SetCameraScreenCenter(static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2), static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2));
 }
 
-void ScenePve::UpdatePl()
+void ScenePve::Update()
 {
 	(this->*_updateFunc)();
 }
@@ -88,19 +93,19 @@ void ScenePve::NomalUpdate()
 	}
 
 	// スカイドームの更新処理
-	_pSkyDome->UpdatePl();
+	_pSkyDome->Update();
 
 	// プレイヤーの更新処理
-	_pPlayerManager->UpdatePl();
+	_pPlayerManager->Update();
 
 	// ゲームフローの更新処理
-	_pGameFlowManager->UpdatePl();
+	_pGameFlowManager->Update();
 
 	// バレットの更新
-	_pBulletManager->UpdatePl();
+	_pBulletManager->Update();
 
 	// 禊虫の更新
-	_pWedgewormManager->UpdatePl();
+	_pWedgewormManager->Update();
 
 	// ゲームが終了していたら終了時の処理に移る
 	if (_pGameFlowManager->GetGameEnd()) {
@@ -109,7 +114,7 @@ void ScenePve::NomalUpdate()
 	}
 
 	// 時間の更新処理
-	_pNum->UpdatePl(_pGameFlowManager->GetGameTime());
+	_pNum->Update(_pGameFlowManager->GetGameTime());
 }
 
 void ScenePve::NormalDraw() const
@@ -142,7 +147,7 @@ void ScenePve::NormalDraw() const
 void ScenePve::EndUpdate()
 {
 	// ゲームフローマネージャーの更新
-	_pGameFlowManager->UpdatePl();
+	_pGameFlowManager->Update();
 
 	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
 	if (_pGameFlowManager->GetFlameCount() >= 120) {

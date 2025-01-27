@@ -50,7 +50,7 @@ PlayerUi::~PlayerUi()
 	DeleteGraph(_frameHandle);
 }
 
-void PlayerUi::UpdatePl()
+void PlayerUi::Update()
 {
 	_framePos = Vec2{};
 }

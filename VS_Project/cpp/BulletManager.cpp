@@ -17,11 +17,11 @@ BulletManager::~BulletManager()
 {
 }
 
-void BulletManager::UpdatePl()
+void BulletManager::Update()
 {
 	// バレットの更新
 	for (auto& bullet : _pBullet) {
-		bullet->UpdatePl();
+		bullet->Update();
 	}
 
 	// バレットが死んでいたら削除する

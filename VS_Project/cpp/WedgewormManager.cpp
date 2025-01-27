@@ -20,11 +20,11 @@ WedgewormManager::~WedgewormManager()
 {
 }
 
-void WedgewormManager::UpdatePl()
+void WedgewormManager::Update()
 {
 	// worm‚ÌXVˆ—
 	for (auto& obj : _worm) {
-		obj->UpdatePl();
+		obj->Update();
 	}
 }
 

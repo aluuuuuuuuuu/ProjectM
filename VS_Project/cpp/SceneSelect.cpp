@@ -9,6 +9,7 @@
 #include "SoundManager.h"
 #include "SkyDome.h"
 #include "ScenePvp.h"
+#include "ScenePve.h"
 
 SceneSelect::SceneSelect(int num) :
 	_flame(60)
@@ -41,7 +42,7 @@ SceneSelect::~SceneSelect()
 	DeleteGraph(_slideHandle);
 }
 
-void SceneSelect::UpdatePl()
+void SceneSelect::Update()
 {
 	(this->*_updateFunc)();
 }
@@ -54,10 +55,10 @@ void SceneSelect::Draw() const
 void SceneSelect::CharacterSelectUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->UpdatePl();
+	_pSkyDome->Update();
 
 	// セレクトマネージャーの更新
-	_pSelectManager->UpdatePl();
+	_pSelectManager->Update();
 
 	// スタートボタンが押されたらゲームシーンに移行する
 	if (_pSelectManager->GetStart()) {
@@ -97,7 +98,7 @@ void SceneSelect::CharacterSelectDraw() const
 void SceneSelect::SlideInUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->UpdatePl();
+	_pSkyDome->Update();
 
 	// スライド画像の移動
 	_slidePos.x -= 80;
@@ -119,7 +120,7 @@ void SceneSelect::SlideInDraw() const
 void SceneSelect::SlideOutUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->UpdatePl();
+	_pSkyDome->Update();
 
 	_slidePos.x += 80;
 	if (_slidePos.x >= -300) {
@@ -140,13 +141,19 @@ void SceneSelect::SlideOutDraw() const
 void SceneSelect::FadeOutUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->UpdatePl();
+	_pSkyDome->Update();
 
 	_flame++;
 	if (_flame >= 60) {
 
 		// 次のシーンに移行する
-		SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_plData));
+		if (_plData.playerNum == PLAYER_ONE) {
+			_plData.aiFlag = true;
+			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePve>(_plData));
+		}
+		else {
+			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_plData));
+		}
 	}
 }
 

@@ -36,7 +36,7 @@ ResultUi::~ResultUi()
 
 }
 
-void ResultUi::UpdatePl()
+void ResultUi::Update()
 {
 }
 

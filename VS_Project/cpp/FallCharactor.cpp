@@ -26,7 +26,7 @@ FallCharactor::~FallCharactor()
 	}
 }
 
-void FallCharactor::UpdatePl()
+void FallCharactor::Update()
 {
 	// ƒtƒŒ[ƒ€‚ği‚ß‚é
 	_fallFlame++;

@@ -14,7 +14,7 @@ MenuButton::~MenuButton()
 	DeleteGraph(_graphHandle);
 }
 
-void MenuButton::UpdatePl()
+void MenuButton::Update()
 {
 }
 

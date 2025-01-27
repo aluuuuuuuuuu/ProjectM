@@ -25,7 +25,7 @@ SceneMenu::~SceneMenu()
 {
 }
 
-void SceneMenu::UpdatePl()
+void SceneMenu::Update()
 {
 	(this->*_updateFunc)();
 }
@@ -38,7 +38,7 @@ void SceneMenu::Draw() const
 void SceneMenu::NomalUpdate()
 {
 	// マネージャーの更新処理
-	_manager->UpdatePl();
+	_manager->Update();
 }
 
 void SceneMenu::NormalDraw() const

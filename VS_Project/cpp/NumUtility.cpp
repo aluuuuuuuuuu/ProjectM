@@ -80,7 +80,7 @@ NumUtility::~NumUtility()
 	}
 }
 
-void NumUtility::UpdatePl(int time)
+void NumUtility::Update(int time)
 {
 	int a = time;	// ¬”“_ˆÈ‰º
 	int b = 0;	// •b

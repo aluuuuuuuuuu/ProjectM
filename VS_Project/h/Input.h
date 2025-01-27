@@ -52,7 +52,7 @@ public:
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
-	void UpdatePl();
+	void Update();
 
 	/// <summary>
 	/// ‰Ÿ‚µ‚½uŠÔ‚ğ‚Æ‚é

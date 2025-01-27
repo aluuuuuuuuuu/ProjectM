@@ -18,7 +18,7 @@ void SceneManager::ChangeScene(std::shared_ptr<SceneBase> next)
 void SceneManager::SceneUpdate()
 {
 	// ––”ö‚Ì‚ÝXV
-	_pScene.back()->UpdatePl();
+	_pScene.back()->Update();
 }
 
 void SceneManager::SceneDraw() const

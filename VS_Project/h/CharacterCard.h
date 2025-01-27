@@ -23,7 +23,7 @@ public:
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
-	void UpdatePl(std::shared_ptr<SelectFinger>& fing);
+	void Update(std::shared_ptr<SelectFinger>& fing);
 	
 	/// <summary>
 	/// •`‰æˆ—

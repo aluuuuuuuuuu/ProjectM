@@ -14,7 +14,7 @@ SelectUI::~SelectUI()
 {
 }
 
-void SelectUI::UpdatePl()
+void SelectUI::Update()
 {
 }
 
