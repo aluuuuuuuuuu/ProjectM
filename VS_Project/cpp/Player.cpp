@@ -16,8 +16,13 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_manager(manager),
 	_grapplerScale(0),
 	_deadFlag(false),
-	_bulletData(data)
+	_bulletData(data),
+	_flame(0)
 {
+	// 関数ポインタの初期化
+	_controlFunc = &Player::ControlPl;
+	_updateFunc = &Player::UpdatePl;
+
 	// 拡大の設定
 	Scale = Vec3{ 0.12f,0.12f,0.12f };
 
@@ -46,11 +51,67 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_bulletData._selectBullet = NORMAL_BULLET;
 }
 
+Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, BulletData& data) :
+	_moveScaleY(0),
+	_groundFlag(false),
+	_bulletManager(bullet),
+	_groundCount(0),
+	_manager(manager),
+	_grapplerScale(0),
+	_deadFlag(false),
+	_bulletData(data),
+	_flame(0),
+	_padNum(-1)
+{
+	// 関数ポインタの初期化
+	_controlFunc = &Player::ControlAI;
+	_updateFunc = &Player::UpdateAI;
+
+	// 乱数生成器の初期化
+	srand(static_cast<unsigned int>(time(nullptr)));
+
+	// 拡大の設定
+	Scale = Vec3{ 0.12f,0.12f,0.12f };
+
+	// モデルの初期処理
+	InitModel(_manager.GetModelHandle(1));
+
+	// 座標の設定
+	Position = Vec3{ 0.0f,25.0f,0.0f };
+
+	// カプセルの初期化
+	InitCapsule(Position, 3.0f, 12);
+
+	// アニメーションの初期処理
+	InitAnimation(_modelHandle, _manager.GetConstantInt("ANIM_AIMING_IDLE"), _manager.GetConstantFloat("BLEND_RATE"));
+
+	// バレットデータの初期化
+	// クールタイムの初期化
+	for (auto& time : _bulletData._bullletCoolTime) {
+		time = 0;
+	}
+
+	// 選択している弾の初期化
+	_bulletData._selectBullet = NORMAL_BULLET;
+
+	_oldPos = Position;
+}
+
 Player::~Player()
 {
 }
 
 void Player::Control()
+{
+	(this->*_controlFunc)();
+}
+
+void Player::Update()
+{
+	(this->*_updateFunc)();
+}
+
+void Player::ControlPl()
 {
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
@@ -172,7 +233,95 @@ void Player::Control()
 	Set(Position);
 }
 
-void Player::Update()
+void Player::ControlAI()
+{
+	// 移動ベクトルの初期化
+	_moveVec = 0;
+
+	// クールタイムの計算
+	if (_bulletData._bullletCoolTime[NORMAL_BULLET] != 0) {
+		_bulletData._bullletCoolTime[NORMAL_BULLET]--;
+	}
+	else {
+		_bulletData._bullletCoolTime[NORMAL_BULLET] = 0;
+	}
+	if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] != 0) {
+		_bulletData._bullletCoolTime[GRAPPLER_BULLET]--;
+	}
+	else {
+		_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 0;
+	}
+	if (_bulletData._bullletCoolTime[BOMB_BULLET] != 0) {
+		_bulletData._bullletCoolTime[BOMB_BULLET]--;
+	}
+	else {
+		_bulletData._bullletCoolTime[BOMB_BULLET] = 0;
+	}
+
+	// AI処理
+	{
+		// 常にプレイヤーの方向を向く
+		Vec3 targetPos = _manager.GetPlayerPos();	// プレイヤーの座標
+		Vec3 length = targetPos - Position;	// プレイヤーとの距離
+		Vec3 dist = (targetPos - Position).GetNormalized();	// プレイヤーの方向への単位ベクトル
+		Angle.y = atan2(dist.x, dist.z) - 1.5708f;	// プレイヤーの方向を向く 
+
+		// forwardVecがプレイヤーの足元の少し下を向くようにする
+		_forwardVec = (Vec3{targetPos.x,0.0f,targetPos.z} - Position).GetNormalized();
+
+		// グラップルが着弾していたらプレイヤーの方法に移動する
+		if (_bulletManager->IsCollisionBullet(_padNum) && !_bulletManager->GetInvalidFlag(_padNum)) {
+			_moveVec += dist * 0.5f;
+		}
+
+		// ランダムな間隔でジャンプする
+		if (rand() % 300 == 0 && _groundFlag) {
+			_moveScaleY = 2.0f;
+		}
+
+		if (_flame % 60 == 0) {
+			if ((Position - _oldPos).Length() < 10.0f) {
+				_moveScaleY = 2.0f;
+			}
+			_oldPos = Position;
+		}
+
+		_moveVec += dist * 0.3f;
+
+		// 30フレームに一回弾を発射する
+		if (_flame % 30 == 0) {
+			BulletTrigger();
+		}
+
+		// 120フレームごとに弾の種類を切り替える
+		if (_flame % 120 == 0) {
+			if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] == 0) {
+				_bulletData._selectBullet = GRAPPLER_BULLET;
+			}
+			else if (_bulletData._bullletCoolTime[BOMB_BULLET] == 0) {
+				_bulletData._selectBullet = BOMB_BULLET;
+			}
+			else {
+				_bulletData._selectBullet = NORMAL_BULLET;
+			}
+		}
+	}
+
+	// y軸の移動も足す
+	_moveVec.y += _moveScaleY;
+
+	// グラップラーの移動
+	_moveVec += _grapplerUnitVec * _grapplerScale;
+
+	// 座標に移動ベクトルを足す
+	Position += _moveVec;
+
+	// カプセルに座標を渡す
+	Set(Position);
+
+}
+
+void Player::UpdatePl()
 {
 	// カプセルに座標を渡す
 	Set(Position);
@@ -242,7 +391,90 @@ void Player::Update()
 	}
 
 	// カメラの更新
-	_pCamera->Update(Position, _forwardVec, Angle);
+	_pCamera->UpdatePl(Position, _forwardVec, Angle);
+
+	// アニメーションコントロール                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+	AnimationContorol();
+
+	// アニメーションの更新
+	UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
+
+	// モデル用のトランスフォームを作成する
+	Transform trans;
+	trans.Scale = Scale;
+	trans.Position = Position;
+	trans.Angle = Vec3{ Angle.x,Angle.y - 1.5708f,Angle.z };
+
+	// モデルの更新
+	UpdateModel(trans);
+}
+
+void Player::UpdateAI()
+{
+	// フレームの加算
+	_flame++;
+
+	// カプセルに座標を渡す
+	Set(Position);
+
+	// 前のy座標と今のy座標が同じであれば着地している
+	if (_frontPos.y == Position.y) {
+		if (_groundCount == 0) {
+			_groundCount++;
+		}
+		else {
+			_groundFlag = true;
+		}
+	}
+	else {
+		_groundCount = 0;
+		_groundFlag = false;
+	}
+
+	// 前フレームの座標を保存する
+	_frontPos = Position;
+
+	// 落下速度を少しづつ早くする
+	if (!_groundFlag && _moveScaleY > -1.5f) {
+		_moveScaleY -= 0.1f;
+	}
+
+	// グラップラーの移動処理
+	if (_groundFlag) {
+		_grapplerScale = 0.0f;
+	}
+	else if (_grapplerScale <= 0.0f) {
+		_grapplerScale = 0.0f;
+	}
+	else {
+		_grapplerScale -= 0.01f;
+	}
+
+	// グラップラーが当たっているかを知らべる
+	if (_bulletManager->IsCollisionBullet(_padNum) && !_bulletManager->GetInvalidFlag(_padNum)) {
+
+		// 弾の無効化
+		_bulletManager->KillBullet(_padNum);
+
+		// 当たっていたら上方向とグラップラーの方向に移動ベクトルを与える
+		if (_groundFlag) {
+			_moveScaleY = 2.4f;
+		}
+		else {
+			_moveScaleY = 1.5f;
+		}
+
+		// グラップラーに向かう単位ベクトルを作成する
+		_grapplerUnitVec = (_bulletManager->GetBulletPos(_padNum) - Position).GetNormalized();
+
+		// グラップラーの着弾点への距離によって移動速度を変化させる
+		_grapplerScale = 0.02f * (_bulletManager->GetBulletPos(_padNum) - Position).Length();
+
+		// グラップラーによる移動速度の最大値を決める
+		if (_grapplerScale > 1.8f) {
+			_grapplerScale = 1.8f;
+		}
+	}
 
 	// アニメーションコントロール                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 	AnimationContorol();
@@ -280,14 +512,14 @@ void Player::Draw() const
 	//else if (_selectBullet == BOMB_BULLET) {
 	//	DrawString(10, 80, "bombBullet", 0xff0000);
 	//}
-	//if (_bulletManager->GetBulletExist(_padNum)) {
-	//	DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff0000);
-	//}
+
 	//if (_deadFlag) {
 	//	DrawString(10, 100, "dead", 0xff0000);
 	//}
 #endif // DEBUG
-
+	if (_bulletManager->GetBulletExist(_padNum)) {
+		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff0000);
+	}
 	// モデルの描画
 	DrawModel();
 }

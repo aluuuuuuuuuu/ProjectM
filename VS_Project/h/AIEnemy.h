@@ -16,7 +16,7 @@ class AIEnemy :
 public:
 
 
-    AIEnemy(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data);
+    AIEnemy(std::shared_ptr<BulletManager>& bullet, BulletData& data);
 
 	/// <summary>
 	/// デストラクタ

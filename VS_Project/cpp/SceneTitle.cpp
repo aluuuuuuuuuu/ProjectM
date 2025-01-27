@@ -84,7 +84,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(_backHandle);
 }
 
-void SceneTitle::Update()
+void SceneTitle::UpdatePl()
 {
 	(this->*_updateFunc)();
 }
@@ -97,16 +97,16 @@ void SceneTitle::Draw() const
 void SceneTitle::NomalUpdate()
 {
 	// 落下キャラクターの更新処理
-	_pFallCharactor->Update();
+	_pFallCharactor->UpdatePl();
 
 	// 王冠の更新処理
-	_pCrown->Update();
+	_pCrown->UpdatePl();
 
 	// 文章の更新処理
-	_pText->Update();
+	_pText->UpdatePl();
 
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// いずれかのボタンが押されたら人数選択へ
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
@@ -144,7 +144,7 @@ void SceneTitle::NormalDraw() const
 void SceneTitle::SlideInUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// スライド画像の移動
 	_slidePos.x += 80;
@@ -179,7 +179,7 @@ void SceneTitle::SlideInDraw() const
 void SceneTitle::SlideOutDraw() const
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// 人数選択の描画
 	NumSelectDraw();
@@ -191,14 +191,14 @@ void SceneTitle::SlideOutDraw() const
 void SceneTitle::FadeInUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 
 	// 王冠の更新処理
-	_pCrown->Update();
+	_pCrown->UpdatePl();
 
 	// 文章の更新処理
-	_pText->Update();
+	_pText->UpdatePl();
 
 	_flame--;
 	if (_flame <= 0) {
@@ -240,19 +240,19 @@ void SceneTitle::FadeOutDraw() const
 void SceneTitle::NumSelectUpdate()
 {
 	// 落下キャラクターの更新処理
-	_pFallCharactor->Update();
+	_pFallCharactor->UpdatePl();
 
 	// 王冠の更新処理
-	_pCrown->Update();
+	_pCrown->UpdatePl();
 
 	// 文章の更新処理
-	_pText->Update();
+	_pText->UpdatePl();
 
 	// 人数選択の更新処理
-	_pNum->Update();
+	_pNum->UpdatePl();
 
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// Aボタンが押されたら状態遷移
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {

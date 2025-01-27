@@ -23,7 +23,7 @@ public:
 
 	virtual ~NumUtility();
 
-	void Update(int time);
+	void UpdatePl(int time);
 
 	void Draw() const;
 

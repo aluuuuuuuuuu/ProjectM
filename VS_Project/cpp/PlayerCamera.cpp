@@ -26,7 +26,7 @@ PlayerCamera::~PlayerCamera()
 	DeleteLightHandle(_lightHandle);
 }
 
-void PlayerCamera::Update(Vec3 pos,Vec3 forward, Vec3 angle)
+void PlayerCamera::UpdatePl(Vec3 pos,Vec3 forward, Vec3 angle)
 {
 	// ターゲットの設定
 	//_target = Vec3(pos.x, pos.y + GetConstantFloat("CAMERA_MARGIN_Y"), pos.z);

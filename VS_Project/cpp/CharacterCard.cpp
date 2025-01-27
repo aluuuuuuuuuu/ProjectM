@@ -56,7 +56,7 @@ CharacterCard::~CharacterCard()
 	}
 }
 
-void CharacterCard::Update(std::shared_ptr<SelectFinger>& fing)
+void CharacterCard::UpdatePl(std::shared_ptr<SelectFinger>& fing)
 {
 }
 

@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void UpdatePl();
 
 	/// <summary>
 	/// ゲーム終了フラグを返す

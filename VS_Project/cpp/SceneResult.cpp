@@ -36,7 +36,7 @@ SceneResult::~SceneResult()
 {
 }
 
-void SceneResult::Update()
+void SceneResult::UpdatePl()
 {
 	(this->*_updateFunc)();
 }
@@ -72,7 +72,7 @@ void SceneResult::NomalUpdate()
 	}
 
 	// キャラクターの更新処理
-	_pCharacter->Update();
+	_pCharacter->UpdatePl();
 }
 
 void SceneResult::NormalDraw() const

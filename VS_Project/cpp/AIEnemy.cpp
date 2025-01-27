@@ -7,13 +7,11 @@
 #include "BulletBase.h"
 #include "PlayerManager.h"
 
-AIEnemy::AIEnemy(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
+AIEnemy::AIEnemy(std::shared_ptr<BulletManager>& bullet, BulletData& data) :
 	_moveScaleY(0),
 	_groundFlag(false),
 	_bulletManager(bullet),
 	_groundCount(0),
-	_padNum(padNum),
-	_manager(manager),
 	_grapplerScale(0),
 	_deadFlag(false),
 	_bulletData(data)

@@ -17,7 +17,7 @@ GameFlowManager::~GameFlowManager()
 {
 }
 
-void GameFlowManager::Update()
+void GameFlowManager::UpdatePl()
 {
 	// プレイヤーの生存数を調べて一人になったら終了フラグを立てる
 	if (!aaa) {

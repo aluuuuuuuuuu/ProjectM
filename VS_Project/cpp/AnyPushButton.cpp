@@ -17,7 +17,7 @@ AnyPushButton::~AnyPushButton()
 	DeleteGraph(_textHandle);
 }
 
-void AnyPushButton::Update()
+void AnyPushButton::UpdatePl()
 {
 	// スタート指示を点滅させる
 	if (_flame == 120) {

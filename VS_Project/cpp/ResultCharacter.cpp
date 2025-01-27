@@ -87,7 +87,7 @@ ResultCharacter::~ResultCharacter()
 {
 }
 
-void ResultCharacter::Update()
+void ResultCharacter::UpdatePl()
 {
 
 	//// アニメーションが終了している場合の処理

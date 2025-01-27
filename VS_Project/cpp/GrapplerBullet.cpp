@@ -24,7 +24,7 @@ GrapplerBullet::~GrapplerBullet()
 {
 }
 
-void GrapplerBullet::Update()
+void GrapplerBullet::UpdatePl()
 {
 	if (!_collisionFlag) {
 		Position += _distVec * _bulletManager.GetConstantFloat("SPEED");

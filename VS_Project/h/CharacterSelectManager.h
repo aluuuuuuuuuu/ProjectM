@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
-	void Update();
+	void UpdatePl();
 
 	/// <summary>
 	/// •`‰æˆ—

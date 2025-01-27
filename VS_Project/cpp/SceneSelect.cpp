@@ -41,7 +41,7 @@ SceneSelect::~SceneSelect()
 	DeleteGraph(_slideHandle);
 }
 
-void SceneSelect::Update()
+void SceneSelect::UpdatePl()
 {
 	(this->*_updateFunc)();
 }
@@ -54,10 +54,10 @@ void SceneSelect::Draw() const
 void SceneSelect::CharacterSelectUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// セレクトマネージャーの更新
-	_pSelectManager->Update();
+	_pSelectManager->UpdatePl();
 
 	// スタートボタンが押されたらゲームシーンに移行する
 	if (_pSelectManager->GetStart()) {
@@ -97,7 +97,7 @@ void SceneSelect::CharacterSelectDraw() const
 void SceneSelect::SlideInUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// スライド画像の移動
 	_slidePos.x -= 80;
@@ -119,7 +119,7 @@ void SceneSelect::SlideInDraw() const
 void SceneSelect::SlideOutUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	_slidePos.x += 80;
 	if (_slidePos.x >= -300) {
@@ -140,7 +140,7 @@ void SceneSelect::SlideOutDraw() const
 void SceneSelect::FadeOutUpdate()
 {
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	_flame++;
 	if (_flame >= 60) {

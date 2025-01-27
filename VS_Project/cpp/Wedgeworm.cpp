@@ -38,7 +38,7 @@ Wedgeworm::~Wedgeworm()
 {
 }
 
-void Wedgeworm::Update()
+void Wedgeworm::UpdatePl()
 {
 
 	// 作成した回転行列を座標に適用する

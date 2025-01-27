@@ -9,6 +9,7 @@
 #include "SceneSelect.h"
 #include "PlayerManager.h"
 #include "SceneResult.h"
+#include "ScenePve.h"
 
 bool Application::Init()
 {
@@ -89,15 +90,15 @@ void Application::Run()
 	// 初期シーンを設定
 	PlayerData data;
 
-	data.playerNum = 2;
-	data.character[0] = 1;
-	data.character[1] = 2;
+	data.playerNum = 0;
+	data.character[0] = 0;
 
 	//manager.ChangeScene(std::make_shared<SceneResult>(data,100));
 	//manager.ChangeScene(std::make_shared<SceneGrapple>());
 	//manager.ChangeScene(std::make_shared <SceneTest>(data));
-	manager.ChangeScene(std::make_shared <SceneTitle>(false));
+	//manager.ChangeScene(std::make_shared <SceneTitle>(false));
 	//manager.ChangeScene(std::make_shared <SceneSelect>());
+	manager.ChangeScene(std::make_shared <ScenePve>(data));
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
@@ -118,7 +119,7 @@ void Application::Run()
 		/*ゲーム処理*/
 
 		// 更新処理
-		input.Update();
+		input.UpdatePl();
 		manager.SceneUpdate();
 
 		manager.SceneDraw();

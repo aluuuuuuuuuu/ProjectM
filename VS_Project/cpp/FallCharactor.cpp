@@ -26,7 +26,7 @@ FallCharactor::~FallCharactor()
 	}
 }
 
-void FallCharactor::Update()
+void FallCharactor::UpdatePl()
 {
 	// フレームを進める
 	_fallFlame++;
@@ -42,7 +42,7 @@ void FallCharactor::Update()
 
 			// 落下キャラを追加
 			_fallCharactors.push_back({ _fallCharactorHandle[rand() % 4],Vec2{rand() % 1920,-100},randomAngle,rotateFlag });
-			SoundManager::GetInstance().RingSE(SE_SHOUT);
+			//SoundManager::GetInstance().RingSE(SE_SHOUT);
 		}
 	}
 

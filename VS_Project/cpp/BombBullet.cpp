@@ -20,7 +20,7 @@ BombBullet::~BombBullet()
 {
 }
 
-void BombBullet::Update()
+void BombBullet::UpdatePl()
 {
 	if (!_collisionFlag) {
 		Position += _distVec * _bulletManager.GetConstantFloat("SPEED");

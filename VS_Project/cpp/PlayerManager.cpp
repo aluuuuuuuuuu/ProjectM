@@ -1,5 +1,4 @@
 #include "PlayerManager.h"
-#include "Player.h"
 #include "Application.h"
 #include "DxLib.h"
 #include "CollisionManager.h"
@@ -7,7 +6,8 @@
 #include "PlayerUi.h"
 
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
-	_playerData(data)
+	_playerData(data),
+	_bulletManager(bullet)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
@@ -22,7 +22,8 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	{
 		// プレイヤーインスタンスの作成
 		for (int num = 0; num <= _playerData.playerNum; num++) {
-			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num,_bulletData[num]));
+			
+			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num, _bulletData[num]));
 
 			switch (num)
 			{
@@ -83,7 +84,7 @@ PlayerManager::~PlayerManager()
 	}
 }
 
-void PlayerManager::Update()
+void PlayerManager::UpdatePl()
 {
 	// プレイヤーの移動など
 	for (auto& pl : _pPlayer) {
@@ -171,6 +172,21 @@ void PlayerManager::SetWinner()
 			_playerData.winner = _playerData.character[pl->GetPlayerNum()];
 		}
 	}
+}
+
+void PlayerManager::AddAi()
+{
+	// AIの追加
+	_playerData.playerNum++;
+	_playerData.character[1] = 1;
+	_pPlayer.push_back(std::make_shared<Player>(_bulletManager, *this, _bulletData[_playerData.playerNum]));
+	_pPlayer[_playerData.playerNum]->Position = Vec3{ 180.0f,0.0f,180.0f };
+	_pPlayer[_playerData.playerNum]->Angle.y = DX_PI_F / -4 * 5;
+}
+
+Vec3 PlayerManager::GetPlayerPos() const
+{
+	return _pPlayer[0]->Position;
 }
 
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)

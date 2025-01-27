@@ -20,7 +20,7 @@ NormalBullet::~NormalBullet()
 {
 }
 
-void NormalBullet::Update()
+void NormalBullet::UpdatePl()
 {
 	Position += _distVec *  _bulletManager.GetConstantFloat("SPEED");
 	_gravity += _bulletManager.GetConstantFloat("GRAVITY");

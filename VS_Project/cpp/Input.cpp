@@ -1,7 +1,7 @@
 #include "Input.h"
 #include <cassert>
 
-void Input::Update()
+void Input::UpdatePl()
 {
 	// 接続されているコントローラーの数を取得する
 	_padNum = GetJoypadNum();

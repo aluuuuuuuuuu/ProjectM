@@ -63,7 +63,7 @@ ScenePvp::~ScenePvp()
 	SetCameraScreenCenter(static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2), static_cast<float>(Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2));
 }
 
-void ScenePvp::Update()
+void ScenePvp::UpdatePl()
 {
 	(this->*_updateFunc)();
 }
@@ -86,19 +86,19 @@ void ScenePvp::NomalUpdate()
 	}
 
 	// スカイドームの更新処理
-	_pSkyDome->Update();
+	_pSkyDome->UpdatePl();
 
 	// プレイヤーの更新処理
-	_pPlayerManager->Update();
+	_pPlayerManager->UpdatePl();
 
 	// ゲームフローの更新処理
-	_pGameFlowManager->Update();
+	_pGameFlowManager->UpdatePl();
 
 	// バレットの更新
-	_pBulletManager->Update();
+	_pBulletManager->UpdatePl();
 
 	// 禊虫の更新
-	_pWedgewormManager->Update();
+	_pWedgewormManager->UpdatePl();
 
 	// ゲームが終了していたら終了時の処理に移る
 	if (_pGameFlowManager->GetGameEnd()) {
@@ -107,7 +107,7 @@ void ScenePvp::NomalUpdate()
 	}
 
 	// 時間の更新処理
-	_pNum->Update(_pGameFlowManager->GetGameTime());
+	_pNum->UpdatePl(_pGameFlowManager->GetGameTime());
 }
 
 void ScenePvp::NormalDraw() const
@@ -144,7 +144,7 @@ void ScenePvp::NormalDraw() const
 void ScenePvp::EndUpdate()
 {
 	// ゲームフローマネージャーの更新
-	_pGameFlowManager->Update();
+	_pGameFlowManager->UpdatePl();
 
 	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
 	if (_pGameFlowManager->GetFlameCount() >= 120) {

@@ -73,7 +73,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void UpdatePl();
 
 	/// <summary>
 	/// 描画処理
@@ -130,6 +130,17 @@ public:
 	/// </summary>
 	void SetWinner();
 
+	/// <summary>
+	/// AIを追加する
+	/// </summary>
+	void AddAi();
+
+	/// <summary>
+	/// AIが呼ぶ用のプレイヤーの座標を返す関数
+	/// </summary>
+	/// <returns>プレイヤーの座標</returns>
+	Vec3 GetPlayerPos() const;
+
 private:
 
 	/// <summary>
@@ -177,5 +188,8 @@ private:
 	PlayerData _playerData;
 
 	std::shared_ptr<PlayerUi> _pUi;
+
+	// 弾マネージャーの参照
+	std::shared_ptr<BulletManager>& _bulletManager;
 };
 

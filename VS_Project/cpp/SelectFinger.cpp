@@ -39,7 +39,7 @@ SelectFinger::~SelectFinger()
 	DeleteGraph(_fingerHandle);
 }
 
-void SelectFinger::Update()
+void SelectFinger::UpdatePl()
 {
 	// 左スティックで移動
 	Vec3 move;

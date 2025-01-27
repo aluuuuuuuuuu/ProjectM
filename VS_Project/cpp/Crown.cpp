@@ -31,7 +31,7 @@ Crown::~Crown()
 	DeleteGraph(_crownParticleHandle3);
 }
 
-void Crown::Update()
+void Crown::UpdatePl()
 {
 	// ‰¤Š¥‘S‘Ì‚ð“_–Å‚³‚¹‚é
 	if (!_flame1Flag) {

@@ -16,9 +16,22 @@ class Player:
 public:
 
 	/// <summary>
-	/// コンストラクタ
+	/// 
 	/// </summary>
+	/// <param name="bullet"></param>
+	/// <param name="manager"></param>
+	/// <param name="padNum"></param>
+	/// <param name="data"></param>
 	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum,BulletData& data);
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="bullet"></param>
+	/// <param name="manager"></param>
+	/// <param name="data"></param>
+	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, BulletData& data);
 
 	/// <summary>
 	/// デストラクタ
@@ -26,12 +39,12 @@ public:
 	virtual ~Player();
 
 	/// <summary>
-	/// 移動などの処理
+	/// 更新処理
 	/// </summary>
-	void Control() ;
+	void Control();
 
 	/// <summary>
-	/// 更新処理
+	/// 描画処理
 	/// </summary>
 	void Update();
 
@@ -69,6 +82,34 @@ public:
 	int GetPlayerNum() const;
 
 private:
+
+	// コントロール関数ポインタ
+	using m_controlFunc_t = void (Player::*)();
+	m_controlFunc_t _controlFunc = nullptr;
+
+	// コントロール関数ポインタ
+	using m_updateFunc_t = void (Player::*)();
+	m_updateFunc_t _updateFunc = nullptr;
+
+	/// <summary>
+	/// 移動などの処理
+	/// </summary>
+	void ControlPl();
+
+	/// <summary>
+	/// 操作AI
+	/// </summary>
+	void ControlAI();
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void UpdatePl();
+
+	/// <summary>
+	/// AI更新処理
+	/// </summary>
+	void UpdateAI();
 
 	/// <summary>
 	/// Y軸の回転値を引数の値に徐々に近づけていく
@@ -133,5 +174,11 @@ private:
 
 	// バレットデータの参照
 	BulletData& _bulletData;
+
+	// AI用のフレームカウンタ
+	int _flame;
+
+	// AI用の60フレーム前の座標
+	Vec3 _oldPos;
 };
 
