@@ -12,7 +12,7 @@
 #include "ScenePve.h"
 
 SceneSelect::SceneSelect(int num) :
-	_flame(60)
+	_flame(0)
 {
 	// ŠÖ”ƒ|ƒCƒ“ƒ^‚Ì‰Šú‰»
 	_updateFunc = &SceneSelect::SlideInUpdate;

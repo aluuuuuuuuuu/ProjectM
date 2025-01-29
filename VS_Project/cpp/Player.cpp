@@ -119,7 +119,7 @@ void Player::ControlPl()
 	auto& input = Input::GetInstance();
 
 	// 弾を発射する
-	if (input.IsHold(INPUT_RIGHT_TRIGGER, _padNum)) {
+	if (input.IsHold(INPUT_X, _padNum) || input.IsHold(INPUT_RIGHT_TRIGGER, _padNum)) {
 		BulletTrigger();
 	}
 
@@ -690,7 +690,7 @@ void Player::BulletTrigger()
 			_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 1200;
+			_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 300;
 		}
 		break;
 	case BOMB_BULLET:
@@ -699,7 +699,7 @@ void Player::BulletTrigger()
 			_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bulletData._bullletCoolTime[BOMB_BULLET] = 300;
+			_bulletData._bullletCoolTime[BOMB_BULLET] = 120;
 		}
 		break;
 	default:

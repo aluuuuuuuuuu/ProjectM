@@ -79,13 +79,25 @@ void PlayerUi::Draw(Vec2 center, BulletData data) const
 	}
 
 	// クールタイムを四角形で描画
+	int margin = 0;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	if (data._bullletCoolTime[NORMAL_BULLET] != 0) {
 
-	//フェード暗幕
-	SetDrawBlendMode(DX_BLENDMODE_MULA, 127);
-	DrawBox(center.intX() - 50 + _drawMargin.intX(), center.intY() - 50 + _drawMargin.intY(), center.intX() + 50 + _drawMargin.intX(), center.intY() + 50 + _drawMargin.intY(), 0xd7fffe, true);
+		margin = 100 /  (30 / data._bullletCoolTime[NORMAL_BULLET]);
+		DrawBox(center.intX() - 50 + _drawMargin.intX(), center.intY() + 50 + _drawMargin.intY() - margin, center.intX() + 50 + _drawMargin.intX(), center.intY() + 50 + _drawMargin.intY(), 0x16fff9, true);
+	}
+
+	if (data._bullletCoolTime[GRAPPLER_BULLET] != 0) {
+		margin = 100 / (300 / data._bullletCoolTime[GRAPPLER_BULLET]);
+		DrawBox(center.intX() - 50 + _drawMargin.intX() + _margin, center.intY() + 50 + _drawMargin.intY() - margin, center.intX() + 50 + _drawMargin.intX() + _margin, center.intY() + 50 + _drawMargin.intY(), 0x16fff9, true);
+	}
+
+	if (data._bullletCoolTime[BOMB_BULLET] != 0) {
+		margin = 100 / (120 / data._bullletCoolTime[BOMB_BULLET]);
+		DrawBox(center.intX() - 50 + _drawMargin.intX() + _margin * 2, center.intY() + 50 + _drawMargin.intY() - margin, center.intX() + 50 + _drawMargin.intX() + _margin * 2, center.intY() + 50 + _drawMargin.intY(), 0x16fff9, true);
+	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	
-
 	//レティクルの描画
 	DrawRotaGraph(center.intX(), center.intY(), 1.0, 0.0, _reticleHandle, true);
 }

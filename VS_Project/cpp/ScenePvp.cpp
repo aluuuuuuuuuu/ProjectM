@@ -111,8 +111,7 @@ void ScenePvp::NomalUpdate()
 	// 時間の更新処理
 	_pNum->Update(_pGameFlowManager->GetGameTime());
 
-	// エフェクトの描画
-	EffectManager::GetInstance().Draw();
+
 }
 
 void ScenePvp::NormalDraw() const
@@ -141,9 +140,15 @@ void ScenePvp::NormalDraw() const
 		// 禊虫の描画
 		_pWedgewormManager->Draw();
 
+		// エフェクトの描画
+		EffectManager::GetInstance().Draw();
+
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);
 	}
+
+	// 時間の更新処理
+	_pNum->Draw();
 }
 
 void ScenePvp::EndUpdate()

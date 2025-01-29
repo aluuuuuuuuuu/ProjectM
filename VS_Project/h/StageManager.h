@@ -38,7 +38,10 @@ public:
 private:
 
     // ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
-    int _modelHandle;
+    int _modelHandleGreen;
+    int _modelHandleRed;
+
+
 
     int _stage[BLOCK_NUM_X][BLOCK_NUM_Y][BLOCK_NUM_Z];
 

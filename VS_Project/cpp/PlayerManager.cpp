@@ -178,7 +178,7 @@ void PlayerManager::AddAi()
 {
 	// AI‚Ì’Ç‰Á
 	_playerData.playerNum++;
-	_playerData.character[1] = 1;
+	_playerData.character[1] = rand() % 3;
 	_pPlayer.push_back(std::make_shared<Player>(_bulletManager, *this, _bulletData[_playerData.playerNum]));
 	_pPlayer[_playerData.playerNum]->Position = Vec3{ 180.0f,0.0f,180.0f };
 	_pPlayer[_playerData.playerNum]->Angle.y = DX_PI_F / -4 * 5;

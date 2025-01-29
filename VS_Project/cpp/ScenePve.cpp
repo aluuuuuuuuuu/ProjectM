@@ -136,14 +136,15 @@ void ScenePve::NormalDraw() const
 	// 禊虫の描画
 	_pWedgewormManager->Draw();
 
+	// エフェクトの描画
+	EffectManager::GetInstance().Draw();
+
 	// プレイヤーの描画
 	_pPlayerManager->Draw(0);
 
 	// 時間の更新処理
-	_pNum->Update(_pGameFlowManager->GetGameTime());
+	_pNum->Draw();
 
-	// エフェクトの描画
-	EffectManager::GetInstance().Draw();
 }
 
 void ScenePve::EndUpdate()

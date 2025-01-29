@@ -4,7 +4,7 @@
 
 StageManager::StageManager() :
 	_size(0),
-	_modelHandle(0)
+	_modelHandleGreen(0)
 {
 	// 定数のロード
 	ReadCSV("data/constant/Stage.csv");
@@ -12,7 +12,8 @@ StageManager::StageManager() :
 	_size = GetConstantInt("BLOCK_SIZE");
 
 	// モデルのロード
-	_modelHandle = MV1LoadModel("data/model/tileMedium_forest.mv1");
+	_modelHandleGreen = MV1LoadModel("data/model/tileMedium_forest.mv1");
+	_modelHandleRed = MV1LoadModel("data/model/tileMedium_Red.mv1");
 
 	// ステージの初期化
 	for (int i = 0; i < BLOCK_NUM_X; ++i) {
@@ -23,7 +24,12 @@ StageManager::StageManager() :
 				_stage[i][j][k] = 1;
 
 				// モデルを複製する
-				_model[i][j][k] = MV1DuplicateModel(_modelHandle);
+				if (j == 1) {
+					_model[i][j][k] = MV1DuplicateModel(_modelHandleGreen);
+				}
+				else {
+					_model[i][j][k] = MV1DuplicateModel(_modelHandleRed);
+				}
 
 				// 拡大率の設定
 				MV1SetScale(_model[i][j][k], VGet(GetConstantFloat("BLOCK_SCALE_X"),
@@ -44,7 +50,8 @@ StageManager::StageManager() :
 
 StageManager::~StageManager()
 {
-	MV1DeleteModel(_modelHandle);
+	MV1DeleteModel(_modelHandleGreen);
+	MV1DeleteModel(_modelHandleRed);
 }
 
 void StageManager::DrawStage() const
