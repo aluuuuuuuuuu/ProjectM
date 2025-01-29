@@ -116,7 +116,7 @@ void Constant::ReadCSV(const std::string& filename)
 		// 例外
 		catch (const std::exception& e) {
 			// エラーを出力する
-			//assert(false);
+			//assert(false);s
 		}
 	}
 	file.close();

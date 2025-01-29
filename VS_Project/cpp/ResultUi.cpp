@@ -10,13 +10,13 @@ ResultUi::ResultUi(int time)
 	_rankFrame = LoadGraph("data/image/RankFrame.png");
 
 	// 時間によってロードする画像を変更する
-	if (time <= 100) {
+	if (time <= 1800) {
 		_rankHandle = LoadGraph("data/image/RankS.png");	// Sランク
 	}
-	else if (time <= 200) {
+	else if (time <= 3600) {
 		_rankHandle = LoadGraph("data/image/RankA.png");	// Aランク
 	}
-	else if(time <= 300) {
+	else if(time <= 7200) {
 		_rankHandle = LoadGraph("data/image/RankB.png");	// Bランク
 	}
 	else {
@@ -33,7 +33,6 @@ ResultUi::~ResultUi()
 	DeleteGraph(_timeStringHandle);
 	DeleteGraph(_rankFrame);
 	DeleteGraph(_rankHandle);
-
 }
 
 void ResultUi::Update()
@@ -63,5 +62,4 @@ void ResultUi::Draw() const
 
 	// 上の枠線
 	DrawBox(0, 0, 1920, 80, 0x000000, true);
-
 }

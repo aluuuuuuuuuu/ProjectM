@@ -25,3 +25,9 @@ void MyEffect::StopEffect()
 {
 	StopEffekseer3DEffect(_playHandle);
 }
+
+void MyEffect::SetScaleEffect(Vec3 scale)
+{
+	// エフェクトのスケールを設定
+	SetScalePlayingEffekseer3DEffect(_playHandle, scale.x, scale.y, scale.z);
+}

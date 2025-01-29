@@ -6,6 +6,8 @@
 #include "BulletManager.h"
 #include "BulletBase.h"
 #include "PlayerManager.h"
+#include "EffectManager.h"
+#include "MyEffect.h"
 
 Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
 	_moveScaleY(0),
@@ -518,7 +520,7 @@ void Player::Draw() const
 	//}
 #endif // DEBUG
 	if (_bulletManager->GetBulletExist(_padNum)) {
-		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff0000);
+		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff16ff);
 	}
 	// ƒ‚ƒfƒ‹‚Ì•`‰æ
 	DrawModel();

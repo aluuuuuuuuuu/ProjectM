@@ -42,5 +42,11 @@ private:
 	// バレットマネージャーの参照
 	BulletManager& _bulletManager;
 
+	// フレームカウンタ
+	int _flame;
+
+	// ブロック破壊エフェクト
+	std::shared_ptr<MyEffect> _destroyEffect;
+
 };
 

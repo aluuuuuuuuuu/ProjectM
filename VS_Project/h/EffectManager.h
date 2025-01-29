@@ -4,8 +4,12 @@
 #include "Vec3.h"
 
 constexpr int NORMAL_BULLET_EFFECT = 0;
+constexpr int BOMB_BULLET_EFFECT = 1;
+constexpr int GRAPPLE_BULLET_EFFECT = 2;
+constexpr int BLOCK_DESTROY_EFFECT = 3;
+constexpr int JUMP_EFFECT = 4;
 
-constexpr int MAX_EFFECT_NUM = 1;
+constexpr int MAX_EFFECT_NUM = 5;
 
 class EffectManager:
 	public Singleton<EffectManager>
@@ -33,6 +37,11 @@ public:
 	/// <param name="effect">エフェクトのキー</param>
 	/// <returns>ハンドル取得</returns>
 	int& GetEffectHandle(int effect);
+
+	/// <summary>
+	/// すべてのエフェクトハンドルを削除する
+	/// </summary>
+	void DeleteEffect();
 
 private:
 

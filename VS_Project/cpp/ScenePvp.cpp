@@ -16,6 +16,7 @@
 #include "NumUtility.h"
 #include "SoundManager.h"
 #include "EffectManager.h"
+#include "EffekseerForDXLib.h"
 
 ScenePvp::ScenePvp(PlayerData& data)
 {

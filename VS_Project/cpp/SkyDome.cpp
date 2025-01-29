@@ -34,4 +34,5 @@ void SkyDome::Draw() const
 {
 	// •`‰æˆ—
 	DrawModel();
+	printfDx("unko");
 }

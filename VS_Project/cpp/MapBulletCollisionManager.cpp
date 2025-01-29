@@ -16,7 +16,6 @@ MapBulletCollisionManager::~MapBulletCollisionManager()
 bool MapBulletCollisionManager::CollisionBullet(Vec3 pos, float radius, int bullet)
 {
 	Vec3 max, min;// 最大座標,最小座標
-	int rnd;
 	// カプセルとステージの当たり判定を取る
 	for (int a = 0; a < BLOCK_NUM_X; a++) {
 		for (int b = 0; b < BLOCK_NUM_Y; b++) {

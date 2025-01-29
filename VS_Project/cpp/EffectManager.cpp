@@ -39,9 +39,16 @@ int& EffectManager::GetEffectHandle(int effect)
 	if (_effectMap[effect] == -1) {
 		 LoadEffect(effect);
 	}
-
+	
 	// ÉnÉìÉhÉãÇÃéQè∆Çï‘Ç∑
 	return _effectMap[effect];
+}
+
+void EffectManager::DeleteEffect()
+{
+	for (auto& [key, value] : _effectMap) {
+		DeleteEffekseerEffect(value);
+	}
 }
 
 void EffectManager::LoadEffect(int effect)
@@ -50,7 +57,19 @@ void EffectManager::LoadEffect(int effect)
 	switch (effect)
 	{
 	case NORMAL_BULLET_EFFECT:
-		_effectMap[effect] =  LoadEffekseerEffect("data/effect/aaaa.efk",2.0f);
+		_effectMap[effect] =  LoadEffekseerEffect("data/effect/NormalBullet.efk",2.0f);
+		break;
+	case BOMB_BULLET_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/BombBullet.efk", 5.0f);
+		break;
+	case GRAPPLE_BULLET_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/GrappleBullet.efk", 5.0f);
+		break;
+	case BLOCK_DESTROY_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/test.efk", 5.0f);
+		break;
+	case JUMP_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/test.efk", 5.0f);
 	default:
 		break;
 	}

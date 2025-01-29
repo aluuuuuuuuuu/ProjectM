@@ -5,6 +5,7 @@
 #include "Vec2.h"
 #include "PlayerManager.h"
 
+class MyEffect;
 class BulletManager;
 class PlayerCamera;
 class Player:
@@ -180,5 +181,7 @@ private:
 
 	// AI用の60フレーム前の座標
 	Vec3 _oldPos;
+
+	std::shared_ptr<MyEffect> _pEffect;
 };
 

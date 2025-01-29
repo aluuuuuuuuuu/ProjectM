@@ -40,5 +40,11 @@ private:
 
 	// バレットマネージャーの参照
 	BulletManager& _bulletManager;
+
+	// 爆発エフェクト
+	std::shared_ptr<MyEffect> _explosionEffect;
+
+	// 爆発エフェクトを描画するためのフレームカウンタ
+	int _flame;
 };
 

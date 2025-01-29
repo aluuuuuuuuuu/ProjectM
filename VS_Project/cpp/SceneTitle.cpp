@@ -70,8 +70,6 @@ SceneTitle::SceneTitle(bool slidInFlag):
 		break;
 	}
 
-
-
 	// スライド画像のロード
 	_slideHandle = LoadGraph("data/image/Slide.png");
 
@@ -161,6 +159,9 @@ void SceneTitle::SlideOutUpdate()
 	// スライド画像の移動 
 	_slidePos.x -= 80;
 
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
 	// 移動が終わったらシーン遷移
 	if (_slidePos.x <= -300) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));
@@ -178,8 +179,8 @@ void SceneTitle::SlideInDraw() const
 
 void SceneTitle::SlideOutDraw() const
 {
-	// スカイドームの更新処理
-	_pSkyDome->Update();
+	// スカイドームの描画処理
+	_pSkyDome->Draw();
 
 	// 人数選択の描画
 	NumSelectDraw();
@@ -192,7 +193,6 @@ void SceneTitle::FadeInUpdate()
 {
 	// スカイドームの更新処理
 	_pSkyDome->Update();
-
 
 	// 王冠の更新処理
 	_pCrown->Update();
@@ -209,6 +209,9 @@ void SceneTitle::FadeInUpdate()
 
 void SceneTitle::FadeOutUpdate()
 {
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
 	_flame++;
 	if (_flame >= 110) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));

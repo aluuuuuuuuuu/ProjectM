@@ -32,6 +32,12 @@ public:
 	/// </summary>
 	void StopEffect();
 
+	/// <summary>
+	/// スケールをセットする
+	/// </summary>
+	/// <param name="scale">拡大率</param>
+	void SetScaleEffect(Vec3 scale);
+
 
 private:
 
