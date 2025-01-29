@@ -41,5 +41,8 @@ private:
 
 	// ランク画像ハンドル
 	int _rankHandle;
+
+	// リターン画像ハンドル
+	int _returnA;
 };
 

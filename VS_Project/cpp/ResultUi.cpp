@@ -8,6 +8,7 @@ ResultUi::ResultUi(int time)
 	_redLineHandle = LoadGraph("data/image/RedLine.png");
 	_timeStringHandle = LoadGraph("data/image/TimeString.png");
 	_rankFrame = LoadGraph("data/image/RankFrame.png");
+	_returnA = LoadGraph("data/image/ReturnA.png");
 
 	// ŠÔ‚É‚æ‚Á‚Äƒ[ƒh‚·‚é‰æ‘œ‚ğ•ÏX‚·‚é
 	if (time <= 1800) {
@@ -33,6 +34,7 @@ ResultUi::~ResultUi()
 	DeleteGraph(_timeStringHandle);
 	DeleteGraph(_rankFrame);
 	DeleteGraph(_rankHandle);
+	DeleteGraph(_returnA);
 }
 
 void ResultUi::Update()
@@ -58,8 +60,10 @@ void ResultUi::Draw() const
 
 	// ‰æ–Ê˜g‚Ì•`‰æ
 	// ‰º‚Ì˜gü
-	DrawBox(0, 1000, 1920, 1080, 0x000000, true);
+	DrawBox(0, 990, 1920, 1080, 0x000000, true);
 
 	// ã‚Ì˜gü
-	DrawBox(0, 0, 1920, 80, 0x000000, true);
+	DrawBox(0, 0, 1920, 90, 0x000000, true);
+
+	DrawGraph(1568, 990, _returnA, true);
 }
