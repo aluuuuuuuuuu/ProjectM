@@ -271,26 +271,3 @@ private:
 
 };
 
-// Effekseerを使ったエフェクトコンポーネント
-class Effect
-{
-public:
-	Effect();
-	virtual ~Effect();
-
-	// 初期化処理
-	void InitEffect();
-
-	// 終了処理
-	void TerminateEffect();
-
-	// ハンドルを追加する
-	void AddEffect(const char *fileName, float magnification);
-
-private:
-
-	// エフェクトのハンドルを保持するリスト
-	std::list<int> m_effectHandleList;
-
-};
-

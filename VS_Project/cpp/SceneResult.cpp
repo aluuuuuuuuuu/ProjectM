@@ -115,6 +115,7 @@ void SceneResult::FadeOutUpdate()
 			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_playerData));
 			break;
 		case SCENE_PVE:
+			_playerData.playerNum--;
 			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePve>(_playerData));
 			break;
 		case SCENE_TITLE:

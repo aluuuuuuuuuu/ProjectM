@@ -10,6 +10,7 @@
 #include "PlayerManager.h"
 #include "SceneResult.h"
 #include "ScenePve.h"
+#include "EffectManager.h"
 
 bool Application::Init()
 {
@@ -79,6 +80,9 @@ bool Application::Init()
 	// サウンドマネージャーの初期処理
 	SoundManager::GetInstance().Init();
 
+	// エフェクトマネージャーの初期処理
+	EffectManager::GetInstance().Init();
+
 	return true;
 }
 
@@ -147,5 +151,6 @@ void Application::Run()
 
 void Application::Terminate()
 {
+	EffectManager::GetInstance().Terminate();
 	DxLib_End();    // DXライブラリの終了処理
 }

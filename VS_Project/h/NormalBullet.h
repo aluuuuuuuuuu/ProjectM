@@ -2,6 +2,7 @@
 #include <memory>
 #include "BulletBase.h"
 
+class MyEffect;
 class BulletManager;
 class MapBulletCollisionManager;
 class NormalBullet :
@@ -40,5 +41,6 @@ private:
 
 	// バレットマネージャーの参照
 	BulletManager& _bulletManager;
+
 };
 

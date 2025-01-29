@@ -4,6 +4,7 @@
 #include "Components.h"
 #include <memory>
 
+class MyEffect;
 class BulletManager;
 class MapBulletCollisionManager;
 class BulletBase:
@@ -80,6 +81,9 @@ protected:
 
 	// 重力
 	float _gravity;
+
+	// エフェクトポインタ
+	std::shared_ptr<MyEffect> _pEffect;
 
 };
 

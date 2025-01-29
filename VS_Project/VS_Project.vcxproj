@@ -152,6 +152,7 @@
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
     <ClCompile Include="cpp\Crown.cpp" />
+    <ClCompile Include="cpp\EffectManager.cpp" />
     <ClCompile Include="cpp\FallCharactor.cpp" />
     <ClCompile Include="cpp\GameFlowManager.cpp" />
     <ClCompile Include="cpp\GrapplerBullet.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="cpp\MenuButton.cpp" />
     <ClCompile Include="cpp\MenuCollisionManager.cpp" />
     <ClCompile Include="cpp\MenuManager.cpp" />
+    <ClCompile Include="cpp\MyEffect.cpp" />
     <ClCompile Include="cpp\NormalBullet.cpp" />
     <ClCompile Include="cpp\NumSelectButton.cpp" />
     <ClCompile Include="cpp\NumUtility.cpp" />
@@ -202,6 +204,7 @@
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
     <ClInclude Include="h\Crown.h" />
+    <ClInclude Include="h\EffectManager.h" />
     <ClInclude Include="h\FallCharactor.h" />
     <ClInclude Include="h\GameFlowManager.h" />
     <ClInclude Include="h\GrapplerBullet.h" />
@@ -211,6 +214,7 @@
     <ClInclude Include="h\MenuButton.h" />
     <ClInclude Include="h\MenuCollisionManager.h" />
     <ClInclude Include="h\MenuManager.h" />
+    <ClInclude Include="h\MyEffect.h" />
     <ClInclude Include="h\NormalBullet.h" />
     <ClInclude Include="h\NumSelectButton.h" />
     <ClInclude Include="h\NumUtility.h" />

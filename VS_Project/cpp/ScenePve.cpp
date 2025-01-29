@@ -15,17 +15,13 @@
 #include "SceneResult.h"
 #include "NumUtility.h"
 #include "SoundManager.h"
+#include "EffectManager.h"
 
 
 ScenePve::ScenePve(PlayerData& data)
 {
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
-
-	if (_pPlayerManager->GetAiFlag()) {
-		data.playerNum--;
-		data.character[1] = -1;
-	}
 
 	// 各クラスのインスタンス作成
 	{
@@ -142,6 +138,12 @@ void ScenePve::NormalDraw() const
 
 	// プレイヤーの描画
 	_pPlayerManager->Draw(0);
+
+	// 時間の更新処理
+	_pNum->Update(_pGameFlowManager->GetGameTime());
+
+	// エフェクトの描画
+	EffectManager::GetInstance().Draw();
 }
 
 void ScenePve::EndUpdate()

@@ -669,7 +669,7 @@ void Player::AnimationContorol()
 void Player::BulletTrigger()
 {
 	// î≠éÀÇ∑ÇÈç¿ïW
-	Vec3 pos = { Position.x  ,Position.y + 10 ,Position.z };
+	Vec3 pos = MV1GetFramePosition(GetModelHandle(), 65);
 
 	switch (_bulletData._selectBullet)
 	{

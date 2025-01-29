@@ -395,24 +395,3 @@ BoxCollision::~BoxCollision()
 {
 }
 
-// エフェクトクラス
-
-Effect::Effect()
-{
-}
-
-Effect::~Effect()
-{
-}
-
-void Effect::InitEffect()
-{
-}
-
-void Effect::TerminateEffect()
-{
-}
-
-void Effect::AddEffect(const char* fileName, float magnification)
-{
-}

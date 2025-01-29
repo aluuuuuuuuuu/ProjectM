@@ -15,6 +15,7 @@
 #include "SceneResult.h"
 #include "NumUtility.h"
 #include "SoundManager.h"
+#include "EffectManager.h"
 
 ScenePvp::ScenePvp(PlayerData& data)
 {
@@ -108,6 +109,9 @@ void ScenePvp::NomalUpdate()
 
 	// 時間の更新処理
 	_pNum->Update(_pGameFlowManager->GetGameTime());
+
+	// エフェクトの描画
+	EffectManager::GetInstance().Draw();
 }
 
 void ScenePvp::NormalDraw() const
