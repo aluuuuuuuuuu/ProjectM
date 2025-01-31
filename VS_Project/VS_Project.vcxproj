@@ -189,6 +189,7 @@
     <ClCompile Include="cpp\SoundManager.cpp" />
     <ClCompile Include="cpp\StageCollisionManager.cpp" />
     <ClCompile Include="cpp\StageManager.cpp" />
+    <ClCompile Include="cpp\TitlePlayer.cpp" />
     <ClCompile Include="cpp\Wedgeworm.cpp" />
     <ClCompile Include="cpp\WedgewormManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="h\SoundManager.h" />
     <ClInclude Include="h\StageCollisionManager.h" />
     <ClInclude Include="h\StageManager.h" />
+    <ClInclude Include="h\TitlePlayer.h" />
     <ClInclude Include="h\Vec2.h" />
     <ClInclude Include="h\Vec3.h" />
     <ClInclude Include="h\Wedgeworm.h" />

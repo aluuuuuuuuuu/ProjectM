@@ -32,7 +32,8 @@ SceneSelect::SceneSelect(int num) :
 	}
 
 	// スライド画像のロード
-	_slideHandle = LoadGraph("data/image/Slide.png");
+	//_slideHandle = LoadGraph("data/image/Slide.png");
+	_slideHandle = LoadGraph("data/image/takasaki.png");
 
 	_slidePos = Vec2{ -300,0 };
 }
@@ -164,7 +165,7 @@ void SceneSelect::FadeOutDraw() const
 
 	//フェード暗幕
 	int alpha = (int)(255 * ((float)_flame / 60));
-	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

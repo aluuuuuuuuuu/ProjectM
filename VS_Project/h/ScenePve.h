@@ -15,7 +15,7 @@ class StageCollisionManager;
 class StageManager;
 struct PlayerData;
 class ScenePve :
-    public SceneBase,
+	public SceneBase,
 	public Constant
 {
 public:
@@ -70,48 +70,43 @@ private:
 	void EndDraw() const;
 
 	/// <summary>
-	/// ゲームフローマネージャー
+	/// フェードイン更新処理
 	/// </summary>
+	void FadeInUpdate();
+
+	/// <summary>
+	/// フェードイン描画処理
+	/// </summary>
+	void FadeInDraw() const;
+
+	// ゲームフローマネージャー
 	std::shared_ptr<GameFlowManager> _pGameFlowManager;
 
-	/// <summary>
-	/// プレイヤーマネージャー
-	/// </summary>
+	// プレイヤーマネージャー
 	std::shared_ptr<PlayerManager> _pPlayerManager;
 
-	/// <summary>
-	/// ステージマネージャー
-	/// </summary>
+	// ステージマネージャー
 	std::shared_ptr<StageManager> _pStage;
 
-	/// <summary>
-	/// バレットマネージャー
-	/// </summary>
+	// バレットマネージャー
 	std::shared_ptr<BulletManager> _pBulletManager;
 
-	/// <summary>
-	/// バレットコリジョンマネージャー
-	/// </summary>
+	// バレットコリジョンマネージャー
 	std::shared_ptr<MapBulletCollisionManager> _pBulletCollsionManager;
 
-	/// <summary>
-	/// ステージコリジョンマネージャー
-	/// </summary>
+	// ステージコリジョンマネージャー
 	std::shared_ptr<StageCollisionManager> _pStageCollisionManager;
 
-	/// <summary>
-	/// 禊虫マネージャー
-	/// </summary>
+	// 禊虫マネージャー
 	std::shared_ptr<WedgewormManager> _pWedgewormManager;
 
-	/// <summary>
-	/// スカイドーム
-	/// </summary>
+	// スカイドーム
 	std::shared_ptr<SkyDome> _pSkyDome;
 
-	/// <summary>
-	/// 数字ユーティリティ
-	/// </summary>
+	// 数字ユーティリティ
 	std::shared_ptr<NumUtility> _pNum;
+
+	// フレームカウンタ
+	int _flame;
 };
 

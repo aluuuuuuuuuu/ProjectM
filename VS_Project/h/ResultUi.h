@@ -42,7 +42,7 @@ private:
 	// ランク画像ハンドル
 	int _rankHandle;
 
-	// リターン画像ハンドル
-	int _returnA;
+	// ボタン説明画像ハンドル
+	int _guide;
 };
 

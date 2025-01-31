@@ -7,7 +7,8 @@ void SoundManager::Init()
 
 	// BGM
 	{
-		_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/Title_BGM.mp3");
+		//_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/Title_BGM.mp3");
+		_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/a.mp3");
 		_bgmMap[BGM_BATTLE] = LoadSoundMem("data/BGM/intrusion_loop.ogg");
 	}
 

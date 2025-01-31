@@ -18,7 +18,6 @@ SkyDome::SkyDome()
 
 SkyDome::~SkyDome()
 {
-	int a = 0;
 }
 
 void SkyDome::Update()

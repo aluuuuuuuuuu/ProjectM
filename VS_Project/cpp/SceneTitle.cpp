@@ -11,8 +11,9 @@
 #include "FallCharactor.h"
 #include "SkyDome.h"
 #include "StageManager.h"
+#include "TitlePlayer.h"
 
-SceneTitle::SceneTitle(bool slidInFlag):
+SceneTitle::SceneTitle(bool slidInFlag) :
 	_flame(110),
 	_selectDrawFlag(false)
 {
@@ -23,7 +24,8 @@ SceneTitle::SceneTitle(bool slidInFlag):
 	ReadCSV("data/constant/SceneTitle.csv");
 
 	// カメラの初期化
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{150.0f, 250.0f, 0.0f });
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{ 150.0f, 250.0f, 0.0f });
+	SetCameraNearFar(1, 1000);
 
 	// 関数ポインタの初期化
 	{
@@ -50,28 +52,32 @@ SceneTitle::SceneTitle(bool slidInFlag):
 		_pStage = std::make_shared<StageManager>(); // ステージマネージャ
 	}
 
-	// 背景画像のロード
-
+	// 両翼のモデル
 	switch (rand() % 4)
 	{
 	case 0:
-		_backHandle = LoadGraph("data/image/taitkeBack1.png");
+		_pModel1 = std::make_shared<TitlePlayer>(0, 0);
+		_pModel2 = std::make_shared<TitlePlayer>(1, 1);
 		break;
 	case 1:
-		_backHandle = LoadGraph("data/image/taitkeBack2.png");
+		_pModel1 = std::make_shared<TitlePlayer>(0, 2);
+		_pModel2 = std::make_shared<TitlePlayer>(1, 3);
 		break;
 	case 2:
-		_backHandle = LoadGraph("data/image/taitkeBack3.png");
+		_pModel1 = std::make_shared<TitlePlayer>(0, 0);
+		_pModel2 = std::make_shared<TitlePlayer>(1, 3);
 		break;
 	case 3:
-		_backHandle = LoadGraph("data/image/taitkeBack4.png");
+		_pModel1 = std::make_shared<TitlePlayer>(0, 1);
+		_pModel2 = std::make_shared<TitlePlayer>(1, 2);
 		break;
 	default:
 		break;
 	}
 
 	// スライド画像のロード
-	_slideHandle = LoadGraph("data/image/Slide.png");
+	//_slideHandle = LoadGraph("data/image/Slide.png");
+	_slideHandle = LoadGraph("data/image/takasaki.png");
 
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
@@ -106,6 +112,10 @@ void SceneTitle::NomalUpdate()
 	// スカイドームの更新処理
 	_pSkyDome->Update();
 
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
+
 	// いずれかのボタンが押されたら人数選択へ
 	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
 
@@ -126,9 +136,6 @@ void SceneTitle::NormalDraw() const
 	// 落下キャラクターの描画
 	_pFallCharactor->Draw();
 
-	// 背景画像の描画
-	DrawGraph(0, 0, _backHandle, true);
-
 	// ロゴの描画
 	_pLogo->Draw();
 
@@ -137,6 +144,10 @@ void SceneTitle::NormalDraw() const
 
 	// 文章画像の描画
 	_pText->Draw();
+
+	// 両翼の描画
+	_pModel1->Draw();
+	_pModel2->Draw();
 }
 
 void SceneTitle::SlideInUpdate()
@@ -146,6 +157,10 @@ void SceneTitle::SlideInUpdate()
 
 	// スライド画像の移動
 	_slidePos.x += 80;
+
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
 
 	// 移動が終わったら通常の状態に遷移
 	if (_slidePos.x >= 2000) {
@@ -161,6 +176,10 @@ void SceneTitle::SlideOutUpdate()
 
 	// スカイドームの更新処理
 	_pSkyDome->Update();
+
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
 
 	// 移動が終わったらシーン遷移
 	if (_slidePos.x <= -300) {
@@ -185,6 +204,10 @@ void SceneTitle::SlideOutDraw() const
 	// 人数選択の描画
 	NumSelectDraw();
 
+	// 両翼の描画
+	_pModel1->Draw();
+	_pModel2->Draw();
+
 	// スライド画像の描画
 	DrawGraph(_slidePos.intX(), _slidePos.intY(), _slideHandle, true);
 }
@@ -200,6 +223,10 @@ void SceneTitle::FadeInUpdate()
 	// 文章の更新処理
 	_pText->Update();
 
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
+
 	_flame--;
 	if (_flame <= 0) {
 		_updateFunc = &SceneTitle::NomalUpdate;
@@ -211,6 +238,10 @@ void SceneTitle::FadeOutUpdate()
 {
 	// スカイドームの更新処理
 	_pSkyDome->Update();
+
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
 
 	_flame++;
 	if (_flame >= 110) {
@@ -257,6 +288,10 @@ void SceneTitle::NumSelectUpdate()
 	// スカイドームの更新処理
 	_pSkyDome->Update();
 
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
+
 	// Aボタンが押されたら状態遷移
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 
@@ -276,9 +311,6 @@ void SceneTitle::NumSelectDraw() const
 	// 落下キャラクターの描画
 	_pFallCharactor->Draw();
 
-	// 背景画像の描画
-	DrawGraph(0, 0, _backHandle, true);
-
 	// ロゴの描画
 	_pLogo->Draw();
 
@@ -288,4 +320,7 @@ void SceneTitle::NumSelectDraw() const
 	// 人数選択の描画
 	_pNum->Draw();
 
+	// 両翼の描画
+	_pModel1->Draw();
+	_pModel2->Draw();
 }

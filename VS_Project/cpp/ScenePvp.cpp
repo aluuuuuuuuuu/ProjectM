@@ -18,7 +18,8 @@
 #include "EffectManager.h"
 #include "EffekseerForDXLib.h"
 
-ScenePvp::ScenePvp(PlayerData& data)
+ScenePvp::ScenePvp(PlayerData& data):
+	_flame(110)
 {
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
@@ -50,9 +51,12 @@ ScenePvp::ScenePvp(PlayerData& data)
 
 	// 関数ポインタの初期化
 	{
-		_updateFunc = &ScenePvp::NomalUpdate;
-		_drawFunc = &ScenePvp::NormalDraw;
+		_updateFunc = &ScenePvp::FadeInUpdate;
+		_drawFunc = &ScenePvp::FadeInDraw;
 	}
+
+	// プレイヤーの更新処理
+	_pPlayerManager->Update();
 }
 
 ScenePvp::~ScenePvp()
@@ -110,8 +114,6 @@ void ScenePvp::NomalUpdate()
 
 	// 時間の更新処理
 	_pNum->Update(_pGameFlowManager->GetGameTime());
-
-
 }
 
 void ScenePvp::NormalDraw() const
@@ -192,4 +194,28 @@ void ScenePvp::EndDraw() const
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);
 	}
+}
+
+void ScenePvp::FadeInUpdate()
+{
+	// 通常の更新
+	NomalUpdate();
+
+	_flame--;
+	if (_flame == 0) {
+		_updateFunc = &ScenePvp::NomalUpdate;
+		_drawFunc = &ScenePvp::NormalDraw;
+	}
+}
+
+void ScenePvp::FadeInDraw() const
+{
+	// 通常の描画
+	NormalDraw();
+
+	//フェード暗幕
+	int alpha = static_cast<int>(255 * ((float)_flame / 110));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

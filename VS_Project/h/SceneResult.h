@@ -3,6 +3,7 @@
 #include <memory>
 #include "PlayerManager.h"
 
+class SkyDome;
 class ResultCharacter;
 class NumUtility;
 class ResultUi;
@@ -59,6 +60,8 @@ private:
 	/// </summary>
 	void FadeOutDraw() const;
 
+	// スカイドーム　
+	std::shared_ptr<SkyDome> _pSkyDome;
 
 	// 数字利用ポインタ
 	std::shared_ptr<NumUtility> _pNum;

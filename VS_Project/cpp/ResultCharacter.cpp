@@ -74,7 +74,7 @@ ResultCharacter::ResultCharacter(int plNum)
 	}
 
 	// カメラのニアファーのセット
-	DxLib::SetCameraNearFar(1.0f, 300.0f);
+	DxLib::SetCameraNearFar(1.0f, 4096.0f);
 
 	// カメラの座標のセット
 	DxLib::SetCameraPositionAndTarget_UpVecY(VGet(0, 0, 0), VGet(-1, 0, 0));
@@ -89,38 +89,9 @@ ResultCharacter::~ResultCharacter()
 
 void ResultCharacter::Update()
 {
-
-	//// アニメーションが終了している場合の処理
-	//if (GetEndAnimFlag()) {
-
-	//	// 終了したタイミングをとる
-	//	if (!_flag) {
-	//		_maxAnimeFlame = GetAnimeFlame();	// 最大値を保存
-	//		_flag = true;
-	//	}
-
-	//	// アニメーションの増減を切り替える
-	//	if (GetAnimeFlame() == _maxAnimeFlame - 3) {
-	//		_animFlag = true;
-	//	}
-	//	else if(GetAnimeFlame() == _maxAnimeFlame) {
-	//		_animFlag = false;
-	//	}
-
-	//	// フレームの増減
-	//	if (_animFlag) {
-	//		UpdateAnimationOnce(_modelHandle, 0.1);
-	//	}
-	//	else {
-	//		UpdateAnimationOnce(_modelHandle, -0.1);
-	//	}
-	//	
-	//}
-	//else {
-	//	UpdateAnimationOnce(_modelHandle, 0.5);
-	//}
-
+	// ループなしアニメーション再生
 	UpdateAnimationOnce(_modelHandle, 0.5f);
+
 	// モデルの更新処理
 	UpdateModel(GetTransformInstance());
 }

@@ -67,6 +67,16 @@ private:
     /// </summary>
     void EndDraw() const;
 
+    /// <summary>
+    /// フェードイン更新処理
+    /// </summary>
+    void FadeInUpdate();
+
+    /// <summary>
+    /// フェードイン描画処理
+    /// </summary>
+    void FadeInDraw() const;
+
     // ステージポインタ
     std::shared_ptr<StageManager> _pStage;
 
@@ -93,5 +103,8 @@ private:
 
     // 数字クラスポインタ
     std::shared_ptr<NumUtility> _pNum;
+
+    // フレームカウンタ
+    int _flame;
 };
 

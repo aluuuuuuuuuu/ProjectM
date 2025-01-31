@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "SceneTitle.h"
 
 MenuManager::MenuManager(int padNum) :
 	_margin(-905),
@@ -209,7 +210,8 @@ void MenuManager::NomalUpdate()
 			break;
 		case END_BUTTON:
 			// ゲーム終了確認画面を開く
-
+			SceneManager::GetInstance().PopScene();
+			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
 			break;
 		default:
 			break;

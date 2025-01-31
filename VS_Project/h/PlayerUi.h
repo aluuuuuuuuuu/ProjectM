@@ -29,50 +29,35 @@ public:
 	void Draw(Vec2 center, BulletData data) const;
 private:
 
-	/// <summary>
-	/// 通常弾画像ハンドル
-	/// </summary>
+	// 通常弾画像ハンドル
 	int _normalBulletHandle;
 
-	/// <summary>
-	/// 爆発弾画像ハンドル
-	/// </summary>
+	// 爆発弾画像ハンドル
 	int _bombBulletHandle;
 
-	/// <summary>
-	/// グラップル弾画像ハンドル
-	/// </summary>
+	// グラップル弾画像ハンドル
 	int _grappleBulletHandle;
 
-	/// <summary>
-	/// レティクル画像ハンドル
-	/// </summary>
+	// レティクル画像ハンドル
 	int _reticleHandle;
 
-	/// <summary>
-	/// アイコンフレーム画像ハンドル
-	/// </summary>
+	// アイコンフレーム画像ハンドル
 	int _frameHandle;
 
-	/// <summary>
-	/// 画面中心からの描画余白
-	/// </summary>
+	// 画面中心からの描画余白
 	Vec2 _drawMargin;
 
-	/// <summary>
-	/// アイコン同士の余白
-	/// </summary>
+	// アイコン同士の余白
 	int _margin;
 
-	/// <summary>
-	/// 画像の拡大率
-	/// </summary>
+	// 画像の拡大率
 	double _exRate;
 
-	/// <summary>
-	/// フレームの描画座標
-	/// </summary>
+	// フレームの描画座標
 	Vec2 _framePos;
+
+	// フレームカウンタ
+	float _flame;
 
 };
 

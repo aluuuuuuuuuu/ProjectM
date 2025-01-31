@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "Player.h"
 #include "PlayerUi.h"
+#include <cassert>
 
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
 	_playerData(data),
@@ -20,41 +21,42 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 
 	// 各インスタンスの作成
 	{
-		// プレイヤーインスタンスの作成
-		for (int num = 0; num <= _playerData.playerNum; num++) {
-			
-			_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num, _bulletData[num]));
+		// 各インスタンスの作成
+		if (_playerData.playerNum <= 3) {
+			// プレイヤーインスタンスの作成
+			for (int num = 0; num <= _playerData.playerNum; num++) {
+				if (num < 0 || num >= 4) {
+					assert(false);
+				}
+				_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num, _bulletData[num]));
 
-			switch (num)
-			{
-			case 0:
-				_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,0.0f };
-				
-				// プレイヤーの角度をラジアンで-45度に設定
-				_pPlayer[num]->Angle.y = DX_PI_F / -4;
-				break;
-			case 1:
-				_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,180.0f };
-
-				// プレイヤーの角度をラジアンで-180度に設定
-				_pPlayer[num]->Angle.y = DX_PI_F / -4 * 5;
-				break;
-			case 2:
-				_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,180.0f };
-
-				// プレイヤーの角度をラジアンで-135度に設定
-				_pPlayer[num]->Angle.y = DX_PI_F / -4 * 3;
-				break;
-			case 3:
-				_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,0.0f };
-
-				// プレイヤーの角度をラジアンで-90度に設定
-				_pPlayer[num]->Angle.y = DX_PI_F / -4 * 7;
-				break;
-			default:
-				break;
+				switch (num)
+				{
+				case 0:
+					_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,0.0f };
+					_pPlayer[num]->Angle.y = DX_PI_F / -4;
+					break;
+				case 1:
+					_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,180.0f };
+					_pPlayer[num]->Angle.y = DX_PI_F / -4 * 5;
+					break;
+				case 2:
+					_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,180.0f };
+					_pPlayer[num]->Angle.y = DX_PI_F / -4 * 3;
+					break;
+				case 3:
+					_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,0.0f };
+					_pPlayer[num]->Angle.y = DX_PI_F / -4 * 7;
+					break;
+				default:
+					break;
+				}
 			}
 		}
+		else {
+			assert(false); // assert(true) は常に真なので、assert(false) に変更
+		}
+
 
 		// コリジョンマネージャーの作成
 		_pCollision = std::make_shared<CollisionManager>(stageManager);
@@ -109,6 +111,9 @@ void PlayerManager::Update()
 			pl->KillPlayer();
 		}
 	}
+
+	// UIの更新
+	_pUi->Update();
 }
 
 void PlayerManager::Draw(int num) const
@@ -119,7 +124,7 @@ void PlayerManager::Draw(int num) const
 	}
 
 	// UIの描画
-	_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b },_bulletData[num]);
+	_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b }, _bulletData[num]);
 
 }
 

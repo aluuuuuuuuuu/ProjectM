@@ -8,7 +8,7 @@ ResultUi::ResultUi(int time)
 	_redLineHandle = LoadGraph("data/image/RedLine.png");
 	_timeStringHandle = LoadGraph("data/image/TimeString.png");
 	_rankFrame = LoadGraph("data/image/RankFrame.png");
-	_returnA = LoadGraph("data/image/ReturnA.png");
+	_guide = LoadGraph("data/image/Guide.png");
 
 	// 時間によってロードする画像を変更する
 	if (time <= 1800) {
@@ -34,7 +34,7 @@ ResultUi::~ResultUi()
 	DeleteGraph(_timeStringHandle);
 	DeleteGraph(_rankFrame);
 	DeleteGraph(_rankHandle);
-	DeleteGraph(_returnA);
+	DeleteGraph(_guide);
 }
 
 void ResultUi::Update()
@@ -64,6 +64,7 @@ void ResultUi::Draw() const
 
 	// 上の枠線
 	DrawBox(0, 0, 1920, 90, 0x000000, true);
-
-	DrawGraph(1568, 990, _returnA, true);
+	
+	// ボタン説明の描画
+	DrawGraph(900, 990, _guide, true);
 }

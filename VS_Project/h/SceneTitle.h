@@ -5,6 +5,7 @@
 #include "Constant.h"
 #include "Vec2.h"
 
+class TitlePlayer;
 class StageManager;
 class SkyDome;
 class FallCharactor;
@@ -127,6 +128,10 @@ private:
 	// ステージマネージャポインタ
 	std::shared_ptr<StageManager> _pStage;
 
+	// 両翼のモデル
+	std::shared_ptr<TitlePlayer> _pModel1;
+	std::shared_ptr<TitlePlayer> _pModel2;
+
 	// フェード用フレームカウンタ
 	int _flame;
 
@@ -141,6 +146,5 @@ private:
 
 	// 背景画像ハンドル
 	int _backHandle;
-
 };
 

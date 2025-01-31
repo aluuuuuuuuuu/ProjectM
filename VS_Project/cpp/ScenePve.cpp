@@ -18,7 +18,8 @@
 #include "EffectManager.h"
 
 
-ScenePve::ScenePve(PlayerData& data)
+ScenePve::ScenePve(PlayerData& data):
+	_flame(110)
 {
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
@@ -53,9 +54,12 @@ ScenePve::ScenePve(PlayerData& data)
 
 	// 関数ポインタの初期化
 	{
-		_updateFunc = &ScenePve::NomalUpdate;
-		_drawFunc = &ScenePve::NormalDraw;
+		_updateFunc = &ScenePve::FadeInUpdate;
+		_drawFunc = &ScenePve::FadeInDraw;
 	}
+
+	// プレイヤーの更新処理
+	_pPlayerManager->Update();
 }
 
 ScenePve::~ScenePve()
@@ -152,36 +156,53 @@ void ScenePve::EndUpdate()
 	// ゲームフローマネージャーの更新
 	_pGameFlowManager->Update();
 
-	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
-	if (_pGameFlowManager->GetFlameCount() >= 120) {
+	_flame++;
+	if (_flame >= 110) {
+		
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
 	}
+
+	//// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
+	//if (_pGameFlowManager->GetFlameCount() >= 120) {
+	//	SoundManager::GetInstance().StopBGM(BGM_BATTLE);
+	//	SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
+	//}
 }
 
 void ScenePve::EndDraw() const
 {
-	// カメラの設定
-	_pPlayerManager->CameraSet(0);
+	// 通常の描画
+	NormalDraw();
 
-	// 描画範囲の設定
-	SetDrawArea(_pPlayerManager->GetArea(0).a, _pPlayerManager->GetArea(0).b, _pPlayerManager->GetArea(0).c, _pPlayerManager->GetArea(0).d);
+	//フェード暗幕
+	int alpha = static_cast<int>(255 * ((float)_flame / 110));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// 描画先の中心を設定
-	SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(0).a), static_cast<float>(_pPlayerManager->GetCenter(0).b));
+}
 
-	//スカイドームの描画
-	_pSkyDome->Draw();
+void ScenePve::FadeInUpdate()
+{
+	// 通常の更新
+	NomalUpdate();
 
-	// バレットの描画
-	_pBulletManager->Draw();
+	_flame--;
+	if (_flame == 0) {
+		_updateFunc = &ScenePve::NomalUpdate;
+		_drawFunc = &ScenePve::NormalDraw;
+	}
+}
 
-	// ステージの描画
-	_pStage->DrawStage();
+void ScenePve::FadeInDraw() const
+{
+	// 通常の描画
+	NormalDraw();
 
-	// 禊虫の描画
-	_pWedgewormManager->Draw();
-
-	// プレイヤーの描画
-	_pPlayerManager->Draw(0);
+	//フェード暗幕
+	int alpha = static_cast<int>(255 * ((float)_flame / 110));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

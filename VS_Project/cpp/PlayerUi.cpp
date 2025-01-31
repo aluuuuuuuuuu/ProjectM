@@ -1,9 +1,11 @@
 #include "PlayerUi.h"
 #include "DxLib.h"
 #include "PlayerManager.h"
+#include <cmath>
 
 
-PlayerUi::PlayerUi(int playerNum)
+PlayerUi::PlayerUi(int playerNum):
+	_flame(0.0f)
 {
 	// 画像のロード
 	_normalBulletHandle = LoadGraph("data/image/Icon_Bullet.png");
@@ -52,52 +54,63 @@ PlayerUi::~PlayerUi()
 
 void PlayerUi::Update()
 {
-	_framePos = Vec2{};
+	_flame += 0.1f;	// 時間経過
+	_exRate = 0.2 +  0.04 * sin(_flame); // y座標（振幅50のサイン波）
 }
 
 void PlayerUi::Draw(Vec2 center, BulletData data) const
 {
+
+	// 表示座標
+	int x, y;
+
+	x = center.intX() + _drawMargin.intX();
+	y = center.intY() + _drawMargin.intY();
+
 	// アイコンの描画
-	DrawRotaGraph(center.intX() + _drawMargin.intX(), center.intY() + _drawMargin.intY(), _exRate, 0.0, _normalBulletHandle, true);
-	DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin, center.intY() + _drawMargin.intY(), _exRate, 0.0, _grappleBulletHandle, true);
-	DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin * 2, center.intY() + _drawMargin.intY(), _exRate, 0.0, _bombBulletHandle, true);
+	DrawRotaGraph(x, y, 0.2f, 0.0, _normalBulletHandle, true);
+	DrawRotaGraph(x + _margin, y, 0.2f, 0.0, _grappleBulletHandle, true);
+	DrawRotaGraph(x + _margin * 2, y, 0.2f, 0.0, _bombBulletHandle, true);
 
 	// アイコンフレームの描画
 	switch (data._selectBullet)
 	{
 	case NORMAL_BULLET:
-		DrawRotaGraph(center.intX() + _drawMargin.intX(), center.intY() + _drawMargin.intY(), _exRate, 0.0, _frameHandle, true);
+		DrawRotaGraph(x, y, _exRate, 0.0, _frameHandle, true);
 		break;
 	case GRAPPLER_BULLET:
-		DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin, center.intY() + _drawMargin.intY(), _exRate, 0.0, _frameHandle, true);
+		DrawRotaGraph(x + _margin, y, _exRate, 0.0, _frameHandle, true);
 		break;
 	case BOMB_BULLET:
-		DrawRotaGraph(center.intX() + _drawMargin.intX() + _margin * 2, center.intY() + _drawMargin.intY(), _exRate, 0.0, _frameHandle, true);
+		DrawRotaGraph(x + _margin * 2, y, _exRate, 0.0, _frameHandle, true);
 		break;
 	default:
 		break;
 	}
 
 	// クールタイムを四角形で描画
-	int margin = 0;
+	double margin = 0;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 	if (data._bullletCoolTime[NORMAL_BULLET] != 0) {
-
-		margin = 100 /  (30 / data._bullletCoolTime[NORMAL_BULLET]);
-		DrawBox(center.intX() - 50 + _drawMargin.intX(), center.intY() + 50 + _drawMargin.intY() - margin, center.intX() + 50 + _drawMargin.intX(), center.intY() + 50 + _drawMargin.intY(), 0x16fff9, true);
+		auto rate = static_cast<float>(data._bullletCoolTime[NORMAL_BULLET] / 30.0f);
+		margin = 100 * rate ;
+		DrawBox(x - 50, y + 50 - static_cast<int>(margin), x + 50, y + 50, 0xd30707, true);
 	}
 
 	if (data._bullletCoolTime[GRAPPLER_BULLET] != 0) {
-		margin = 100 / (300 / data._bullletCoolTime[GRAPPLER_BULLET]);
-		DrawBox(center.intX() - 50 + _drawMargin.intX() + _margin, center.intY() + 50 + _drawMargin.intY() - margin, center.intX() + 50 + _drawMargin.intX() + _margin, center.intY() + 50 + _drawMargin.intY(), 0x16fff9, true);
+		auto rate = static_cast<float>(data._bullletCoolTime[GRAPPLER_BULLET] / 300.0f);
+		margin = 100 * rate;
+		DrawBox(x - 50 + _margin, y + 50 - static_cast<int>(margin), x + 50 + _margin, y + 50, 0xd30707, true);
 	}
 
 	if (data._bullletCoolTime[BOMB_BULLET] != 0) {
-		margin = 100 / (120 / data._bullletCoolTime[BOMB_BULLET]);
-		DrawBox(center.intX() - 50 + _drawMargin.intX() + _margin * 2, center.intY() + 50 + _drawMargin.intY() - margin, center.intX() + 50 + _drawMargin.intX() + _margin * 2, center.intY() + 50 + _drawMargin.intY(), 0x16fff9, true);
+
+		auto rate = static_cast<float>(data._bullletCoolTime[BOMB_BULLET] / 120.0f);
+		margin = 100 * rate;
+		DrawBox(x - 50 + _margin * 2, y + 50 - static_cast<int>(margin), x + 50 + _margin * 2, y + 50, 0xd30707, true);
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	
+
 	//レティクルの描画
 	DrawRotaGraph(center.intX(), center.intY(), 1.0, 0.0, _reticleHandle, true);
 }

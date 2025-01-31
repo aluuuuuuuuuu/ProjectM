@@ -10,6 +10,7 @@
 #include "ResultCharacter.h"
 #include "SoundManager.h"
 #include "ScenePve.h"
+#include "SkyDome.h"
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
@@ -22,12 +23,18 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	// 数字の作成
 	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,400 }, gameTime);
 
+	// スカイドームの作成
+	_pSkyDome = std::make_shared<SkyDome>();
+
 	// リザルトUIの作成
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
 
 	// 関数ポインタの初期化
 	_updateFunc = &SceneResult::NomalUpdate;
 	_drawFunc = &SceneResult::NormalDraw;
+
+	// キャラクターの更新処理
+	_pCharacter->Update();
 
 	// シングルの再生
 	SoundManager::GetInstance().RingSE(SE_RESULT);
@@ -49,8 +56,15 @@ void SceneResult::Draw() const
 
 void SceneResult::NomalUpdate()
 {
+	auto plNum = _playerData.playerNum;
 
-	for (int num = 0; num <= _playerData.playerNum; num++) {
+	// AIフラグが立っていたらプレイヤーの人数を一人減らす
+	if (_playerData.aiFlag) {
+		plNum--;
+	}
+
+	// プレイヤーの数だけ判定を行う
+	for (int num = 0; num <= plNum; num++) {
 
 		// Aボタンが押されたらリスタート
 		if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
@@ -63,6 +77,7 @@ void SceneResult::NomalUpdate()
 				_nextScene = SCENE_PVP;
 			}
 
+			// フェードアウトに移行
 			_updateFunc = &SceneResult::FadeOutUpdate;
 			_drawFunc = &SceneResult::FadeOutDraw;
 		}
@@ -80,12 +95,18 @@ void SceneResult::NomalUpdate()
 		}
 	}
 
+	// スカイドームの更新
+	_pSkyDome->Update();
+
 	// キャラクターの更新処理
 	_pCharacter->Update();
 }
 
 void SceneResult::NormalDraw() const
 {
+	// スカイドームの描画
+	_pSkyDome->Draw();
+	
 	// キャラクターの描画
 	_pCharacter->Draw();
 
