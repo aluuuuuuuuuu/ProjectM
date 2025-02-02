@@ -5,7 +5,8 @@
 #include "SoundManager.h"
 
 NumSelectButton::NumSelectButton():
-	_selectNum(0)
+	_selectNum(0),
+	_message(false)
 {
 	// 人数選択の画像のロード
 	_numHandle[PLAYER_ONE] = LoadGraph("data/image/1play.png");
@@ -15,6 +16,9 @@ NumSelectButton::NumSelectButton():
 
 	// 選択矢印のロード
 	_arrowHandle = LoadGraph("data/image/arrow.png");
+
+	// メッセージ画像のロード
+	_messageHandle = LoadGraph("data/image/message.png");
 
 	_arrowPos = Vec2{ 690,875 };
 }
@@ -27,6 +31,7 @@ NumSelectButton::~NumSelectButton()
 	}
 
 	DeleteGraph(_gameEndHandle);
+	DeleteGraph(_messageHandle);
 
 }
 
@@ -104,9 +109,18 @@ void NumSelectButton::Draw() const
 	DrawRotaGraph(890, 950, 1, 0, _numHandle[1], true);
 	DrawRotaGraph(1090, 950, 1, 0, _numHandle[2], true);
 	DrawRotaGraph(1290, 950, 1, 0, _numHandle[3], true);
+
+	if (_message) {
+		DrawGraph(36, 176, _messageHandle, true);
+	}
 }
 
 int NumSelectButton::GetSelectNum() const
 {
 	return _selectNum;
+}
+
+void NumSelectButton::SetMessage()
+{
+	_message = true;
 }

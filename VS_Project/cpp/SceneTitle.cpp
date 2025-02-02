@@ -295,11 +295,22 @@ void SceneTitle::NumSelectUpdate()
 	// Aボタンが押されたら状態遷移
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 
-		// 決定音を鳴らす
-		SoundManager::GetInstance().RingSE(SE_TITLE_START);
+		// 接続されているコントローラーより大きい数が選ばれたらメッセージを出す
+		if (_pNum->GetSelectNum() >= Input::GetInstance().GetPadNum()) {
 
-		_updateFunc = &SceneTitle::SlideOutUpdate;
-		_drawFunc = &SceneTitle::SlideOutDraw;
+			// ビープ音を鳴らす
+			SoundManager::GetInstance().RingSE(SE_BEEP);
+
+			_pNum->SetMessage();
+		}
+		else {
+
+			// 決定音を鳴らす
+			SoundManager::GetInstance().RingSE(SE_TITLE_START);
+
+			_updateFunc = &SceneTitle::SlideOutUpdate;
+			_drawFunc = &SceneTitle::SlideOutDraw;
+		}
 	}
 }
 

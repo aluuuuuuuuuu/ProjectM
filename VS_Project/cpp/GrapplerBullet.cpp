@@ -5,6 +5,7 @@
 #include "MyEffect.h"
 #include "EffekseerForDXLib.h"
 #include "EffectManager.h"
+#include "SoundManager.h"
 
 GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum, std::shared_ptr<WedgewormManager>& wedge) :
 	_collManager(col),
@@ -51,18 +52,19 @@ void GrapplerBullet::Update()
 	}
 
 	// ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
-	if (_collManager->CollisionBullet(Position, 3.0f, GRAPPLER_BULLET)) _collisionFlag = true;
+	if (_collManager->CollisionBullet(Position, 3.0f, GRAPPLER_BULLET)) {
 
-	// âS’Ž‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
-
-	for (int i = 0; i < 2; i++) {
-		Vec3 pos = _wedgeManager->GetPos(i);
-		float dist = (pos - Position).Length();
-
-		if (dist < 16.0f + 16.0f) {
-			_collisionFlag = true;
-		}
+		_collisionFlag = true;
 	}
+	//// âS’Ž‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
+	//for (int i = 0; i < 2; i++) {
+	//	Vec3 pos = _wedgeManager->GetPos(i);
+	//	float dist = (pos - Position).Length();
+
+	//	if (dist < 16.0f + 16.0f) {
+	//		_collisionFlag = true;
+	//	}
+	//}
 
 	// “–‚½‚Á‚Ä‚àˆê’èŽžŠÔŽc‚é‚æ‚¤‚É‚·‚é
 	if (_invalidFlag) {

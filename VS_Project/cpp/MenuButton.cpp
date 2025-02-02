@@ -11,6 +11,7 @@ MenuButton::MenuButton(Vec2 pos, Vec2 range, int handle, int type) :
 
 MenuButton::~MenuButton()
 {
+	// ‰æ‘œ‚ÌƒfƒŠ[ƒg
 	DeleteGraph(_graphHandle);
 }
 

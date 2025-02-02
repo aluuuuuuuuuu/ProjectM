@@ -9,6 +9,7 @@ constexpr int  VOLUME_ZERO = 0;
 
 constexpr int BGM_OPENING = 0;
 constexpr int BGM_BATTLE = 1;
+constexpr int BGM_THEME = 2;
 
 constexpr int SE_NUM_SELECT = 0;
 constexpr int SE_TITLE_START = 1;
@@ -17,6 +18,16 @@ constexpr int SE_CHARA_CANCEL = 3;
 constexpr int SE_GAME_START = 4;
 constexpr int SE_RESULT = 5;
 constexpr int SE_SHOUT = 6;
+constexpr int SE_BEEP = 7;
+constexpr int SE_OPEN_MENU = 8;
+constexpr int SE_CLOSE_MENU = 9;
+constexpr int SE_BULLET_SELECT = 10;
+constexpr int SE_SHOT_NORMAL_BULET = 11;
+constexpr int SE_SHOT_GRAPPLE_BULET = 12;
+constexpr int SE_SHOT_BOMB_BULET = 13;
+constexpr int SE_EXPLOSION = 14;
+constexpr int SE_DESTRUCTION = 15;
+constexpr int SE_GRAPPLE = 16;
 
 
 

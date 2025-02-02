@@ -4,6 +4,7 @@
 #include "EffectManager.h"
 #include "MyEffect.h"
 #include "EffekseerForDXLib.h"
+#include "SoundManager.h"
 
 NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
@@ -47,6 +48,10 @@ void NormalBullet::Update()
 
 		// ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
 		if (_collManager->CollisionBullet(Position, 3.0f, NORMAL_BULLET)) {
+
+			// ’…’e‰¹‚ð–Â‚ç‚·
+			SoundManager::GetInstance().RingSE(SE_DESTRUCTION);
+
 			_flame = 1;
 			_pEffect->StopEffect();
 			_destroyEffect = std::make_shared<MyEffect>(BLOCK_DESTROY_EFFECT, Position);

@@ -11,6 +11,7 @@
 #include "SceneResult.h"
 #include "ScenePve.h"
 #include "EffectManager.h"
+#include "resource.h"
 
 bool Application::Init()
 {

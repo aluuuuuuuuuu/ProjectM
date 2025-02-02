@@ -31,6 +31,11 @@ public:
 	/// <returns>選択人数</returns>
 	int GetSelectNum() const;
 
+	/// <summary>
+	/// メッセージを表示する
+	/// </summary>
+	void SetMessage();
+
 private:
 
 	// 人数選択ボタン画像
@@ -47,5 +52,11 @@ private:
 
 	// 選択人数
 	int _selectNum;
+
+	// メッセージを表示するフラグ
+	bool _message;
+
+	// メッセージ画像ハンドル
+	int _messageHandle;
 };
 

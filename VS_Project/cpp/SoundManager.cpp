@@ -7,8 +7,8 @@ void SoundManager::Init()
 
 	// BGM
 	{
-		//_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/Title_BGM.mp3");
-		_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/a.mp3");
+		_bgmMap[BGM_OPENING] = LoadSoundMem("data/BGM/Title_BGM.mp3");
+		_bgmMap[BGM_THEME] = LoadSoundMem("data/BGM/a.mp3");
 		_bgmMap[BGM_BATTLE] = LoadSoundMem("data/BGM/intrusion_loop.ogg");
 	}
 
@@ -21,6 +21,16 @@ void SoundManager::Init()
 		_seMap[SE_GAME_START] = LoadSoundMem("data/SE/GameStartSound.mp3");
 		_seMap[SE_RESULT] = LoadSoundMem("data/SE/Result_Victory.mp3");
 		_seMap[SE_SHOUT] = LoadSoundMem("data/SE/TitleShout.mp3");
+		_seMap[SE_BEEP] = LoadSoundMem("data/SE/Beep.mp3");
+		_seMap[SE_OPEN_MENU] = LoadSoundMem("data/SE/OpenMenu.mp3");
+		_seMap[SE_CLOSE_MENU] = LoadSoundMem("data/SE/CloseMenu.mp3");
+		_seMap[SE_BULLET_SELECT] = LoadSoundMem("data/SE/BulletSelect.mp3");
+		_seMap[SE_SHOT_NORMAL_BULET] = LoadSoundMem("data/SE/ShotNormalBullet.mp3");
+		_seMap[SE_SHOT_GRAPPLE_BULET] = LoadSoundMem("data/SE/ShotGrappleBullet.mp3");
+		_seMap[SE_SHOT_BOMB_BULET] = LoadSoundMem("data/SE/ShotBombBullet.mp3");
+		_seMap[SE_EXPLOSION] = LoadSoundMem("data/SE/Explosion.mp3");
+		_seMap[SE_DESTRUCTION] = LoadSoundMem("data/SE/Destruction.mp3");
+		_seMap[SE_GRAPPLE] = LoadSoundMem("data/SE/Grapple.mp3");
 	}
 
 	// âπó ÇÃê›íË

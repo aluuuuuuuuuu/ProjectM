@@ -86,6 +86,9 @@ MenuManager::MenuManager(int padNum) :
 	default:
 		break;
 	}
+
+	// メニューを開く音を鳴らす
+	SoundManager::GetInstance().RingSE(SE_OPEN_MENU);
 }
 
 MenuManager::~MenuManager()
@@ -125,11 +128,19 @@ void MenuManager::NomalUpdate()
 
 	// Bボタンが押されたらウィンドウを閉じる
 	if (Input::GetInstance().IsTrigger(INPUT_B, _pFinger->GetPadNum())) {
+
+		// メニューを閉じる音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_CLOSE_MENU);
+
 		_updateFunc = &MenuManager::SlideOutUpdate;
 	}
 
 	// STARTボタンが押されたらウィンドウを閉じる
 	if (Input::GetInstance().IsTrigger(INPUT_START, _pFinger->GetPadNum())) {
+
+		// メニューを閉じる音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_CLOSE_MENU);
+
 		_updateFunc = &MenuManager::SlideOutUpdate;
 	}
 

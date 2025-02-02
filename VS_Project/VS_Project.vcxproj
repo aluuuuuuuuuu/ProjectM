@@ -223,6 +223,7 @@
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\PlayerManager.h" />
     <ClInclude Include="h\PlayerUi.h" />
+    <ClInclude Include="h\resource.h" />
     <ClInclude Include="h\ResultCharacter.h" />
     <ClInclude Include="h\ResultLogo.h" />
     <ClInclude Include="h\ResultUi.h" />
@@ -264,6 +265,9 @@
     <None Include="data\constant\Stage.csv" />
     <None Include="data\constant\SubActor.csv" />
     <None Include="data\constant\Tama.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

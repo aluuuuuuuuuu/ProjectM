@@ -8,6 +8,7 @@
 #include "PlayerManager.h"
 #include "EffectManager.h"
 #include "MyEffect.h"
+#include "SoundManager.h"
 
 Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
 	_moveScaleY(0),
@@ -145,6 +146,10 @@ void Player::ControlPl()
 
 	// ’e‚ÌŽí—Þ‚Ì‚ÌØ‚è‘Ö‚¦
 	if (input.IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
+
+		// Ø‚è‘Ö‚¦‰¹‚ð–Â‚ç‚·
+		SoundManager::GetInstance().RingSE(SE_BULLET_SELECT);
+
 		if (_bulletData._selectBullet == MAX_TYPE_NUM - 1) {
 			_bulletData._selectBullet = MIN_TYPE_NUM;
 		}
@@ -153,6 +158,10 @@ void Player::ControlPl()
 		}
 	}
 	if (input.IsTrigger(INPUT_LEFT_SHOULDER, _padNum)) {
+
+		// Ø‚è‘Ö‚¦‰¹‚ð–Â‚ç‚·
+		SoundManager::GetInstance().RingSE(SE_BULLET_SELECT);
+
 		if (_bulletData._selectBullet == MIN_TYPE_NUM) {
 			_bulletData._selectBullet = MAX_TYPE_NUM - 1;
 		}
@@ -677,6 +686,10 @@ void Player::BulletTrigger()
 	{
 	case NORMAL_BULLET:
 		if (_bulletData._bullletCoolTime[NORMAL_BULLET] == 0) {
+
+			// ’Êí’e”­ŽË‰¹‚ð–Â‚ç‚·
+			SoundManager::GetInstance().RingSE(SE_SHOT_NORMAL_BULET);
+
 			// ’e‚ð¶¬
 			_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos, _padNum);
 
@@ -686,6 +699,10 @@ void Player::BulletTrigger()
 		break;
 	case GRAPPLER_BULLET:
 		if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] == 0) {
+
+			// ’Êí’e”­ŽË‰¹‚ð–Â‚ç‚·
+			SoundManager::GetInstance().RingSE(SE_SHOT_GRAPPLE_BULET);
+
 			// ’e‚ð¶¬
 			_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos, _padNum);
 
@@ -695,6 +712,10 @@ void Player::BulletTrigger()
 		break;
 	case BOMB_BULLET:
 		if (_bulletData._bullletCoolTime[BOMB_BULLET] == 0) {
+
+			// ’Êí’e”­ŽË‰¹‚ð–Â‚ç‚·
+			SoundManager::GetInstance().RingSE(SE_SHOT_BOMB_BULET);
+
 			// ’e‚ð¶¬
 			_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
 

@@ -4,6 +4,7 @@
 #include "MyEffect.h"
 #include "EffekseerForDXLib.h"
 #include "EffectManager.h"
+#include "SoundManager.h"
 
 BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
@@ -39,7 +40,7 @@ BombBullet::~BombBullet()
 void BombBullet::Update()
 {
 	if (!_collisionFlag && _flame == 0) {
-		Position += _distVec * _bulletManager.GetConstantFloat("SPEED");
+		Position += _distVec * _bulletManager.GetConstantFloat("SPEED") * 0.5f;
 		_gravity += _bulletManager.GetConstantFloat("GRAVITY");
 		Position.y -= _gravity;
 	}
@@ -61,6 +62,9 @@ void BombBullet::Update()
 	else {
 		// ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è‚ð‚Æ‚é
 		if (_collManager->CollisionBullet(Position, 3.0f, BOMB_BULLET)) {
+
+			SoundManager::GetInstance().RingSE(SE_EXPLOSION);
+
 			_pEffect->StopEffect();
 			_explosionEffect = std::make_shared<MyEffect>(BLOCK_DESTROY_EFFECT, Position);
 			_flame = 1;
