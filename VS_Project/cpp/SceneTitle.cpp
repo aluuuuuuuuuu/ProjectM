@@ -15,7 +15,9 @@
 
 SceneTitle::SceneTitle(bool slidInFlag) :
 	_flame(110),
-	_selectDrawFlag(false)
+	_selectDrawFlag(false),
+	_creditY(0),
+	_creditFlame(0)
 {
 	// 乱数生成器の初期化
 	srand(static_cast<unsigned int>(time(nullptr)));
@@ -79,13 +81,20 @@ SceneTitle::SceneTitle(bool slidInFlag) :
 	//_slideHandle = LoadGraph("data/image/Slide.png");
 	_slideHandle = LoadGraph("data/image/takasaki.png");
 
+	// クレジット画像のロード
+	_creditHandle = LoadGraph("data/image/Credit.png");
+
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
+
+	// ライトの設定
+	SetLightDirection(VECTOR{ 150.0f, 0.0f, 0.0f });
 }
 
 SceneTitle::~SceneTitle()
 {
 	DeleteGraph(_backHandle);
+	DeleteGraph(_creditHandle);
 }
 
 void SceneTitle::Update()
@@ -116,15 +125,23 @@ void SceneTitle::NomalUpdate()
 	_pModel1->Update();
 	_pModel2->Update();
 
-	// いずれかのボタンが押されたら人数選択へ
-	if (Input::GetInstance().AnyPressButton(INPUT_PAD_1)) {
+	// Bボタンが押されたらクレジット表示
+	for (int num = 0; num < Input::GetInstance().GetPadNum(); num++) {
+		if (Input::GetInstance().IsTrigger(INPUT_X, num)) {
 
-		// 決定音を鳴らす
-		SoundManager::GetInstance().RingSE(SE_TITLE_START);
+			// フェードアウト
+			_updateFunc = &SceneTitle::NormalFadeOutUpdate;
+			_drawFunc = &SceneTitle::NormalFadeDraw;
+		}
+		else if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
 
-		// 人数選択へ移行
-		_updateFunc = &SceneTitle::NumSelectUpdate;
-		_drawFunc = &SceneTitle::NumSelectDraw;
+			// 決定音を鳴らす
+			SoundManager::GetInstance().RingSE(SE_TITLE_START);
+
+			// 人数選択へ移行
+			_updateFunc = &SceneTitle::NumSelectUpdate;
+			_drawFunc = &SceneTitle::NumSelectDraw;
+		}
 	}
 }
 
@@ -163,7 +180,7 @@ void SceneTitle::SlideInUpdate()
 	_pModel2->Update();
 
 	// 移動が終わったら通常の状態に遷移
-	if (_slidePos.x >= 2000) {
+	if (_slidePos.x > 2000) {
 		_updateFunc = &SceneTitle::NumSelectUpdate;
 		_drawFunc = &SceneTitle::NumSelectDraw;
 	}
@@ -293,23 +310,25 @@ void SceneTitle::NumSelectUpdate()
 	_pModel2->Update();
 
 	// Aボタンが押されたら状態遷移
-	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
+	for (int num = 0; num < Input::GetInstance().GetPadNum(); num++) {
+		if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
 
-		// 接続されているコントローラーより大きい数が選ばれたらメッセージを出す
-		if (_pNum->GetSelectNum() >= Input::GetInstance().GetPadNum()) {
+			// 接続されているコントローラーより大きい数が選ばれたらメッセージを出す
+			if (_pNum->GetSelectNum() >= Input::GetInstance().GetPadNum()) {
 
-			// ビープ音を鳴らす
-			SoundManager::GetInstance().RingSE(SE_BEEP);
+				// ビープ音を鳴らす
+				SoundManager::GetInstance().RingSE(SE_BEEP);
 
-			_pNum->SetMessage();
-		}
-		else {
+				_pNum->SetMessage();
+			}
+			else {
 
-			// 決定音を鳴らす
-			SoundManager::GetInstance().RingSE(SE_TITLE_START);
+				// 決定音を鳴らす
+				SoundManager::GetInstance().RingSE(SE_TITLE_START);
 
-			_updateFunc = &SceneTitle::SlideOutUpdate;
-			_drawFunc = &SceneTitle::SlideOutDraw;
+				_updateFunc = &SceneTitle::SlideOutUpdate;
+				_drawFunc = &SceneTitle::SlideOutDraw;
+			}
 		}
 	}
 }
@@ -334,4 +353,161 @@ void SceneTitle::NumSelectDraw() const
 	// 両翼の描画
 	_pModel1->Draw();
 	_pModel2->Draw();
+}
+
+void SceneTitle::CreditUpdate()
+{
+	// Bボタンが押されたら通常の処理に移行
+	for (int num = 0; num < Input::GetInstance().GetPadNum(); num++) {
+		if (Input::GetInstance().IsTrigger(INPUT_B, num)) {
+
+			// 通常の処理に移行
+			_updateFunc = &SceneTitle::CreditFadeOutUpdate;
+			_drawFunc = &SceneTitle::CreditFadeDraw;
+		}
+	}
+
+	// フレームの加算
+	_creditFlame++;
+
+	if (_creditFlame >= 600) {
+		if (_creditY > -3500 + 1080) {
+			// クレジット座標の移動
+			_creditY--;
+		}
+	}
+
+	// BGMが終わったら通常の処理に戻る
+	if (_creditFlame == 3960) {
+		// BGMを変える
+		SoundManager::GetInstance().StopBGM(BGM_THEME);
+		SoundManager::GetInstance().StartBGM(BGM_OPENING);
+
+		// 通常の処理に移行
+		_updateFunc = &SceneTitle::CreditFadeOutUpdate;
+		_drawFunc = &SceneTitle::CreditFadeDraw;
+	}
+}
+
+void SceneTitle::CreditDraw() const
+{
+	DrawGraph(0, _creditY, _creditHandle, true);
+}
+
+void SceneTitle::NormalFadeInUpdate()
+{
+	// 落下キャラクターの更新処理
+	_pFallCharactor->Update();
+
+	// 王冠の更新処理
+	_pCrown->Update();
+
+	// 文章の更新処理
+	_pText->Update();
+
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
+
+	_flame--;
+	if (_flame == 0) {
+
+		_updateFunc = &SceneTitle::NomalUpdate;
+		_drawFunc = &SceneTitle::NormalDraw;
+	}
+}
+
+void SceneTitle::NormalFadeOutUpdate()
+{
+	// 落下キャラクターの更新処理
+	_pFallCharactor->Update();
+
+	// 王冠の更新処理
+	_pCrown->Update();
+
+	// 文章の更新処理
+	_pText->Update();
+
+	// スカイドームの更新処理
+	_pSkyDome->Update();
+
+	// 両翼の更新処理
+	_pModel1->Update();
+	_pModel2->Update();
+
+	_flame++;
+	if (_flame == 60) {
+		SoundManager::GetInstance().StopBGM(BGM_OPENING);
+		SoundManager::GetInstance().StartBGM(BGM_THEME);
+
+		_updateFunc = &SceneTitle::CreditFadeInUpdate;
+		_drawFunc = &SceneTitle::CreditFadeDraw;
+	}
+}
+
+void SceneTitle::NormalFadeDraw() const
+{
+	NormalDraw();
+
+	//フェード暗幕
+	int alpha = static_cast<int>(255 * ((float)_flame / 60));
+	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+void SceneTitle::CreditFadeInUpdate()
+{
+	// フレームの加算
+	_creditFlame++;
+
+	if (_creditFlame >= 600) {
+		if (_creditY > -3500 + 1080) {
+			// クレジット座標の移動
+			_creditY--;
+		}
+	}
+
+	_flame--;
+	if (_flame == 0) {
+
+		_updateFunc = &SceneTitle::CreditUpdate;
+		_drawFunc = &SceneTitle::CreditDraw;
+	}
+}
+
+void SceneTitle::CreditFadeOutUpdate()
+{
+	// フレームの加算
+	_creditFlame++;
+
+	if (_creditFlame >= 600) {
+		if (_creditY > -3500 + 1080) {
+			// クレジット座標の移動
+			_creditY--;
+		}
+	}
+
+	_flame++;
+	if (_flame == 60) {
+		SoundManager::GetInstance().StopBGM(BGM_THEME);
+		SoundManager::GetInstance().StartBGM(BGM_OPENING);
+
+		_updateFunc = &SceneTitle::NormalFadeInUpdate;
+		_drawFunc = &SceneTitle::NormalFadeDraw;
+	}
+}
+
+void SceneTitle::CreditFadeDraw() const
+{
+	DrawGraph(0, _creditY, _creditHandle, true);
+
+	//フェード暗幕
+	int alpha = static_cast<int>(255 * ((float)_flame / 60));
+	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

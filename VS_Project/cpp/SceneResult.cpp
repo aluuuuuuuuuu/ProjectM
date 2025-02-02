@@ -115,12 +115,6 @@ void SceneResult::NormalDraw() const
 
 	// 数字の描画
 	_pNum->Draw();
-
-#ifdef _DEBUG
-	DrawString(10, 10, "Aボタンでリスタート", 0xffffff);
-	DrawString(10, 40, "Bボタンでタイトル画面へ", 0xffffff);
-	DrawString(10, 70, "STARTボタンでメニュー", 0xffffff);
-#endif // DEBUG
 }
 
 void SceneResult::FadeOutUpdate()

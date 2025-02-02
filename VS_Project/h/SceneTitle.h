@@ -107,6 +107,28 @@ private:
 	/// </summary>
 	void NumSelectDraw() const;
 
+	/// <summary>
+	/// クレジット更新処理
+	/// </summary>
+	void CreditUpdate();
+
+	/// <summary>
+	/// クレジット描画処理
+	/// </summary>
+	void CreditDraw() const;
+
+	void NormalFadeInUpdate();
+
+	void NormalFadeOutUpdate();
+
+	void NormalFadeDraw() const;
+
+	void CreditFadeInUpdate();
+
+	void CreditFadeOutUpdate();
+
+	void CreditFadeDraw() const;
+
 	// 王冠ポインタ
 	std::shared_ptr<Crown> _pCrown;
 
@@ -146,5 +168,14 @@ private:
 
 	// 背景画像ハンドル
 	int _backHandle;
+
+	// クレジット画像ハンドル
+	int _creditHandle;
+
+	// クレジット表示Y座標
+	int _creditY;
+
+	// クレジットフレームカウンタ
+	int _creditFlame;
 };
 
