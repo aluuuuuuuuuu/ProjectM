@@ -84,6 +84,11 @@ SceneTitle::SceneTitle(bool slidInFlag) :
 	// クレジット画像のロード
 	_creditHandle = LoadGraph("data/image/Credit.png");
 
+	// セリフ画像のロード
+	_serihu = LoadGraph("data/image/message2.png");
+
+	_serihu2 = LoadGraph("data/image/message3.png");
+
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
 
@@ -95,6 +100,7 @@ SceneTitle::~SceneTitle()
 {
 	DeleteGraph(_backHandle);
 	DeleteGraph(_creditHandle);
+	DeleteGraph(_serihu);
 }
 
 void SceneTitle::Update()
@@ -125,22 +131,29 @@ void SceneTitle::NomalUpdate()
 	_pModel1->Update();
 	_pModel2->Update();
 
-	// Bボタンが押されたらクレジット表示
-	for (int num = 0; num < Input::GetInstance().GetPadNum(); num++) {
-		if (Input::GetInstance().IsTrigger(INPUT_X, num)) {
+	// Xボタンが押されたらクレジット表示
 
-			// フェードアウト
-			_updateFunc = &SceneTitle::NormalFadeOutUpdate;
-			_drawFunc = &SceneTitle::NormalFadeDraw;
-		}
-		else if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
+	if (Input::GetInstance().GetPadNum() != 0) {
+		for (int num = 0; num < Input::GetInstance().GetPadNum(); num++) {
+			if (Input::GetInstance().IsTrigger(INPUT_X, num)) {
 
-			// 決定音を鳴らす
-			SoundManager::GetInstance().RingSE(SE_TITLE_START);
+				// フレームと座標の初期化
+				_creditFlame = 0;
+				_creditY = 0;
 
-			// 人数選択へ移行
-			_updateFunc = &SceneTitle::NumSelectUpdate;
-			_drawFunc = &SceneTitle::NumSelectDraw;
+				// フェードアウト
+				_updateFunc = &SceneTitle::NormalFadeOutUpdate;
+				_drawFunc = &SceneTitle::NormalFadeDraw;
+			}
+			else if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
+
+				// 決定音を鳴らす
+				SoundManager::GetInstance().RingSE(SE_TITLE_START);
+
+				// 人数選択へ移行
+				_updateFunc = &SceneTitle::NumSelectUpdate;
+				_drawFunc = &SceneTitle::NumSelectDraw;
+			}
 		}
 	}
 }
@@ -161,6 +174,14 @@ void SceneTitle::NormalDraw() const
 
 	// 文章画像の描画
 	_pText->Draw();
+
+	// メッセージの描画処理
+	if (Input::GetInstance().GetPadNum() == 0) {
+		DrawGraph(30, 170, _serihu, true);
+	}
+	else {
+		DrawGraph(30, 170, _serihu2, true);
+	}
 
 	// 両翼の描画
 	_pModel1->Draw();

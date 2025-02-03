@@ -156,6 +156,8 @@ void ScenePve::EndUpdate()
 	// ゲームフローマネージャーの更新
 	_pGameFlowManager->Update();
 
+	_pPlayerManager->Update();
+
 	_flame++;
 	if (_flame >= 110) {
 		

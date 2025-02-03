@@ -17,11 +17,12 @@ void MyEffect::Update(Vec3 pos)
 	SetPosPlayingEffekseer3DEffect(_playHandle, pos.x, pos.y, pos.z);
 }
 
-void MyEffect::Draw() const
+void MyEffect::StopEffect()
 {
+	StopEffekseer3DEffect(_playHandle);
 }
 
-void MyEffect::StopEffect()
+void MyEffect::StartEffect()
 {
 	StopEffekseer3DEffect(_playHandle);
 }

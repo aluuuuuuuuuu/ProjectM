@@ -117,16 +117,34 @@ private:
 	/// </summary>
 	void CreditDraw() const;
 
+	/// <summary>
+	/// 通常のフェードイン更新処理
+	/// </summary>
 	void NormalFadeInUpdate();
 
+	/// <summary>
+	/// 通常のフェードアウト更新処理
+	/// </summary>
 	void NormalFadeOutUpdate();
 
+	/// <summary>
+	/// 通常のフェード描画処理
+	/// </summary>
 	void NormalFadeDraw() const;
 
+	/// <summary>
+	/// クレジットフェードイン更新処理
+	/// </summary>
 	void CreditFadeInUpdate();
 
+	/// <summary>
+	/// クレジットフェードアウト更新処理
+	/// </summary>
 	void CreditFadeOutUpdate();
 
+	/// <summary>
+	/// クレジットフェード描画処理
+	/// </summary>
 	void CreditFadeDraw() const;
 
 	// 王冠ポインタ
@@ -177,5 +195,9 @@ private:
 
 	// クレジットフレームカウンタ
 	int _creditFlame;
+
+	// セリフ画像ハンドル
+	int _serihu;
+	int _serihu2;
 };
 

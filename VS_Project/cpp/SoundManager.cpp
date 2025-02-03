@@ -31,6 +31,7 @@ void SoundManager::Init()
 		_seMap[SE_EXPLOSION] = LoadSoundMem("data/SE/Explosion.mp3");
 		_seMap[SE_DESTRUCTION] = LoadSoundMem("data/SE/Destruction.mp3");
 		_seMap[SE_GRAPPLE] = LoadSoundMem("data/SE/Grapple.mp3");
+		_seMap[SE_KO] = LoadSoundMem("data/SE/KO.mp3");
 	}
 
 	// âπó ÇÃê›íË

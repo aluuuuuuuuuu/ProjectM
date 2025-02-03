@@ -8,8 +8,10 @@ constexpr int BOMB_BULLET_EFFECT = 1;
 constexpr int GRAPPLE_BULLET_EFFECT = 2;
 constexpr int BLOCK_DESTROY_EFFECT = 3;
 constexpr int JUMP_EFFECT = 4;
+constexpr int WIN_EFFECT = 5;
+constexpr int SHOT_DOWN_EFFECT = 6;
 
-constexpr int MAX_EFFECT_NUM = 5;
+constexpr int MAX_EFFECT_NUM = 7;
 
 class EffectManager:
 	public Singleton<EffectManager>

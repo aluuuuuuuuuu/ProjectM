@@ -28,6 +28,7 @@ constexpr int SE_SHOT_BOMB_BULET = 13;
 constexpr int SE_EXPLOSION = 14;
 constexpr int SE_DESTRUCTION = 15;
 constexpr int SE_GRAPPLE = 16;
+constexpr int SE_KO = 17;
 
 
 

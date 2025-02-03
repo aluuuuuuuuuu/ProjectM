@@ -33,7 +33,7 @@ struct PlayerData
 	int playerNum = -1;
 
 	// 勝利したプレイヤー
-	int winner = 0;
+	int winner = -1;
 
 	bool aiFlag = false;
 };
@@ -49,6 +49,7 @@ struct BulletData
 
 };
 
+class MyEffect;
 class PlayerUi;
 class StageManager;
 class CollisionManager;
@@ -147,7 +148,7 @@ public:
 	/// aiフラグを取得する
 	/// </summary>
 	/// <returns>trueであればAI戦</returns>
-	bool GetAiFlag();
+	bool GetAiFlag() const;
 
 	/// <summary>
 	/// AIキャラを削除する
@@ -204,5 +205,17 @@ private:
 
 	// 弾マネージャーの参照
 	std::shared_ptr<BulletManager>& _bulletManager;
+
+	// 勝利エフェクト
+	std::shared_ptr<MyEffect> _pWinEffect;
+
+	// 撃墜エフェクト
+	std::shared_ptr<MyEffect> _pShotOutEffect;
+
+	// フレームカウンタ
+	int _flame;
+
+	// 勝利したプレイヤー
+	int _winner;
 };
 

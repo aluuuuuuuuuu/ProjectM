@@ -111,7 +111,7 @@ void NumSelectButton::Draw() const
 	DrawRotaGraph(1290, 950, 1, 0, _numHandle[3], true);
 
 	if (_message) {
-		DrawGraph(36, 176, _messageHandle, true);
+		DrawGraph(30, 170, _messageHandle, true);
 	}
 }
 

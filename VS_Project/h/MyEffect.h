@@ -23,14 +23,14 @@ public:
 	void Update(Vec3 pos);
 
 	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw() const;
-
-	/// <summary>
 	/// エフェクトを停止する
 	/// </summary>
 	void StopEffect();
+
+	/// <summary>
+	/// エフェクトを開始する
+	/// </summary>
+	void StartEffect();
 
 	/// <summary>
 	/// スケールをセットする

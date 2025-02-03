@@ -145,7 +145,7 @@ void SceneSelect::FadeOutUpdate()
 	_pSkyDome->Update();
 
 	_flame++;
-	if (_flame >= 60) {
+	if (_flame > 60) {
 
 		// Ÿ‚ÌƒV[ƒ“‚ÉˆÚs‚·‚é
 		if (_plData.playerNum == PLAYER_ONE) {

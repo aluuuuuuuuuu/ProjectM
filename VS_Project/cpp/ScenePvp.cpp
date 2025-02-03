@@ -159,7 +159,7 @@ void ScenePvp::EndUpdate()
 	_pGameFlowManager->Update();
 
 	// ƒQ[ƒ€‚ªI—¹‚µ‚Ä‚©‚ç‚P‚Q‚OƒtƒŒ[ƒ€‚½‚Ä‚ÎƒŠƒUƒ‹ƒg‰æ–Ê‚ÖˆÚs
-	if (_pGameFlowManager->GetFlameCount() >= 120) {
+	if (_pGameFlowManager->GetFlameCount() >= 180) {
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
 	}

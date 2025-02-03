@@ -66,10 +66,17 @@ void EffectManager::LoadEffect(int effect)
 		_effectMap[effect] = LoadEffekseerEffect("data/effect/GrappleBullet.efk", 5.0f);
 		break;
 	case BLOCK_DESTROY_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/test.efk", 5.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effects/test.efk", 5.0f);
 		break;
 	case JUMP_EFFECT:
 		_effectMap[effect] = LoadEffekseerEffect("data/effect/test.efk", 5.0f);
+		break;
+	case WIN_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/Winner.efk", 1.5f);
+		break;
+	case SHOT_DOWN_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/gekitui.efk", 10.0f);
+		break;
 	default:
 		break;
 	}

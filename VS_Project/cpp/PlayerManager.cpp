@@ -5,10 +5,16 @@
 #include "Player.h"
 #include "PlayerUi.h"
 #include <cassert>
+#include "MyEffect.h"
+#include "EffectManager.h"
+#include "Effekseer.h"
+#include "SoundManager.h"
 
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
 	_playerData(data),
-	_bulletManager(bullet)
+	_bulletManager(bullet),
+	_flame(0),
+	_winner(-1)
 {
 	// 外部ファイルから定数を取得する
 	ReadCSV("data/constant/Player.csv");
@@ -65,6 +71,9 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 		_pUi = std::make_shared<PlayerUi>(_playerData.playerNum);
 	}
 
+	// 勝者の初期化
+	_playerData.winner = -1;
+
 	// ウィンドウの幅と高さを取得
 	_windowHeight = Application::GetInstance().GetConstantInt("SCREEN_HEIGHT");
 	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
@@ -90,7 +99,16 @@ void PlayerManager::Update()
 {
 	// プレイヤーの移動など
 	for (auto& pl : _pPlayer) {
-		pl->Control();
+		if(!pl->GetDeadFlag()) pl->Control();
+	}
+
+	if (_winner != -1) {
+		_flame++;
+		if (_flame >= 30) {
+			_pWinEffect->StopEffect();
+		}
+
+		_pWinEffect->Update(_pPlayer[_winner]->Position);
 	}
 
 	ColResult result = _pCollision->PlayerCollision(_pPlayer);
@@ -107,8 +125,12 @@ void PlayerManager::Update()
 		pl->Update();
 
 		// 落下死
-		if (pl->Position.y <= GetConstantFloat("DEAD_LINE")) {
+		if (pl->Position.y <= GetConstantFloat("DEAD_LINE") && !pl->GetDeadFlag()) {
 			pl->KillPlayer();
+			_pShotOutEffect = std::make_shared<MyEffect>(SHOT_DOWN_EFFECT, pl->Position);
+			_pShotOutEffect->Update(pl->Position);
+			SoundManager::GetInstance().RingSE(SE_KO);
+
 		}
 	}
 
@@ -172,9 +194,53 @@ PlayerData PlayerManager::GetPlayerData() const
 
 void PlayerManager::SetWinner()
 {
-	for (auto& pl : _pPlayer) {
-		if (!pl->GetDeadFlag()) {
-			_playerData.winner = _playerData.character[pl->GetPlayerNum()];
+
+	if (_playerData.aiFlag) {
+		/*if (_pPlayer[0]->GetDeadFlag()) {
+			_playerData.winner = _playerData.character[_pPlayer[0]->GetPlayerNum()];
+
+			_pEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[0]->Position);
+			_pEffect->Update(_pPlayer[0]->Position);
+
+			_winner = 0;
+		}
+		else {
+			_playerData.winner = _playerData.character[_pPlayer[1]->GetPlayerNum()];
+
+			_pEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[1]->Position);
+			_pEffect->Update(_pPlayer[1]->Position);
+
+			_winner = 1;
+		}*/
+		if (_pPlayer[PLAYER_ONE]->GetDeadFlag()) {
+			_playerData.winner = _playerData.character[_pPlayer[PLAYER_TWO]->GetPlayerNum()];
+
+			_pWinEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[PLAYER_TWO]->Position);
+			_pWinEffect->Update(_pPlayer[PLAYER_TWO]->Position);
+
+			_winner = PLAYER_TWO;
+		}
+		else {
+			_playerData.winner = _playerData.character[_pPlayer[PLAYER_ONE]->GetPlayerNum()];
+
+			_pWinEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[PLAYER_ONE]->Position);
+			_pWinEffect->Update(_pPlayer[PLAYER_ONE]->Position);
+
+			_winner = PLAYER_ONE;
+		}
+	}
+	else {
+		for (auto& pl : _pPlayer) {
+			if (!pl->GetDeadFlag()) {
+				_playerData.winner = _playerData.character[pl->GetPlayerNum()];
+
+				// エフェクトインスタンスの作成
+				_pWinEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[pl->GetPlayerNum()]->Position);
+				_pWinEffect->Update(_pPlayer[pl->GetPlayerNum()]->Position);
+
+				_winner = pl->GetPlayerNum();
+				return;
+			}
 		}
 	}
 }
@@ -194,7 +260,7 @@ Vec3 PlayerManager::GetPlayerPos() const
 	return _pPlayer[0]->Position;
 }
 
-bool PlayerManager::GetAiFlag()
+bool PlayerManager::GetAiFlag() const
 {
 	return _playerData.aiFlag;
 }
