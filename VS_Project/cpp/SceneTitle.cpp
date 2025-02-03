@@ -266,7 +266,7 @@ void SceneTitle::FadeInUpdate()
 	_pModel2->Update();
 
 	_flame--;
-	if (_flame <= 0) {
+	if (_flame == 0) {
 		_updateFunc = &SceneTitle::NomalUpdate;
 		_drawFunc = &SceneTitle::NormalDraw;
 	}
@@ -282,7 +282,7 @@ void SceneTitle::FadeOutUpdate()
 	_pModel2->Update();
 
 	_flame++;
-	if (_flame >= 110) {
+	if (_flame > 110) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));
 	}
 }
@@ -391,7 +391,7 @@ void SceneTitle::CreditUpdate()
 	// フレームの加算
 	_creditFlame++;
 
-	if (_creditFlame >= 600) {
+	if (_creditFlame > 600) {
 		if (_creditY > -3500 + 1080) {
 			// クレジット座標の移動
 			_creditY--;
@@ -485,7 +485,7 @@ void SceneTitle::CreditFadeInUpdate()
 	// フレームの加算
 	_creditFlame++;
 
-	if (_creditFlame >= 600) {
+	if (_creditFlame > 600) {
 		if (_creditY > -3500 + 1080) {
 			// クレジット座標の移動
 			_creditY--;
@@ -505,7 +505,7 @@ void SceneTitle::CreditFadeOutUpdate()
 	// フレームの加算
 	_creditFlame++;
 
-	if (_creditFlame >= 600) {
+	if (_creditFlame > 600) {
 		if (_creditY > -3500 + 1080) {
 			// クレジット座標の移動
 			_creditY--;

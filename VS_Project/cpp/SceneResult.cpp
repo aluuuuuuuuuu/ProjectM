@@ -122,7 +122,7 @@ void SceneResult::FadeOutUpdate()
 	_flame++;
 
 	// フェードが終了したら
-	if (_flame >= 110) {
+	if (_flame > 110) {
 		// 次のシーンに切り替える
 		switch (_nextScene)
 		{

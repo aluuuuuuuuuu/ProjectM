@@ -49,15 +49,15 @@ void SelectFinger::Update()
 
 	_pos += Vec2{ static_cast<int>(move.x),static_cast<int>(move.z * -1) };
 
-	if (_pos.intX() >= 1920) {
-		_pos.x = 1920;
+	if (_pos.intX() >= 1920 - 100) {
+		_pos.x = 1920 - 100;
 	}
-	else if (_pos.intX() <= 0) {
-		_pos.x = 0;
+	else if (_pos.intX() <= 0 + 20) {
+		_pos.x = 0 + 20;
 	}
 
-	if (_pos.intY() >= 1080) {
-		_pos.y = 1080;
+	if (_pos.intY() >= 1080 - 150) {
+		_pos.y = 1080 - 150;
 	}
 	else if (_pos.intY() <= 0) {
 		_pos.y = 0;

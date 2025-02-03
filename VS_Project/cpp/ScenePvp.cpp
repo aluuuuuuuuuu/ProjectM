@@ -190,7 +190,6 @@ void ScenePvp::EndDraw() const
 
 		// âS’Ž‚Ì•`‰æ
 		_pWedgewormManager->Draw();
-
 		// ƒvƒŒƒCƒ„[‚Ì•`‰æ
 		_pPlayerManager->Draw(i);
 	}
