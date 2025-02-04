@@ -5,6 +5,7 @@
 #include "Constant.h"
 #include "Vec2.h"
 
+class CreditCharacter;
 class TitlePlayer;
 class StageManager;
 class SkyDome;
@@ -165,15 +166,12 @@ private:
 	// スカイドームポインタ
 	std::shared_ptr<SkyDome> _pSkyDome;
 
-	// ステージマネージャポインタ
-	std::shared_ptr<StageManager> _pStage;
-
 	// 両翼のモデル
 	std::shared_ptr<TitlePlayer> _pModel1;
 	std::shared_ptr<TitlePlayer> _pModel2;
 
 	// フェード用フレームカウンタ
-	int _flame;
+	int _frame;
 
 	// スライド画像ハンドル
 	int _slideHandle;
@@ -199,5 +197,15 @@ private:
 	// セリフ画像ハンドル
 	int _serihu;
 	int _serihu2;
+	int _serihu3;
+
+	// クレジットキャラ
+	std::shared_ptr<CreditCharacter> _pChar1;
+	std::shared_ptr<CreditCharacter> _pChar2;
+	std::shared_ptr<CreditCharacter> _pChar3;
+	std::shared_ptr<CreditCharacter> _pChar4;
+
+	// チュートリアルフラグ
+	bool _tutorial;
 };
 

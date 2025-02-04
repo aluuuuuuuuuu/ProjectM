@@ -177,7 +177,7 @@ private:
 	BulletData& _bulletData;
 
 	// AI用のフレームカウンタ
-	int _flame;
+	int _frame;
 
 	// AI用の60フレーム前の座標
 	Vec3 _oldPos;

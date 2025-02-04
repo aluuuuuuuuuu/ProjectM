@@ -6,6 +6,7 @@ SkyDome::SkyDome()
 	// ƒ‚ƒfƒ‹‚Ì‰Šúˆ—
 	InitModel(MV1LoadModel("data/model/Dome.mv1"));
 
+
 	// Šg‘å—¦‚Ìİ’è
 	Scale = 7.0f;
 

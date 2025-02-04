@@ -55,10 +55,7 @@ private:
     // 操作するパッド
     int _padNum;
 
-    // 背景のぼかし画像
-    int _backHandle;
-
     // フェード用フレームカウンタ
-    int _flame;
+    int _frame;
 };
 

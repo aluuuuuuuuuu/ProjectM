@@ -20,7 +20,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_grapplerScale(0),
 	_deadFlag(false),
 	_bulletData(data),
-	_flame(0)
+	_frame(0)
 {
 	// 関数ポインタの初期化
 	_controlFunc = &Player::ControlPl;
@@ -63,7 +63,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 	_grapplerScale(0),
 	_deadFlag(false),
 	_bulletData(data),
-	_flame(0),
+	_frame(0),
 	_padNum(1)
 {
 	// 関数ポインタの初期化
@@ -290,7 +290,7 @@ void Player::ControlAI()
 			_moveScaleY = 2.0f;
 		}
 
-		if (_flame % 60 == 0) {
+		if (_frame % 60 == 0) {
 			if ((Position - _oldPos).Length() < 10.0f) {
 				_moveScaleY = 2.0f;
 			}
@@ -300,12 +300,12 @@ void Player::ControlAI()
 		_moveVec += dist * 0.3f;
 
 		// 30フレームに一回弾を発射する
-		if (_flame % 30 == 0) {
+		if (_frame % 30 == 0) {
 			BulletTrigger();
 		}
 
 		// 120フレームごとに弾の種類を切り替える
-		if (_flame % 120 == 0) {
+		if (_frame % 120 == 0) {
 			if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] == 0) {
 				_bulletData._selectBullet = GRAPPLER_BULLET;
 			}
@@ -423,7 +423,7 @@ void Player::UpdatePl()
 void Player::UpdateAI()
 {
 	// フレームの加算
-	_flame++;
+	_frame++;
 
 	// カプセルに座標を渡す
 	Set(Position);
@@ -720,7 +720,7 @@ void Player::BulletTrigger()
 			_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bulletData._bullletCoolTime[BOMB_BULLET] = 120;
+			_bulletData._bullletCoolTime[BOMB_BULLET] = 300;
 		}
 		break;
 	default:

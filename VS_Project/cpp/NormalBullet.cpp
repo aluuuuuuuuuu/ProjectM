@@ -9,7 +9,7 @@
 NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
 	_bulletManager(mgr),
-	_flame(0)
+	_frame(0)
 {
 	// 初期位置の設定
 	Position = pos;
@@ -29,7 +29,7 @@ NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisi
 
 NormalBullet::~NormalBullet()
 {
-	if (_flame == 0) {
+	if (_frame == 0) {
 		_pEffect->StopEffect();
 	}
 	else if (!_deadFlag){
@@ -40,7 +40,7 @@ NormalBullet::~NormalBullet()
 void NormalBullet::Update()
 {
 	// ポジションの更新
-	if (_flame == 0) {
+	if (_frame == 0) {
 		Position += _distVec * _bulletManager.GetConstantFloat("SPEED");
 		// 重力の影響を与える
 		_gravity += _bulletManager.GetConstantFloat("GRAVITY");
@@ -52,7 +52,7 @@ void NormalBullet::Update()
 			// 着弾音を鳴らす
 			SoundManager::GetInstance().RingSE(SE_DESTRUCTION);
 
-			_flame = 1;
+			_frame = 1;
 			_pEffect->StopEffect();
 			_destroyEffect = std::make_shared<MyEffect>(BLOCK_DESTROY_EFFECT, Position);
 			_destroyEffect->SetScaleEffect(Vec3{ 0.1f,0.1f,0.1f });
@@ -67,8 +67,8 @@ void NormalBullet::Update()
 	}
 	else {
 		_destroyEffect->Update(Position);
-		_flame++;
-		if (_flame > 60) {
+		_frame++;
+		if (_frame > 60) {
 			_deadFlag = true;
 			_destroyEffect->StopEffect();
 		}

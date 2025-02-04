@@ -35,6 +35,6 @@ private:
 	Vec2 _dispPos;
 
 	// フレームカウント
-	int _flame;
+	int _frame;
 };
 

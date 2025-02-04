@@ -77,6 +77,8 @@ private:
     /// </summary>
     void FadeInDraw() const;
 
+    void MakeScreen();
+
     // ステージポインタ
     std::shared_ptr<StageManager> _pStage;
 
@@ -105,6 +107,8 @@ private:
     std::shared_ptr<NumUtility> _pNum;
 
     // フレームカウンタ
-    int _flame;
+    int _frame;
+
+    std::vector<int> _screen;
 };
 

@@ -170,10 +170,8 @@ private:
 	/// プレイヤー数からスクリーンの中心を求める
 	/// </summary>
 	/// <param name="num">プレイヤーの数-1</param>
-	/// <param name="scWidth">スクリーンの幅</param>
-	/// <param name="scHeight">スクリーンの高さ</param>
 	/// <returns>カメラの中心</returns>
-	VECTOR2 CreateScreenCenter(int num, int scWidth, int scHeight);
+	VECTOR2 CreateScreenCenter(int num);
 
 	// プレイヤーの配列
 	std::vector<std::shared_ptr<Player>> _pPlayer;
@@ -188,7 +186,7 @@ private:
 	VECTOR4 _drawArea[4];
 
 	// プレイヤーの数に対応したカメラのセンター
-	VECTOR2 _cameraSenter[4];
+	VECTOR2 _cameraSenter;
 
 	// プレイヤーの数の対応したモデルハンドル
 	int _modelHandle[4];
@@ -213,7 +211,7 @@ private:
 	std::shared_ptr<MyEffect> _pShotOutEffect;
 
 	// フレームカウンタ
-	int _flame;
+	int _frame;
 
 	// 勝利したプレイヤー
 	int _winner;

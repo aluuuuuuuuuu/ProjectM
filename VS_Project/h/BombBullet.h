@@ -45,6 +45,6 @@ private:
 	std::shared_ptr<MyEffect> _explosionEffect;
 
 	// 爆発エフェクトを描画するためのフレームカウンタ
-	int _flame;
+	int _frame;
 };
 

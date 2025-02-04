@@ -13,7 +13,7 @@
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
 	_playerData(data),
 	_bulletManager(bullet),
-	_flame(0),
+	_frame(0),
 	_winner(-1)
 {
 	// 外部ファイルから定数を取得する
@@ -29,35 +29,42 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	{
 		// 各インスタンスの作成
 		if (_playerData.playerNum <= 3) {
-			// プレイヤーインスタンスの作成
-			for (int num = 0; num <= _playerData.playerNum; num++) {
-				if (num < 0 || num >= 4) {
-					assert(false);
-				}
-				_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num, _bulletData[num]));
 
-				switch (num)
-				{
-				case 0:
-					_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,0.0f };
-					_pPlayer[num]->Angle.y = DX_PI_F / -4;
-					break;
-				case 1:
-					_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,180.0f };
-					_pPlayer[num]->Angle.y = DX_PI_F / -4 * 5;
-					break;
-				case 2:
-					_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,180.0f };
-					_pPlayer[num]->Angle.y = DX_PI_F / -4 * 3;
-					break;
-				case 3:
-					_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,0.0f };
-					_pPlayer[num]->Angle.y = DX_PI_F / -4 * 7;
-					break;
-				default:
-					break;
+
+			//if (_playerData.playerNum == -2) {
+				//_pPlayer.push_back(std::make_shared<Player>(bullet, *this, 0, _bulletData[0]));
+			//}
+			//else {
+				// プレイヤーインスタンスの作成
+				for (int num = 0; num <= _playerData.playerNum; num++) {
+					if (num < 0 || num >= 4) {
+						assert(false);
+					}
+					_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num, _bulletData[num]));
+
+					switch (num)
+					{
+					case 0:
+						_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,0.0f };
+						_pPlayer[num]->Angle.y = DX_PI_F / -4;
+						break;
+					case 1:
+						_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,180.0f };
+						_pPlayer[num]->Angle.y = DX_PI_F / -4 * 5;
+						break;
+					case 2:
+						_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,180.0f };
+						_pPlayer[num]->Angle.y = DX_PI_F / -4 * 3;
+						break;
+					case 3:
+						_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,0.0f };
+						_pPlayer[num]->Angle.y = DX_PI_F / -4 * 7;
+						break;
+					default:
+						break;
+					}
 				}
-			}
+			//}
 		}
 		else {
 			assert(false); // assert(true) は常に真なので、assert(false) に変更
@@ -79,12 +86,7 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	_windowWidth = Application::GetInstance().GetConstantInt("SCREEN_WIDTH");
 
 	// 描画範囲とカメラセンターの作成
-	int num = 0;
-	for (auto& pl : _pPlayer) {
-		_drawArea[num] = CreateDrawArea(num, _windowWidth, _windowHeight);		// 描画範囲
-		_cameraSenter[num] = CreateScreenCenter(num, _windowWidth, _windowHeight);	// カメラのセンター
-		num++;
-	}
+	_cameraSenter = CreateScreenCenter(data.playerNum);
 }
 
 PlayerManager::~PlayerManager()
@@ -103,8 +105,8 @@ void PlayerManager::Update()
 	}
 
 	if (_winner != -1) {
-		_flame++;
-		if (_flame >= 30) {
+		_frame++;
+		if (_frame >= 30) {
 			_pWinEffect->StopEffect();
 		}
 
@@ -146,7 +148,8 @@ void PlayerManager::Draw(int num) const
 	}
 
 	// UIの描画
-	_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b }, _bulletData[num]);
+	//_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b }, _bulletData[num]);
+	_pUi->Draw(Vec2{_cameraSenter.a,_cameraSenter.b}, _bulletData[num]);
 
 }
 
@@ -157,7 +160,7 @@ VECTOR4 PlayerManager::GetArea(int num) const
 
 VECTOR2 PlayerManager::GetCenter(int num) const
 {
-	return _cameraSenter[num];
+	return _cameraSenter;
 }
 
 int PlayerManager::GetPlayerNum() const
@@ -331,68 +334,21 @@ VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)
 	}
 }
 
-VECTOR2 PlayerManager::CreateScreenCenter(int num, int scWidth, int scHeight)
+VECTOR2 PlayerManager::CreateScreenCenter(int num)
 {
-	int size = static_cast<int>(_pPlayer.size());
-
-	int width;
-	int height;
-
-	switch (size)
+	switch (num)
 	{
+	case 0:
+		return VECTOR2{ 1920 / 2,1080 / 2 };
+		break;
 	case 1:
-		return VECTOR2{ scWidth / 2,scHeight / 2 };
+		return VECTOR2{ 1920 / 4,1080 / 2 };
 		break;
-
 	case 2:
-
-		width = scWidth / 4;
-		height = scHeight / 2;
-
-		if (num == 0) {
-			return VECTOR2{ width , height };
-		}
-		else {
-			return VECTOR2{ width * 3, height };
-		}
-		break;
-
 	case 3:
-
-		width = scWidth / 4;
-		height = scHeight / 4;
-
-		if (num == 0) {
-			return VECTOR2{ width ,height };
-		}
-		else if (num == 1) {
-			return  VECTOR2{ width * 3, height };
-		}
-		else {
-			return VECTOR2{ width, height * 3 };
-		}
-		break;
-
-	case 4:
-
-		width = scWidth / 4;
-		height = scHeight / 4;
-
-		if (num == 0) {
-			return VECTOR2{ width ,height };
-		}
-		else if (num == 1) {
-			return  VECTOR2{ width * 3, height };
-		}
-		else if (num == 2) {
-			return VECTOR2{ width, height * 3 };
-		}
-		else {
-			return VECTOR2{ width * 3, height * 3 };
-		}
+		return VECTOR2{ 1920 / 4,1080 / 4 };
 		break;
 	default:
-		return VECTOR2{};
 		break;
 	}
 }

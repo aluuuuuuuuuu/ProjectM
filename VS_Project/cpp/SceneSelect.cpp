@@ -12,7 +12,7 @@
 #include "ScenePve.h"
 
 SceneSelect::SceneSelect(int num) :
-	_flame(0)
+	_frame(0)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelect::SlideInUpdate;
@@ -32,8 +32,7 @@ SceneSelect::SceneSelect(int num) :
 	}
 
 	// スライド画像のロード
-	//_slideHandle = LoadGraph("data/image/Slide.png");
-	_slideHandle = LoadGraph("data/image/takasaki.png");
+	_slideHandle = LoadGraph("data/image/Slide.png");
 
 	_slidePos = Vec2{ -300,0 };
 }
@@ -144,8 +143,8 @@ void SceneSelect::FadeOutUpdate()
 	// スカイドームの更新処理
 	_pSkyDome->Update();
 
-	_flame++;
-	if (_flame > 60) {
+	_frame++;
+	if (_frame > 60) {
 
 		// 次のシーンに移行する
 		if (_plData.playerNum == PLAYER_ONE) {
@@ -164,7 +163,7 @@ void SceneSelect::FadeOutDraw() const
 	CharacterSelectDraw();
 
 	//フェード暗幕
-	int alpha = (int)(255 * ((float)_flame / 60));
+	int alpha = (int)(255 * ((float)_frame / 60));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

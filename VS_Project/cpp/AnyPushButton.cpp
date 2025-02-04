@@ -3,7 +3,7 @@
 #include "SceneTitle.h"
 
 AnyPushButton::AnyPushButton(SceneTitle& scene):
-	_flame(0)
+	_frame(0)
 {
 	// 画像のロード
 	_textHandle = LoadGraph("data/image/PressAnyButton.png");
@@ -20,24 +20,24 @@ AnyPushButton::~AnyPushButton()
 void AnyPushButton::Update()
 {
 	// スタート指示を点滅させる
-	if (_flame == 120) {
-		_flame++;
+	if (_frame == 120) {
+		_frame++;
 	}
-	else if (_flame == 1) {
-		_flame--;
+	else if (_frame == 1) {
+		_frame--;
 	}
-	else if (_flame % 2 == 0) {
-		_flame += 2;
+	else if (_frame % 2 == 0) {
+		_frame += 2;
 	}
 	else {
-		_flame -= 2;
+		_frame -= 2;
 	}
 }
 
 void AnyPushButton::Draw() const
 {
 	// フェードしながら描画
-	int alpha = static_cast<int>(255 * ((float)_flame / 120));
+	int alpha = static_cast<int>(255 * ((float)_frame / 120));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	// 画像の描画
 	DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), 1.0f, 0.0f, _textHandle, true);

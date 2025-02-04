@@ -43,7 +43,7 @@ private:
 	BulletManager& _bulletManager;
 
 	// フレームカウンタ
-	int _flame;
+	int _frame;
 
 	// ブロック破壊エフェクト
 	std::shared_ptr<MyEffect> _destroyEffect;

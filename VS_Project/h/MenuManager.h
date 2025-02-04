@@ -78,6 +78,10 @@ private:
 
 	void FadeOutDraw() const;
 
+	void EndUpdate();
+
+	void EndDraw() const;
+
 	// メニューの基盤画像
 	int _menuBordHandle;
 
@@ -100,7 +104,7 @@ private:
 	int _margin;
 
 	// フェード用のフレームカウンタ
-	int _flame;
+	int _frame;
 
 	// 音量調節画像ハンドル配列
 	int _volumeSEGraph[4];

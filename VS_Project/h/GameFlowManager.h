@@ -49,7 +49,7 @@ private:
 	bool _gameEndFlag;
 
 	// フレームカウンタ
-	int _flame;
+	int _frame;
 
 	// ゲーム開始からのフレームを数える
 	int _gameTime;

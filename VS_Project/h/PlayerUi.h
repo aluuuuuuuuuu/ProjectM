@@ -57,7 +57,7 @@ private:
 	Vec2 _framePos;
 
 	// フレームカウンタ
-	float _flame;
+	float _frame;
 
 };
 

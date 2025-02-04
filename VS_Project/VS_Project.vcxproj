@@ -151,6 +151,7 @@
     <ClCompile Include="cpp\CollisionManager.cpp" />
     <ClCompile Include="cpp\Components.cpp" />
     <ClCompile Include="cpp\Constant.cpp" />
+    <ClCompile Include="cpp\CreditCharacter.cpp" />
     <ClCompile Include="cpp\Crown.cpp" />
     <ClCompile Include="cpp\EffectManager.cpp" />
     <ClCompile Include="cpp\FallCharactor.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="cpp\SceneSelect.cpp" />
     <ClCompile Include="cpp\SceneTest.cpp" />
     <ClCompile Include="cpp\SceneTitle.cpp" />
+    <ClCompile Include="cpp\SceneTutorial.cpp" />
     <ClCompile Include="cpp\SelectFinger.cpp" />
     <ClCompile Include="cpp\CharacterSelectManager.cpp" />
     <ClCompile Include="cpp\SelectUI.cpp" />
@@ -190,6 +192,7 @@
     <ClCompile Include="cpp\StageCollisionManager.cpp" />
     <ClCompile Include="cpp\StageManager.cpp" />
     <ClCompile Include="cpp\TitlePlayer.cpp" />
+    <ClCompile Include="cpp\TutorialManager.cpp" />
     <ClCompile Include="cpp\Wedgeworm.cpp" />
     <ClCompile Include="cpp\WedgewormManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -204,6 +207,7 @@
     <ClInclude Include="h\CollisionManager.h" />
     <ClInclude Include="h\Components.h" />
     <ClInclude Include="h\Constant.h" />
+    <ClInclude Include="h\CreditCharacter.h" />
     <ClInclude Include="h\Crown.h" />
     <ClInclude Include="h\EffectManager.h" />
     <ClInclude Include="h\FallCharactor.h" />
@@ -236,6 +240,7 @@
     <ClInclude Include="h\SceneSelect.h" />
     <ClInclude Include="h\SceneTest.h" />
     <ClInclude Include="h\SceneTitle.h" />
+    <ClInclude Include="h\SceneTutorial.h" />
     <ClInclude Include="h\SelectFinger.h" />
     <ClInclude Include="h\CharacterSelectManager.h" />
     <ClInclude Include="h\SelectUI.h" />
@@ -245,6 +250,7 @@
     <ClInclude Include="h\StageCollisionManager.h" />
     <ClInclude Include="h\StageManager.h" />
     <ClInclude Include="h\TitlePlayer.h" />
+    <ClInclude Include="h\TutorialManager.h" />
     <ClInclude Include="h\Vec2.h" />
     <ClInclude Include="h\Vec3.h" />
     <ClInclude Include="h\Wedgeworm.h" />

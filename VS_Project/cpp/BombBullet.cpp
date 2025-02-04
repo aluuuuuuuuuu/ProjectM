@@ -9,7 +9,7 @@
 BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
 	_bulletManager(mgr),
-	_flame(0)
+	_frame(0)
 {
 	// èâä˙à íuÇÃê›íË
 	Position = pos;
@@ -29,7 +29,7 @@ BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionMa
 
 BombBullet::~BombBullet()
 {
-	if (_flame == 0) {
+	if (_frame == 0) {
 		_pEffect->StopEffect();
 	}
 	else if (!_deadFlag) {
@@ -39,7 +39,7 @@ BombBullet::~BombBullet()
 
 void BombBullet::Update()
 {
-	if (!_collisionFlag && _flame == 0) {
+	if (!_collisionFlag && _frame == 0) {
 		Position += _distVec * _bulletManager.GetConstantFloat("SPEED") * 0.5f;
 		_gravity += _bulletManager.GetConstantFloat("GRAVITY");
 		Position.y -= _gravity;
@@ -51,10 +51,10 @@ void BombBullet::Update()
 		_deadFlag = true;
 	}
 
-	if (_flame > 0) {
+	if (_frame > 0) {
 		_explosionEffect->Update(Position);
-		_flame++;
-		if (_flame == 60) {
+		_frame++;
+		if (_frame == 60) {
 			_deadFlag = true;
 			_explosionEffect->StopEffect();
 		}
@@ -67,7 +67,7 @@ void BombBullet::Update()
 
 			_pEffect->StopEffect();
 			_explosionEffect = std::make_shared<MyEffect>(BLOCK_DESTROY_EFFECT, Position);
-			_flame = 1;
+			_frame = 1;
 		}
 	}
 

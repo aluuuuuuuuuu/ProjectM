@@ -4,7 +4,7 @@
 GameFlowManager::GameFlowManager(std::shared_ptr<PlayerManager>& plMg) :
 	_playerManager(plMg),
 	_gameEndFlag(false),
-	_flame(0),
+	_frame(0),
 	_gameTime(0)
 {
 }
@@ -26,7 +26,7 @@ void GameFlowManager::Update()
 
 	// ゲームが終了してからのフレーム数を数える
 	if (_gameEndFlag) {
-		_flame++;
+		_frame++;
 	}
 
 	// マイフレームゲームタイムを加算する
@@ -42,7 +42,7 @@ bool GameFlowManager::GetGameEnd()
 
 int GameFlowManager::GetFlameCount()
 {
-	return _flame;
+	return _frame;
 }
 
 int GameFlowManager::GetGameTime()

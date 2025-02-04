@@ -5,7 +5,7 @@
 
 
 PlayerUi::PlayerUi(int playerNum):
-	_flame(0.0f)
+	_frame(0.0f)
 {
 	// 画像のロード
 	_normalBulletHandle = LoadGraph("data/image/Icon_Bullet.png");
@@ -54,8 +54,8 @@ PlayerUi::~PlayerUi()
 
 void PlayerUi::Update()
 {
-	_flame += 0.1f;	// 時間経過
-	_exRate = 0.2 +  0.04 * sin(_flame); // y座標（振幅50のサイン波）
+	_frame += 0.1f;	// 時間経過
+	_exRate = 0.2 +  0.04 * sin(_frame); // y座標（振幅50のサイン波）
 }
 
 void PlayerUi::Draw(Vec2 center, BulletData data) const
@@ -105,7 +105,7 @@ void PlayerUi::Draw(Vec2 center, BulletData data) const
 
 	if (data._bullletCoolTime[BOMB_BULLET] != 0) {
 
-		auto rate = static_cast<float>(data._bullletCoolTime[BOMB_BULLET] / 120.0f);
+		auto rate = static_cast<float>(data._bullletCoolTime[BOMB_BULLET] / 300.0f);
 		margin = 100 * rate;
 		DrawBox(x - 50 + _margin * 2, y + 50 - static_cast<int>(margin), x + 50 + _margin * 2, y + 50, 0xd30707, true);
 	}

@@ -11,7 +11,7 @@
 
 MenuManager::MenuManager(int padNum) :
 	_margin(-905),
-	_flame(15)
+	_frame(15)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &MenuManager::SlideInUpdate;
@@ -220,9 +220,10 @@ void MenuManager::NomalUpdate()
 			}
 			break;
 		case END_BUTTON:
-			// ゲーム終了確認画面を開く
-			SceneManager::GetInstance().PopScene();
-			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
+			// 終了フラグを立てる
+			_frame = 0;
+			_updateFunc = &MenuManager::EndUpdate;
+			_drawFunc = &MenuManager::EndDraw;
 			break;
 		default:
 			break;
@@ -278,8 +279,8 @@ void MenuManager::SlideOutUpdate()
 
 void MenuManager::FadeOutUpdate()
 {
-	_flame--;
-	if (_flame == 0) {
+	_frame--;
+	if (_frame == 0) {
 		SceneManager::GetInstance().PopScene();
 	}
 }
@@ -287,8 +288,30 @@ void MenuManager::FadeOutUpdate()
 void MenuManager::FadeOutDraw() const
 {
 	// ぼかしの描画
-	int alpha = static_cast<int>(255 * ((float)_flame / 15));
+	int alpha = static_cast<int>(255 * ((float)_frame / 15));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
 	DrawGraph(1, 0, _backHandle, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+void MenuManager::EndUpdate()
+{
+	_frame++;
+	if (_frame > 60) {
+		SceneManager::GetInstance().PopScene();
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
+	}
+}
+
+
+void MenuManager::EndDraw() const
+{
+	// 通常の描画
+	NormalDraw();
+	
+	// ぼかしの描画
+	int alpha = static_cast<int>(255 * ((float)_frame / 60));
+	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
+	DrawBox(0, 0, 1920, 1080, 0x0000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

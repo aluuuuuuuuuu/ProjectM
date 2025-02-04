@@ -19,7 +19,7 @@
 #include "EffekseerForDXLib.h"
 
 ScenePvp::ScenePvp(PlayerData& data):
-	_flame(110)
+	_frame(110)
 {
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
@@ -57,6 +57,10 @@ ScenePvp::ScenePvp(PlayerData& data):
 
 	// プレイヤーの更新処理
 	_pPlayerManager->Update();
+
+	// スクリーンの作成
+	MakeScreen();
+
 }
 
 ScenePvp::~ScenePvp()
@@ -121,14 +125,16 @@ void ScenePvp::NormalDraw() const
 	// プレイヤーの画面の数だけ描画する
 	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
 
+		// 描画先の設定
+		SetDrawScreen(_screen[i]);
+
+		// スクリーンのクリア
+		ClearDrawScreen();
+
 		// カメラの設定
+		SetCameraNearFar(1.0f, 1000.0f);
+
 		_pPlayerManager->CameraSet(i);
-
-		// 描画範囲の設定
-		SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
-
-		// 描画先の中心を設定
-		SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(i).a), static_cast<float>(_pPlayerManager->GetCenter(i).b));
 
 		//スカイドームの描画
 		_pSkyDome->Draw();
@@ -149,8 +155,24 @@ void ScenePvp::NormalDraw() const
 		_pPlayerManager->Draw(i);
 	}
 
+	// 描画先を戻す
+	SetDrawScreen(DX_SCREEN_BACK);
+
+	// スクリーンの描画
+	if (_pPlayerManager->GetPlayerNum() == 2) {
+		DrawGraph(0, 0, _screen[0], true);
+		DrawGraph(960, 0, _screen[1], true);
+	}
+	else if (_pPlayerManager->GetPlayerNum() > 2) {
+		DrawGraph(0, 0, _screen[0], true);
+		DrawGraph(960, 0, _screen[1], true);
+		DrawGraph(0, 540, _screen[2], true);
+		DrawGraph(960, 540, _screen[3], true);
+	}
+
 	// 時間の更新処理
 	_pNum->Draw();
+
 }
 
 void ScenePvp::EndUpdate()
@@ -158,41 +180,53 @@ void ScenePvp::EndUpdate()
 	// ゲームフローマネージャーの更新
 	_pGameFlowManager->Update();
 
-	// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
-	if (_pGameFlowManager->GetFlameCount() >= 180) {
+	_pPlayerManager->Update();
+
+	_frame++;
+	if (_frame >= 110) {
+
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
 	}
+
+	//// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
+	//if (_pGameFlowManager->GetFlameCount() >= 180) {
+	//	SoundManager::GetInstance().StopBGM(BGM_BATTLE);
+	//	SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
+	//}
 }
 
 void ScenePvp::EndDraw() const
 {
-	// プレイヤーの画面の数だけ描画する
-	for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
 
-		// カメラの設定
-		_pPlayerManager->CameraSet(i);
+	NormalDraw();
 
-		// 描画範囲の設定
-		SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
+	//// プレイヤーの画面の数だけ描画する
+	//for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
 
-		// 描画先の中心を設定
-		SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(i).a), static_cast<float>(_pPlayerManager->GetCenter(i).b));
+	//	// カメラの設定
+	//	_pPlayerManager->CameraSet(i);
 
-		//スカイドームの描画
-		_pSkyDome->Draw();
+	//	// 描画範囲の設定
+	//	SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
 
-		// バレットの描画
-		_pBulletManager->Draw();
+	//	// 描画先の中心を設定
+	//	SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(i).a), static_cast<float>(_pPlayerManager->GetCenter(i).b));
 
-		// ステージの描画
-		_pStage->DrawStage();
+	//	//スカイドームの描画
+	//	_pSkyDome->Draw();
 
-		// 禊虫の描画
-		_pWedgewormManager->Draw();
-		// プレイヤーの描画
-		_pPlayerManager->Draw(i);
-	}
+	//	// バレットの描画
+	//	_pBulletManager->Draw();
+
+	//	// ステージの描画
+	//	_pStage->DrawStage();
+
+	//	// 禊虫の描画
+	//	_pWedgewormManager->Draw();
+	//	// プレイヤーの描画
+	//	_pPlayerManager->Draw(i);
+	//}
 }
 
 void ScenePvp::FadeInUpdate()
@@ -200,8 +234,8 @@ void ScenePvp::FadeInUpdate()
 	// 通常の更新
 	NomalUpdate();
 
-	_flame--;
-	if (_flame == 0) {
+	_frame--;
+	if (_frame == 0) {
 		_updateFunc = &ScenePvp::NomalUpdate;
 		_drawFunc = &ScenePvp::NormalDraw;
 	}
@@ -213,8 +247,22 @@ void ScenePvp::FadeInDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_flame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / 110));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+void ScenePvp::MakeScreen()
+{
+	if (_pPlayerManager->GetPlayerNum() == 2) {
+		_screen.push_back(DxLib::MakeScreen(960, 1080, true));
+		_screen.push_back(DxLib::MakeScreen(960, 1080, true));
+	}
+	else {
+		_screen.push_back(DxLib::MakeScreen(960, 540, true));
+		_screen.push_back(DxLib::MakeScreen(960, 540, true));
+		_screen.push_back(DxLib::MakeScreen(960, 540, true));
+		_screen.push_back(DxLib::MakeScreen(960, 540, true));
+	}
 }

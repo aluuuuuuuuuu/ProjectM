@@ -107,6 +107,6 @@ private:
 	std::shared_ptr<NumUtility> _pNum;
 
 	// フレームカウンタ
-	int _flame;
+	int _frame;
 };
 

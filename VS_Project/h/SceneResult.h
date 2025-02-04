@@ -76,7 +76,7 @@ private:
 	std::shared_ptr<ResultCharacter> _pCharacter;
 
 	// フレームカウンタ
-	int _flame;
+	int _frame;
 
 	// 次にロードするシーン
 	int _nextScene;

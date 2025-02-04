@@ -14,7 +14,7 @@
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
-	_flame(0),
+	_frame(0),
 	_nextScene(0)
 {
 	// キャラクターの作成
@@ -119,10 +119,10 @@ void SceneResult::NormalDraw() const
 
 void SceneResult::FadeOutUpdate()
 {
-	_flame++;
+	_frame++;
 
 	// フェードが終了したら
-	if (_flame > 110) {
+	if (_frame > 110) {
 		// 次のシーンに切り替える
 		switch (_nextScene)
 		{
@@ -147,7 +147,7 @@ void SceneResult::FadeOutDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_flame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / 110));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

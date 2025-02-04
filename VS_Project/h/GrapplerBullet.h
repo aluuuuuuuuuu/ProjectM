@@ -52,6 +52,6 @@ private:
     // 禊虫マネージャーの参照
     std::shared_ptr<WedgewormManager>& _wedgeManager;
 
-    int _flame;
+    int _frame;
 };
 

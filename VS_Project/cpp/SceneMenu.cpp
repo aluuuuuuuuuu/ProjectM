@@ -7,7 +7,7 @@
 
 SceneMenu::SceneMenu(int padNum) :
 	_padNum(padNum),
-	_flame(0)
+	_frame(0)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneMenu::NomalUpdate;
@@ -46,4 +46,3 @@ void SceneMenu::NormalDraw() const
 	// メニューマネージャーの描画処理
 	_manager->Draw();
 }
-

@@ -96,7 +96,7 @@ private:
 	std::shared_ptr<SkyDome> _pSkyDome;
 
 	// フェード用フレームカウンタ
-	int _flame;
+	int _frame;
 
 	// ゲームシーンに渡すプレイヤーのデータ
 	PlayerData _plData;

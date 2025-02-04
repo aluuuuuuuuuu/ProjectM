@@ -10,7 +10,7 @@
 GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum, std::shared_ptr<WedgewormManager>& wedge) :
 	_collManager(col),
 	_bulletManager(mgr),
-	_flame(0),
+	_frame(0),
 	_wedgeManager(wedge)
 
 {
@@ -68,8 +68,8 @@ void GrapplerBullet::Update()
 
 	// “–‚½‚Á‚Ä‚àˆê’èŽžŠÔŽc‚é‚æ‚¤‚É‚·‚é
 	if (_invalidFlag) {
-		_flame++;
-		if (_flame >= 80) {
+		_frame++;
+		if (_frame >= 80) {
 			_deadFlag = true;
 		}
 	}

@@ -49,8 +49,8 @@ TitlePlayer::TitlePlayer(int pos, int num)
 	//}
 	//else {
 		// アニメーションの初期処理
-		InitAnimation(_modelHandle, 0, 0.5f);
-		ChangeAnimation(_modelHandle, 1, true, 0.1f);
+	InitAnimation(_modelHandle, 0, 0.5f);
+	ChangeAnimation(_modelHandle, 1, true, 0.1f);
 	//}
 
 	// モデルの更新
