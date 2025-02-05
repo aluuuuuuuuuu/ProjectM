@@ -30,7 +30,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_pResultUi = std::make_shared<ResultUi>(gameTime);
 
 	// 関数ポインタの初期化
-	_updateFunc = &SceneResult::NomalUpdate;
+	_updateFunc = &SceneResult::NormalUpdate;
 	_drawFunc = &SceneResult::NormalDraw;
 
 	// キャラクターの更新処理
@@ -54,7 +54,7 @@ void SceneResult::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneResult::NomalUpdate()
+void SceneResult::NormalUpdate()
 {
 	auto plNum = _playerData.playerNum;
 

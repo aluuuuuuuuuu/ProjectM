@@ -177,6 +177,7 @@
     <ClCompile Include="cpp\SceneBase.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
     <ClCompile Include="cpp\SceneMenu.cpp" />
+    <ClCompile Include="cpp\ScenePause.cpp" />
     <ClCompile Include="cpp\ScenePve.cpp" />
     <ClCompile Include="cpp\ScenePvp.cpp" />
     <ClCompile Include="cpp\SceneResult.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="h\SceneBase.h" />
     <ClInclude Include="h\SceneManager.h" />
     <ClInclude Include="h\SceneMenu.h" />
+    <ClInclude Include="h\ScenePause.h" />
     <ClInclude Include="h\ScenePve.h" />
     <ClInclude Include="h\ScenePvp.h" />
     <ClInclude Include="h\SceneResult.h" />

@@ -48,7 +48,7 @@ SceneTest::SceneTest(PlayerData& data)
 
 	// ŠÖ”ƒ|ƒCƒ“ƒ^‚Ì‰Šú‰»
 	{
-		_updateFunc = &SceneTest::NomalUpdate;
+		_updateFunc = &SceneTest::NormalUpdate;
 		_drawFunc = &SceneTest::NormalDraw;
 	}
 }
@@ -73,7 +73,7 @@ void SceneTest::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneTest::NomalUpdate()
+void SceneTest::NormalUpdate()
 {
 	SoundManager::GetInstance().StartBGM(BGM_BATTLE);
 

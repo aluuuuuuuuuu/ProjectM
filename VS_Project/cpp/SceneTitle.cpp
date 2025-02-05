@@ -121,7 +121,7 @@ void SceneTitle::Draw() const
 	(this->*_drawFunc)();
 }
 
-void SceneTitle::NomalUpdate()
+void SceneTitle::NormalUpdate()
 {
 	// 落下キャラクターの更新処理
 	_pFallCharactor->Update();
@@ -275,7 +275,7 @@ void SceneTitle::FadeInUpdate()
 
 	_frame--;
 	if (_frame == 0) {
-		_updateFunc = &SceneTitle::NomalUpdate;
+		_updateFunc = &SceneTitle::NormalUpdate;
 		_drawFunc = &SceneTitle::NormalDraw;
 	}
 }
@@ -496,7 +496,7 @@ void SceneTitle::NormalFadeInUpdate()
 	_frame--;
 	if (_frame == 0) {
 
-		_updateFunc = &SceneTitle::NomalUpdate;
+		_updateFunc = &SceneTitle::NormalUpdate;
 		_drawFunc = &SceneTitle::NormalDraw;
 	}
 }

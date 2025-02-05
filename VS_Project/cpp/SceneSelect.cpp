@@ -8,8 +8,7 @@
 #include "SceneTitle.h"
 #include "SoundManager.h"
 #include "SkyDome.h"
-#include "ScenePvp.h"
-#include "ScenePve.h"
+#include "ScenePause.h"
 
 SceneSelect::SceneSelect(int num) :
 	_frame(0)
@@ -147,13 +146,7 @@ void SceneSelect::FadeOutUpdate()
 	if (_frame > 60) {
 
 		// Ÿ‚ÌƒV[ƒ“‚ÉˆÚs‚·‚é
-		if (_plData.playerNum == PLAYER_ONE) {
-			_plData.aiFlag = true;
-			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePve>(_plData));
-		}
-		else {
-			SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePvp>(_plData));
-		}
+		SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePause>(_plData));
 	}
 }
 

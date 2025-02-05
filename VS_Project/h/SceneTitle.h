@@ -51,7 +51,7 @@ private:
 	/// <summary>
 	/// ’Êí‚ÌXVˆ—
 	/// </summary>
-	void NomalUpdate();
+	void NormalUpdate();
 
 	/// <summary>
 	/// ’Êí‚Ì•`‰æˆ—

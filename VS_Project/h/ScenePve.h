@@ -24,7 +24,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="data">プレイヤーデータ</param>
-	ScenePve(PlayerData& data);
+	ScenePve(PlayerData data);
 
 	/// <summary>
 	/// デストラクタ
@@ -52,7 +52,7 @@ private:
 	/// <summary>
 	/// 通常の更新処理
 	/// </summary>
-	void NomalUpdate();
+	void NormalUpdate();
 
 	/// <summary>
 	/// 通常の描画処理

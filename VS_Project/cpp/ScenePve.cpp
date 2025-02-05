@@ -18,7 +18,7 @@
 #include "EffectManager.h"
 
 
-ScenePve::ScenePve(PlayerData& data):
+ScenePve::ScenePve(PlayerData data):
 	_frame(110)
 {
 	// タイトルのBGMを止める
@@ -82,7 +82,7 @@ void ScenePve::Draw() const
 	(this->*_drawFunc)();
 }
 
-void ScenePve::NomalUpdate()
+void ScenePve::NormalUpdate()
 {
 	// BGMを再生	
 	SoundManager::GetInstance().StartBGM(BGM_BATTLE);
@@ -182,11 +182,11 @@ void ScenePve::EndDraw() const
 void ScenePve::FadeInUpdate()
 {
 	// 通常の更新
-	NomalUpdate();
+	NormalUpdate();
 
 	_frame--;
 	if (_frame == 0) {
-		_updateFunc = &ScenePve::NomalUpdate;
+		_updateFunc = &ScenePve::NormalUpdate;
 		_drawFunc = &ScenePve::NormalDraw;
 	}
 }

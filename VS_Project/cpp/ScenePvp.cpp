@@ -18,7 +18,7 @@
 #include "EffectManager.h"
 #include "EffekseerForDXLib.h"
 
-ScenePvp::ScenePvp(PlayerData& data):
+ScenePvp::ScenePvp(PlayerData data):
 	_frame(110)
 {
 	// タイトルのBGMを止める
@@ -83,7 +83,7 @@ void ScenePvp::Draw() const
 	(this->*_drawFunc)();
 }
 
-void ScenePvp::NomalUpdate()
+void ScenePvp::NormalUpdate()
 {
 	// BGMを再生	
 	SoundManager::GetInstance().StartBGM(BGM_BATTLE);
@@ -232,11 +232,11 @@ void ScenePvp::EndDraw() const
 void ScenePvp::FadeInUpdate()
 {
 	// 通常の更新
-	NomalUpdate();
+	NormalUpdate();
 
 	_frame--;
 	if (_frame == 0) {
-		_updateFunc = &ScenePvp::NomalUpdate;
+		_updateFunc = &ScenePvp::NormalUpdate;
 		_drawFunc = &ScenePvp::NormalDraw;
 	}
 }

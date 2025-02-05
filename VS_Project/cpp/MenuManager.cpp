@@ -121,7 +121,7 @@ Vec2 MenuManager::GetRange(int buttonNum)
 	return _pButton[buttonNum]->GetRange();
 }
 
-void MenuManager::NomalUpdate()
+void MenuManager::NormalUpdate()
 {
 	// 指の更新処理
 	_pFinger->Update();
@@ -257,7 +257,7 @@ void MenuManager::SlideInUpdate()
 		}
 	}
 	else {
-		_updateFunc = &MenuManager::NomalUpdate;
+		_updateFunc = &MenuManager::NormalUpdate;
 	}
 
 	// 指の更新処理
