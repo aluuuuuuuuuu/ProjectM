@@ -95,7 +95,7 @@ SceneTitle::SceneTitle(bool slidInFlag) :
 
 	_serihu2 = LoadGraph("data/image/message3.png");
 
-	_serihu3 = LoadGraph("data/image/message4.png");
+	//_serihu3 = LoadGraph("data/image/message4.png");
 
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
@@ -365,16 +365,16 @@ void SceneTitle::NumSelectUpdate()
 			}
 		}
 
-		if (Input::GetInstance().IsTrigger(INPUT_Y, num)) {
-			// 決定音を鳴らす
-			SoundManager::GetInstance().RingSE(SE_TITLE_START);
+		//if (Input::GetInstance().IsTrigger(INPUT_Y, num)) {
+		//	// 決定音を鳴らす
+		//	SoundManager::GetInstance().RingSE(SE_TITLE_START);
 
-			// チュートリアルフラグを立てる
-			_tutorial = true;
+		//	// チュートリアルフラグを立てる
+		//	_tutorial = true;
 
-			_updateFunc = &SceneTitle::FadeOutUpdate;
-			_drawFunc = &SceneTitle::FadeOutDraw;
-		}
+		//	_updateFunc = &SceneTitle::FadeOutUpdate;
+		//	_drawFunc = &SceneTitle::FadeOutDraw;
+		//}
 	}
 }
 
