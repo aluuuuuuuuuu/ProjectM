@@ -298,6 +298,7 @@ void MenuManager::EndUpdate()
 {
 	_frame++;
 	if (_frame > 60) {
+		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().PopScene();
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
 	}
