@@ -11,6 +11,8 @@
 #include "SoundManager.h"
 #include "ScenePve.h"
 #include "SkyDome.h"
+#include "Effekseer.h"
+#include <EffekseerForDXLib.h>
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
@@ -47,6 +49,10 @@ SceneResult::~SceneResult()
 void SceneResult::Update()
 {
 	(this->*_updateFunc)();
+
+
+	// Ç¶Ç”Ç•Ç≠ÇµÇ†ÇÃçXêV
+	UpdateEffekseer3D();
 }
 
 void SceneResult::Draw() const
