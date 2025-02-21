@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+class PlayerBulletCollisionManager;
 class NumUtility;
 class GameFlowManager;
 class WedgewormManager;
@@ -93,6 +94,9 @@ private:
 
     // プレイヤーマネージャー
     std::shared_ptr<PlayerManager> _pPlayerManager;
+
+    // プレイヤーバレットコリジョンマネージャー
+    std::shared_ptr<PlayerBulletCollisionManager> _pPlayerBulletCollisionManager;
 
     // スカイドームポインタ
     std::shared_ptr<SkyDome> _pSkyDome;

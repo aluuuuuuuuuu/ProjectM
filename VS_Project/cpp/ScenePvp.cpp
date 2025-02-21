@@ -17,6 +17,7 @@
 #include "SoundManager.h"
 #include "EffectManager.h"
 #include "EffekseerForDXLib.h"
+#include "PlayerBulletCollisionManager.h"
 
 ScenePvp::ScenePvp(PlayerData data):
 	_frame(110)
@@ -35,6 +36,7 @@ ScenePvp::ScenePvp(PlayerData data):
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
 		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
+		_pPlayerBulletCollisionManager = std::make_shared<PlayerBulletCollisionManager>(_pBulletManager, _pPlayerManager);
 	}
 
 	// ライトの設定
@@ -109,6 +111,9 @@ void ScenePvp::NormalUpdate()
 
 	// 禊虫の更新
 	_pWedgewormManager->Update();
+
+	// プレイヤーコリジョンマネージャーの更新
+	_pPlayerBulletCollisionManager->Update();
 
 	// ゲームが終了していたら終了時の処理に移る
 	if (_pGameFlowManager->GetGameEnd()) {

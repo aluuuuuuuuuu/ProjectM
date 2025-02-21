@@ -63,7 +63,7 @@ void EffectManager::LoadEffect(int effect)
 		_effectMap[effect] = LoadEffekseerEffect("data/effect/BombBullet.efk", 5.0f);
 		break;
 	case GRAPPLE_BULLET_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/GrappleBullet.efk", 5.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/GrappleBullet2.efk", 5.0f);
 		break;
 	case BLOCK_DESTROY_EFFECT:
 		_effectMap[effect] = LoadEffekseerEffect("data/effects/test.efk", 5.0f);

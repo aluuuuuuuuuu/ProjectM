@@ -34,7 +34,17 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() const;
+
+	/// <summary>
+	/// プレイヤーと当たった時の処理
+	/// </summary>
+	void PlayerCollision();
 private:
+
+	/// <summary>
+	/// 弾が何かに当たった時の処理
+	/// </summary>
+	void CollisionFunction();
 
 	// コリジョンマネージャーの参照
 	std::shared_ptr<MapBulletCollisionManager>& _collManager;

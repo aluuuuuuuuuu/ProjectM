@@ -28,6 +28,9 @@ GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCol
 
 	// エフェクトインスタンスの作成
 	_pEffect = std::make_shared<MyEffect>(GRAPPLE_BULLET_EFFECT, pos);
+
+	// 半径の設定
+	_radius = 3.0f;
 }
 
 GrapplerBullet::~GrapplerBullet()
@@ -52,7 +55,7 @@ void GrapplerBullet::Update()
 	}
 
 	// マップとの当たり判定をとる
-	if (_collManager->CollisionBullet(Position, 3.0f, GRAPPLER_BULLET)) {
+	if (_collManager->CollisionBullet(Position, _radius, GRAPPLER_BULLET)) {
 
 		_collisionFlag = true;
 	}
@@ -86,4 +89,8 @@ void GrapplerBullet::Update()
 void GrapplerBullet::Draw() const
 {
 	//DrawSphere3D(Position.VGet(), 3.0f, 16, 0xff00ff, 0xff00ff, true);
+}
+
+void GrapplerBullet::PlayerCollision()
+{
 }

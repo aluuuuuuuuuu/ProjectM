@@ -22,27 +22,27 @@ ColResult CollisionManager::PlayerCollision(std::vector<std::shared_ptr<Player>>
 
 		// カプセルとカプセルの当たり判定をとる
 
-		float moveDist = (player[i]->_data.FrontPointA - player[i]->_data.PointA).Length();
+		float moveDist = (player[i]->_capsuleData.FrontPointA - player[i]->_capsuleData.PointA).Length();
 
 		for (int n = 0; n < player.size(); n++) {
 
 			// プレイヤーが自身と当たり判定をとらないようにする
 			if (n != i) {
 				// カプセルの線分同士の距離を求める
-				float dist = DistanceLineToLine(player[i]->_data, player[n]->_data);
+				float dist = DistanceLineToLine(player[i]->_capsuleData, player[n]->_capsuleData);
 
 				// 二つのカプセルの半径を足した値より距離が短ければ当たっている
-				if (dist <= player[i]->_data.Radius + player[n]->_data.Radius) {
+				if (dist <= player[i]->_capsuleData.Radius + player[n]->_capsuleData.Radius) {
 
-					if (moveDist >= (player[n]->_data.FrontPointA - player[n]->_data.PointA).Length()) {
+					if (moveDist >= (player[n]->_capsuleData.FrontPointA - player[n]->_capsuleData.PointA).Length()) {
 
 						if (player[n]->GetGroundFlag()) {
-							float aaaa = (player[n]->_data.FrontPointA - player[n]->_data.PointA).Length();
-							Vec3 vec = CreateMoveVectorCapsule(player[i]->_data, player[n]->_data, dist);
+							float aaaa = (player[n]->_capsuleData.FrontPointA - player[n]->_capsuleData.PointA).Length();
+							Vec3 vec = CreateMoveVectorCapsule(player[i]->_capsuleData, player[n]->_capsuleData, dist);
 							_vResultMove += vec;
 
-							player[i]->_data.PointA += vec;
-							player[i]->_data.PointB += vec;
+							player[i]->_capsuleData.PointA += vec;
+							player[i]->_capsuleData.PointB += vec;
 						}
 					}
 				}
@@ -66,16 +66,16 @@ ColResult CollisionManager::PlayerCollision(std::vector<std::shared_ptr<Player>>
 						min = Vec3{ max - _pStage->GetConstantInt("BLOCK_SIZE") };
 
 						// めり込んでいるかどうか判定する
-						if (CollisionBoxCapsule(max, min, player[i]->_data)) {
+						if (CollisionBoxCapsule(max, min, player[i]->_capsuleData)) {
 
 							// ずらす分の移動ベクトルを作成
-							Vec3 vec = CreateMoveVectorBox(max, min, player[i]->_data);
+							Vec3 vec = CreateMoveVectorBox(max, min, player[i]->_capsuleData);
 
 							// 配列に保存
 							_vResultMove += vec;
 
-							player[i]->_data.PointA += vec;
-							player[i]->_data.PointB += vec;
+							player[i]->_capsuleData.PointA += vec;
+							player[i]->_capsuleData.PointB += vec;
 						}
 					}
 				}

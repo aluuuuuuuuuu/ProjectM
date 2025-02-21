@@ -20,7 +20,9 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_grapplerScale(0),
 	_deadFlag(false),
 	_bulletData(data),
-	_frame(0)
+	_frame(0),
+	_stunFrag(false),
+	_stunFrame(0)
 {
 	// 関数ポインタの初期化
 	_controlFunc = &Player::ControlPl;
@@ -64,7 +66,9 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 	_deadFlag(false),
 	_bulletData(data),
 	_frame(0),
-	_padNum(1)
+	_padNum(1),
+	_stunFrag(false),
+	_stunFrame(0)
 {
 	// 関数ポインタの初期化
 	_controlFunc = &Player::ControlAI;
@@ -112,6 +116,14 @@ void Player::Control()
 void Player::Update()
 {
 	(this->*_updateFunc)();
+
+	if (_stunFrag) {
+		_stunFrame++;
+		if (_stunFrame > 30) {
+			_stunFrame = 0;
+			_stunFrag = false;
+		}
+	}
 }
 
 void Player::ControlPl()
@@ -507,7 +519,7 @@ void Player::Draw() const
 {
 
 #ifdef _DEBUG
-	//DrawCapsule();
+	DrawCapsule();
 	//DrawLine3D(Position.VGet(), (Position + _forwardVec * 20).VGet(), 0x00ffff);
 	//DrawFormatString(10, 20, 0xff0000, "x:%f y:%f z:%f angleY:%f angleZ:%f", Position.x, Position.y, Position.z, Angle.y, Angle.z);
 	//if (_groundFlag) {
@@ -559,6 +571,25 @@ void Player::KillPlayer()
 int Player::GetPlayerNum() const
 {
 	return _padNum;
+}
+
+void Player::BulletCollision(int bul)
+{
+	// 弾の種類によって処理を変える
+	switch (bul) {
+	case NORMAL_BULLET:
+		_stunFrag = true;
+		break;
+	case GRAPPLER_BULLET:
+		break;
+	case BOMB_BULLET:
+		break;
+	}
+}
+
+bool Player::GetStunFlag() const
+{
+	return _stunFrag;
 }
 
 void Player::RotateAngleY(float targetAngle)

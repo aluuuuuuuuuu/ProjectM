@@ -16,6 +16,7 @@
 #include "NumUtility.h"
 #include "SoundManager.h"
 #include "EffectManager.h"
+#include "PlayerBulletCollisionManager.h"
 
 
 ScenePve::ScenePve(PlayerData data):
@@ -35,6 +36,7 @@ ScenePve::ScenePve(PlayerData data):
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
 		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
+		_pPlayerBulletCollisionManager = std::make_shared<PlayerBulletCollisionManager>(_pBulletManager, _pPlayerManager);
 	}
 
 	// AIの追加
@@ -106,6 +108,9 @@ void ScenePve::NormalUpdate()
 
 	// 禊虫の更新
 	_pWedgewormManager->Update();
+
+	// プレイヤーコリジョンマネージャーの更新
+	_pPlayerBulletCollisionManager->Update();
 
 	// ゲームが終了していたら終了時の処理に移る
 	if (_pGameFlowManager->GetGameEnd()) {

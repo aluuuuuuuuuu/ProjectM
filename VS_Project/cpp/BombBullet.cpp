@@ -25,6 +25,9 @@ BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionMa
 
 	// エフェクトインスタンスの作成
 	_pEffect = std::make_shared<MyEffect>(BOMB_BULLET_EFFECT, pos);
+
+	// 半径の設定
+	_radius = 3.0f;
 }
 
 BombBullet::~BombBullet()
@@ -61,7 +64,7 @@ void BombBullet::Update()
 	}
 	else {
 		// マップとの当たり判定をとる
-		if (_collManager->CollisionBullet(Position, 3.0f, BOMB_BULLET)) {
+		if (_collManager->CollisionBullet(Position, _radius, BOMB_BULLET)) {
 
 			SoundManager::GetInstance().RingSE(SE_EXPLOSION);
 
@@ -78,4 +81,8 @@ void BombBullet::Update()
 void BombBullet::Draw() const
 {
 	//DrawSphere3D(Position.VGet(), 3.0f, 16, 0xf0ff00, 0xf0ff00, true);
+}
+
+void BombBullet::PlayerCollision()
+{
 }

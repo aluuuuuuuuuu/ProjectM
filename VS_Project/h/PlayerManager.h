@@ -155,6 +155,8 @@ public:
 	/// </summary>
 	void DeleteAi();
 
+	std::vector<std::shared_ptr<Player>>& GetPlayerList();
+
 private:
 
 	/// <summary>

@@ -82,6 +82,14 @@ public:
 	/// <returns>プレイヤーナンバー</returns>
 	int GetPlayerNum() const;
 
+	/// <summary>
+	/// 弾が当たった時に呼ばれる関数
+	/// </summary>
+	/// <param name="bul">弾の種類</param>
+	void BulletCollision(int bul);
+
+	bool GetStunFlag() const;
+
 private:
 
 	// コントロール関数ポインタ
@@ -182,6 +190,13 @@ private:
 	// AI用の60フレーム前の座標
 	Vec3 _oldPos;
 
+	// エフェクト
 	std::shared_ptr<MyEffect> _pEffect;
+
+	// スタンフラグ
+	bool _stunFrag;
+
+	// スタンフレーム
+	int _stunFrame;
 };
 

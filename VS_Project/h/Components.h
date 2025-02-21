@@ -252,7 +252,7 @@ public:
 	/// </summary>
 	void DrawCapsule() const;
 
-	CapsuleData _data;
+	CapsuleData _capsuleData;
 private:
 	float _height = 0;
 	bool _valid = true;	// Šî–{—LŒø‰»‚³‚ê‚Ä‚¢‚é

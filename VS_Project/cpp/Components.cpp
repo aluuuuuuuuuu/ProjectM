@@ -294,14 +294,14 @@ CapsuleCollision::~CapsuleCollision()
 
 void CapsuleCollision::InitCapsule(Vec3 pos, float radius, float height)
 {
-	_data.Radius = radius;
+	_capsuleData.Radius = radius;
 	_height = height;
 
-	Vec3 vecA = Vec3{ pos.x,pos.y + _data.Radius,pos.z };
-	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + _height,pos.z };
+	Vec3 vecA = Vec3{ pos.x,pos.y + _capsuleData.Radius,pos.z };
+	Vec3 vecB = Vec3{ pos.x,pos.y + _capsuleData.Radius + _height,pos.z };
 
-	_data.PointA = vecA;
-	_data.PointB = vecB;
+	_capsuleData.PointA = vecA;
+	_capsuleData.PointB = vecB;
 }
 
 void CapsuleCollision::Aactivation()
@@ -322,15 +322,15 @@ bool CapsuleCollision::IsActivation()
 void CapsuleCollision::Set(Vec3 pos)
 {
 	// 座標を保存しておく
-	_data.FrontPointA = _data.PointA;
-	_data.FrontPointB = _data.PointB;
+	_capsuleData.FrontPointA = _capsuleData.PointA;
+	_capsuleData.FrontPointB = _capsuleData.PointB;
 
 	// 新しい座標をセットする
-	Vec3 vecA = Vec3{ pos.x,pos.y + _data.Radius,pos.z };
-	Vec3 vecB = Vec3{ pos.x,pos.y + _data.Radius + _height,pos.z };
+	Vec3 vecA = Vec3{ pos.x,pos.y + _capsuleData.Radius,pos.z };
+	Vec3 vecB = Vec3{ pos.x,pos.y + _capsuleData.Radius + _height,pos.z };
 
-	_data.PointA = vecA;
-	_data.PointB = vecB;
+	_capsuleData.PointA = vecA;
+	_capsuleData.PointB = vecB;
 }
 
 void CapsuleCollision::SetHeight(float height)
@@ -381,7 +381,7 @@ float CapsuleCollision::CapsuleDistance(const Vec3& p1, const Vec3& q1, const Ve
 void CapsuleCollision::DrawCapsule() const
 {
 	if (_valid) {
-		DrawCapsule3D(_data.PointA.VGet(), _data.PointB.VGet(), _data.Radius, 4, 0xff0000, 0xff0000, false);
+		DrawCapsule3D(_capsuleData.PointA.VGet(), _capsuleData.PointB.VGet(), _capsuleData.Radius, 4, 0xff0000, 0xff0000, false);
 	}
 }
 

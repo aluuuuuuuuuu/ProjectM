@@ -35,12 +35,11 @@ public:
     /// </summary>
     void Draw() const;
 
-     /// <summary>
-     /// 禊虫と当たったかを返す
-     /// </summary>
-     /// <param name="plNum">プレイヤーナンバー</param>
-     /// <returns>当たってないもしくはグラップルでなければfalse</returns>
-    bool WedgeCollision(int plNum);
+    /// <summary>
+    /// プレイヤーと当たった時の処理
+    /// </summary>
+    void PlayerCollision();
+
 private:
 
     // コリジョンマネージャーの参照

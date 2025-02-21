@@ -25,6 +25,9 @@ NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisi
 
 	// エフェクトインスタンスの作成
 	_pEffect = std::make_shared<MyEffect>(NORMAL_BULLET_EFFECT,pos);
+
+	// 半径の設定
+	_radius = 3.0f;
 }
 
 NormalBullet::~NormalBullet()
@@ -47,15 +50,13 @@ void NormalBullet::Update()
 		Position.y -= _gravity;
 
 		// マップとの当たり判定をとる
-		if (_collManager->CollisionBullet(Position, 3.0f, NORMAL_BULLET)) {
+		if (_collManager->CollisionBullet(Position, _radius, NORMAL_BULLET)) {
 
 			// 着弾音を鳴らす
 			SoundManager::GetInstance().RingSE(SE_DESTRUCTION);
 
-			_frame = 1;
-			_pEffect->StopEffect();
-			_destroyEffect = std::make_shared<MyEffect>(BLOCK_DESTROY_EFFECT, Position);
-			_destroyEffect->SetScaleEffect(Vec3{ 0.1f,0.1f,0.1f });
+			// 当たった時の処理
+			CollisionFunction();
 		}
 
 		// 一定のラインを越えたら削除する
@@ -83,4 +84,18 @@ void NormalBullet::Draw() const
 #ifdef _DEBUG
 	//DrawSphere3D(Position.VGet(), 3.0f, 16, 0x0000ff, 0x0000ff, true);
 #endif // DEBUG
+}
+
+void NormalBullet::PlayerCollision()
+{
+	CollisionFunction();
+}
+
+void NormalBullet::CollisionFunction()
+{
+	_playerCollisionFlag = true;
+	_frame = 1;
+	_pEffect->StopEffect();
+	_destroyEffect = std::make_shared<MyEffect>(BLOCK_DESTROY_EFFECT, Position);
+	_destroyEffect->SetScaleEffect(Vec3{ 0.1f,0.1f,0.1f });
 }

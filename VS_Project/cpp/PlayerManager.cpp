@@ -274,6 +274,11 @@ void PlayerManager::DeleteAi()
 	_playerData.character[1] = -1;
 }
 
+std::vector<std::shared_ptr<Player>>& PlayerManager::GetPlayerList()
+{
+	return _pPlayer;
+}
+
 VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)
 {
 	int size = static_cast<int>(_pPlayer.size());

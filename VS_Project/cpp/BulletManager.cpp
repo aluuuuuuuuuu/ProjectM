@@ -115,3 +115,8 @@ bool BulletManager::GetBulletExist(int plNum)
 	return false;
 }
 
+std::list<std::shared_ptr<BulletBase>>& BulletManager::GetBulletList()
+{
+	return _pBullet;
+}
+

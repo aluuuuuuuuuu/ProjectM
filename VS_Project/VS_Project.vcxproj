@@ -168,6 +168,7 @@
     <ClCompile Include="cpp\NumSelectButton.cpp" />
     <ClCompile Include="cpp\NumUtility.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
+    <ClCompile Include="cpp\PlayerBulletCollisionManager.cpp" />
     <ClCompile Include="cpp\PlayerCamera.cpp" />
     <ClCompile Include="cpp\PlayerManager.cpp" />
     <ClCompile Include="cpp\PlayerUi.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="h\NumSelectButton.h" />
     <ClInclude Include="h\NumUtility.h" />
     <ClInclude Include="h\Player.h" />
+    <ClInclude Include="h\PlayerBulletCollisionManager.h" />
     <ClInclude Include="h\PlayerCamera.h" />
     <ClInclude Include="h\PlayerManager.h" />
     <ClInclude Include="h\PlayerUi.h" />

@@ -75,6 +75,12 @@ public:
 	/// <returns>存在していたらtrue</returns>
 	bool GetBulletExist(int plNum);
 
+	/// <summary>
+	/// バレットの配列の参照を返す
+	/// </summary>
+	/// <returns>バレットの配列</returns>
+	std::list<std::shared_ptr<BulletBase>>& GetBulletList();
+
 private:
 
 	// バレットを保存するリスト配列

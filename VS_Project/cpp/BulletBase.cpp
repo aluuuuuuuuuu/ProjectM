@@ -6,7 +6,9 @@ BulletBase::BulletBase():
 	_collisionFlag(false),
 	_invalidFlag(false),
 	_playerNum(0),
-	_gravity(0)
+	_gravity(0),
+	_radius(0),
+	_playerCollisionFlag(false)
 {
 }
 
@@ -38,4 +40,14 @@ void BulletBase::KillBullet()
 int BulletBase::GetPlayerNum()
 {
 	return _playerNum;
+}
+
+float BulletBase::GetRadius() const
+{
+	return _radius;
+}
+
+bool BulletBase::GetPlayerCollisionFlag() const
+{
+	return _playerCollisionFlag;
 }

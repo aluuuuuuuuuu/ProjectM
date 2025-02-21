@@ -59,6 +59,23 @@ public:
 	 /// <returns>プレイヤーナンバー</returns>
 	 int GetPlayerNum();
 
+	 /// <summary>
+	 /// 半径を取得する
+	 /// </summary>
+	 /// <returns>半径</returns>
+	 float GetRadius() const;
+
+	 /// <summary>
+	 /// プレイヤーと当たった時の処理
+	 /// </summary>
+	 virtual void PlayerCollision() = 0;
+
+	 /// <summary>
+	 /// プレイヤーとの当たり判定フラグを返す
+	 /// </summary>
+	 /// <returns>trueで当たっている</returns>
+	 bool GetPlayerCollisionFlag() const;
+
 protected:
 
 	// 死亡フラグ
@@ -73,6 +90,9 @@ protected:
 	// 無効フラグ
 	bool _invalidFlag;
 
+	// プレイヤーと当たったフラグ
+	bool _playerCollisionFlag;
+
 	// 自身がどのプレイヤーから発射されたかを保存しておく
 	int _playerNum;
 
@@ -84,6 +104,9 @@ protected:
 
 	// エフェクトポインタ
 	std::shared_ptr<MyEffect> _pEffect;
+
+	// 半径
+	float _radius;
 
 };
 
