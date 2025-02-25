@@ -578,7 +578,7 @@ void Player::BulletCollision(int bul)
 	// ’e‚Ìí—Ş‚É‚æ‚Á‚Äˆ—‚ğ•Ï‚¦‚é
 	switch (bul) {
 	case NORMAL_BULLET:
-		_stunFrag = true;
+		//_stunFrag = true;
 		break;
 	case GRAPPLER_BULLET:
 		break;

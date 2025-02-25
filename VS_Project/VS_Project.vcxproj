@@ -183,11 +183,13 @@
     <ClCompile Include="cpp\ScenePvp.cpp" />
     <ClCompile Include="cpp\SceneResult.cpp" />
     <ClCompile Include="cpp\SceneSelect.cpp" />
+    <ClCompile Include="cpp\SceneSelectMode.cpp" />
     <ClCompile Include="cpp\SceneTest.cpp" />
     <ClCompile Include="cpp\SceneTitle.cpp" />
     <ClCompile Include="cpp\SceneTutorial.cpp" />
     <ClCompile Include="cpp\SelectFinger.cpp" />
     <ClCompile Include="cpp\CharacterSelectManager.cpp" />
+    <ClCompile Include="cpp\SelectModeUi.cpp" />
     <ClCompile Include="cpp\SelectUI.cpp" />
     <ClCompile Include="cpp\SkyDome.cpp" />
     <ClCompile Include="cpp\SoundManager.cpp" />
@@ -242,11 +244,13 @@
     <ClInclude Include="h\ScenePvp.h" />
     <ClInclude Include="h\SceneResult.h" />
     <ClInclude Include="h\SceneSelect.h" />
+    <ClInclude Include="h\SceneSelectMode.h" />
     <ClInclude Include="h\SceneTest.h" />
     <ClInclude Include="h\SceneTitle.h" />
     <ClInclude Include="h\SceneTutorial.h" />
     <ClInclude Include="h\SelectFinger.h" />
     <ClInclude Include="h\CharacterSelectManager.h" />
+    <ClInclude Include="h\SelectModeUi.h" />
     <ClInclude Include="h\SelectUI.h" />
     <ClInclude Include="h\Singleton.h" />
     <ClInclude Include="h\SkyDome.h" />
