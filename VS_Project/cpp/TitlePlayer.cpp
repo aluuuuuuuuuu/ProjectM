@@ -41,17 +41,9 @@ TitlePlayer::TitlePlayer(int pos, int num)
 		break;
 	}
 
-	// たか子の例外処理
-	//if (num == 2) {
-		// アニメーションの初期処理
-		//InitAnimation(_modelHandle, 0, 0.5f);
-		//ChangeAnimation(_modelHandle, 0, true, 0.1f);
-	//}
-	//else {
-		// アニメーションの初期処理
+	// アニメーションの初期処理
 	InitAnimation(_modelHandle, 0, 0.5f);
 	ChangeAnimation(_modelHandle, 1, true, 0.1f);
-	//}
 
 	// モデルの更新
 	UpdateModel(GetTransformInstance());

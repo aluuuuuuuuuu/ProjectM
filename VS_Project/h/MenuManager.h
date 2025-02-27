@@ -59,12 +59,12 @@ public:
 private:
 
 	// 関数ポインタ
-	using _UpdateFunc_t = void(MenuManager::*)();
-	using _DrawFunc_t = void (MenuManager::*)() const;
+	using _updateFunc_t = void(MenuManager::*)();
+	using _drawFunc_t = void (MenuManager::*)() const;
 
 	// アップデート関数、ドロー関数
-	_UpdateFunc_t _updateFunc = nullptr;
-	_DrawFunc_t _drawFunc = nullptr;
+	_updateFunc_t _updateFunc = nullptr;
+	_drawFunc_t _drawFunc = nullptr;
 
 	void NormalUpdate();
 

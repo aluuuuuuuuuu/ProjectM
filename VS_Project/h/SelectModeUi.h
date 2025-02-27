@@ -37,6 +37,12 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() const;
+
+	/// <summary>
+	/// 選択しているボタンを取得する
+	/// </summary>
+	/// <returns>選択しているボタン</returns>
+	int GetSelect() const;
 private:
 
 	// フレームカウンタ

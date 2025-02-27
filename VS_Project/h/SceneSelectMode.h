@@ -32,12 +32,12 @@ public:
     void Draw() const;
 private:
     // 関数ポインタ
-    using _UpdateFunc_t = void (SceneSelectMode::*)();
-    using _DrawFunc_t = void (SceneSelectMode::*)() const;
+    using _updateFunc_t = void (SceneSelectMode::*)();
+    using _drawFunc_t = void (SceneSelectMode::*)() const;
 
     // 任意のアップデート関数変数、ドロー関数変数
-    _UpdateFunc_t _updateFunc = nullptr;
-    _DrawFunc_t  _drawFunc = nullptr;
+    _updateFunc_t _updateFunc = nullptr;
+    _drawFunc_t  _drawFunc = nullptr;
 
     /// <summary>
     /// 通常の更新処理
@@ -80,5 +80,11 @@ private:
 
     // スライドイン画像の座標
     Vec2 _slidePos;
+
+    // タイトルシーンに戻るフラグ
+    bool _titleFrag;
+
+    // セレクトシーンから戻ったフラグ
+    bool _returnSelectFrag;
 };
 

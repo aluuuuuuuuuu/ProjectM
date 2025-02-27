@@ -9,6 +9,7 @@
 #include "SoundManager.h"
 #include "SkyDome.h"
 #include "ScenePause.h"
+#include "SceneSelectMode.h"
 
 SceneSelect::SceneSelect(int num) :
 	_frame(0)
@@ -124,7 +125,7 @@ void SceneSelect::SlideOutUpdate()
 	_slidePos.x += 80;
 	if (_slidePos.x >= -300) {
 		// Ÿ‚ÌƒV[ƒ“‚ÉˆÚs‚·‚é
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(true));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(false));
 	}
 }
 

@@ -176,6 +176,7 @@
     <ClCompile Include="cpp\ResultLogo.cpp" />
     <ClCompile Include="cpp\ResultUi.cpp" />
     <ClCompile Include="cpp\SceneBase.cpp" />
+    <ClCompile Include="cpp\SceneCredit.cpp" />
     <ClCompile Include="cpp\SceneManager.cpp" />
     <ClCompile Include="cpp\SceneMenu.cpp" />
     <ClCompile Include="cpp\ScenePause.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="h\ResultLogo.h" />
     <ClInclude Include="h\ResultUi.h" />
     <ClInclude Include="h\SceneBase.h" />
+    <ClInclude Include="h\SceneCredit.h" />
     <ClInclude Include="h\SceneManager.h" />
     <ClInclude Include="h\SceneMenu.h" />
     <ClInclude Include="h\ScenePause.h" />

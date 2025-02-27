@@ -1,16 +1,13 @@
 #pragma once
 #include "SceneBase.h"
-#include "Components.h"
 #include <memory>
 #include "Constant.h"
 #include "Vec2.h"
 
 class CreditCharacter;
 class TitlePlayer;
-class StageManager;
 class SkyDome;
 class FallCharactor;
-class NumSelectButton;
 class AnyPushButton;
 class Logo;
 class Crown;
@@ -41,12 +38,12 @@ public:
 private:
 
 	// 関数ポインタ
-	using _UpdateFunc_t = void (SceneTitle::*)();
-	using _DrawFunc_t = void (SceneTitle::*)() const;
+	using _updateFunc_t = void (SceneTitle::*)();
+	using _drawFunc_t = void (SceneTitle::*)() const;
 
 	// 任意のアップデート関数変数、ドロー関数変数
-	_UpdateFunc_t _updateFunc = nullptr;
-	_DrawFunc_t  _drawFunc = nullptr;
+	_updateFunc_t _updateFunc = nullptr;
+	_drawFunc_t  _drawFunc = nullptr;
 
 	/// <summary>
 	/// 通常の更新処理
@@ -84,39 +81,9 @@ private:
 	void FadeInUpdate();
 
 	/// <summary>
-	/// フェードアウト更新処理
-	/// </summary>
-	void FadeOutUpdate();
-
-	/// <summary>
 	/// フェードイン描画処理
 	/// </summary>
 	void FadeInDraw() const;
-
-	/// <summary>
-	/// フェードアウト描画処理
-	/// </summary>
-	void FadeOutDraw() const;
-
-	/// <summary>
-	/// 人数セレクトの更新処理
-	/// </summary>
-	void NumSelectUpdate();
-
-	/// <summary>
-	/// 人数セレクトの描画処理
-	/// </summary>
-	void NumSelectDraw() const;
-
-	/// <summary>
-	/// クレジット更新処理
-	/// </summary>
-	void CreditUpdate();
-
-	/// <summary>
-	/// クレジット描画処理
-	/// </summary>
-	void CreditDraw() const;
 
 	/// <summary>
 	/// 通常のフェードイン更新処理
@@ -133,21 +100,6 @@ private:
 	/// </summary>
 	void NormalFadeDraw() const;
 
-	/// <summary>
-	/// クレジットフェードイン更新処理
-	/// </summary>
-	void CreditFadeInUpdate();
-
-	/// <summary>
-	/// クレジットフェードアウト更新処理
-	/// </summary>
-	void CreditFadeOutUpdate();
-
-	/// <summary>
-	/// クレジットフェード描画処理
-	/// </summary>
-	void CreditFadeDraw() const;
-
 	// 王冠ポインタ
 	std::shared_ptr<Crown> _pCrown;
 
@@ -156,9 +108,6 @@ private:
 
 	// 文章ポインタ
 	std::shared_ptr<AnyPushButton> _pText;
-
-	// 人数セレクトポインタ
-	std::shared_ptr<NumSelectButton> _pNum;
 
 	// 落下キャラクターポインタ
 	std::shared_ptr<FallCharactor> _pFallCharactor;
@@ -182,30 +131,9 @@ private:
 	// スライドインフラグ
 	bool _selectDrawFlag;
 
-	// 背景画像ハンドル
-	int _backHandle;
-
-	// クレジット画像ハンドル
-	int _creditHandle;
-
-	// クレジット表示Y座標
-	int _creditY;
-
-	// クレジットフレームカウンタ
-	int _creditFlame;
-
 	// セリフ画像ハンドル
 	int _serihu;
 	int _serihu2;
 	int _serihu3;
-
-	// クレジットキャラ
-	std::shared_ptr<CreditCharacter> _pChar1;
-	std::shared_ptr<CreditCharacter> _pChar2;
-	std::shared_ptr<CreditCharacter> _pChar3;
-	std::shared_ptr<CreditCharacter> _pChar4;
-
-	// チュートリアルフラグ
-	bool _tutorial;
 };
 

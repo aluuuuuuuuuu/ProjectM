@@ -70,12 +70,16 @@ SelectModeUi::SelectModeUi() :
 SelectModeUi::~SelectModeUi()
 {
 	// 画像の削除
-	for (auto& handle : _buttonHandle) {
-		DeleteGraph(handle);
+	for (int i = 0; i < OPTION_MODE; i++) {
+		DeleteGraph(_circleHandle[i]);
+		DeleteGraph(_centerArrowHandle[i]);
+		DeleteGraph(_buttonHandle[i]);
+		DeleteGraph(_highlightHandle[i]);
+		DeleteGraph(_messageHandle[i]);
+		DeleteGraph(_marginHandle[i]);
 	}
-	for (auto& handle : _messageHandle) {
-		DeleteGraph(handle);
-	}
+
+	DeleteGraph(_circleLogoHandle);
 }
 
 void SelectModeUi::Update()
@@ -166,7 +170,7 @@ void SelectModeUi::Draw() const
 
 	// 中央の円の描画
 	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), 1.0, 0.0, _marginHandle[_selectButtonNum], true);
-	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, _circleAngle, _circleHandle[_selectButtonNum], true);
+	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, 0.0, _circleHandle[_selectButtonNum], true);
 	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, 0.0, _circleLogoHandle, true);
 	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, _circleAngle, _centerArrowHandle[_selectButtonNum], true);
 
@@ -175,6 +179,9 @@ void SelectModeUi::Draw() const
 
 	// 下のメッセージハンドル
 	DrawRotaGraph(960, 1033, 1.0, 0.0, _messageHandle[_selectButtonNum], true);
+}
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "%f", Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, INPUT_PAD_1));
+int SelectModeUi::GetSelect() const
+{
+	return _selectButtonNum;
 }

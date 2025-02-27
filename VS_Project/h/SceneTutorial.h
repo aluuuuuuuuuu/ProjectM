@@ -31,12 +31,12 @@ public:
 private:
 
     // 関数ポインタ
-    using _UpdateFunc_t = void (SceneTutorial::*)();
-    using _DrawFunc_t = void (SceneTutorial::*)() const;
+    using _updateFunc_t = void (SceneTutorial::*)();
+    using _drawFunc_t = void (SceneTutorial::*)() const;
 
     // 任意のアップデート関数変数、ドロー関数変数
-    _UpdateFunc_t _updateFunc = nullptr;
-    _DrawFunc_t  _drawFunc = nullptr;
+    _updateFunc_t _updateFunc = nullptr;
+    _drawFunc_t  _drawFunc = nullptr;
 
     void NormalUpdate();
 
