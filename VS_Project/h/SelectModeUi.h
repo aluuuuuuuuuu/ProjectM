@@ -6,6 +6,14 @@ constexpr int MULTI_MODE = 1;
 constexpr int TUTORIAL_MODE = 2;
 constexpr int OPTION_MODE = 3;
 
+constexpr float SOLO_ANGLE = 315.0f;
+constexpr float MULTI_ANGLE = 45.0f;
+constexpr float TUTORIAL_ANGLE = 225.0f;
+constexpr float OPTION_ANGLE = 135.0f;
+
+constexpr int MARGIN_X = 90;
+constexpr int MARGIN_Y = 90;
+
 class SelectModeUi
 {
 public:
@@ -31,28 +39,54 @@ public:
 	void Draw() const;
 private:
 
+	// フレームカウンタ
+	int _frame;
+
 	// 選択している項目の番号
 	int _selectButtonNum;
 
 	// 中央の円のハンドル
-	int _circleHandle;
+	int _circleHandle[4];
+
+	// 中央のロゴハンドル
+	int _circleLogoHandle;
+
+	// 中央の矢印
+	int _centerArrowHandle[4];
+
+	// 選択している方向に白い余白を表示する画像ハンドル
+	int _marginHandle[4];
 
 	// 中央の円の座標
 	Vec2 _circlePos;
 
+	// 円の拡大率
+	double _circleScale;
+
+	// 円の角度
 	double _circleAngle;
 
 	// 各ボタンハンドル
-	int _buttonHandle[3];
+	int _buttonHandle[4];
 
 	// ボタンの座標
-	Vec2 _buttonPos[3];
+	Vec2 _buttonPos[4];
 
-	// ボタンの拡大率
-	double _buttonScale[3];
+	// 選択しているボタンを目立たせる画像ハンドル	
+	int _highlightHandle[4];
 
 	// 下のメッセージハンドル
-	int _messageHandle[3];
+	int _messageHandle[4];
 
+	// 選択を切り替えたfrag
+	bool _changeFrag;
+
+	// 前フレームで選択していたボタン
+	int _oldSelectButtonNum;
+
+	// 選んだ項目によって全体の画像の位置をよらせる
+	Vec2 _marginPos;
+
+	bool _input;
 };
 

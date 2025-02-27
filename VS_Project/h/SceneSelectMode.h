@@ -1,6 +1,10 @@
 #pragma once
 #include "SceneBase.h"
+#include <memory>
+#include "Vec2.h"
 
+class SkyDome;
+class SelectModeUi;
 class SceneSelectMode :
     public SceneBase
 {
@@ -65,5 +69,16 @@ private:
     /// </summary>
     void SlideOutDraw() const;
 
+    // UIポインタ
+	std::shared_ptr<SelectModeUi> _pUi;
+
+    // スカイドームポインタ
+    std::shared_ptr<SkyDome> _pSkyDome;
+
+    // スライド画像ハンドル
+    int _slideHandle;
+
+    // スライドイン画像の座標
+    Vec2 _slidePos;
 };
 

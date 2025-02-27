@@ -386,6 +386,9 @@
     <ClInclude Include="h\SelectModeUi.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="h\MyMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\constant\Application.csv" />

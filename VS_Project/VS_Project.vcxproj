@@ -224,6 +224,7 @@
     <ClInclude Include="h\MenuCollisionManager.h" />
     <ClInclude Include="h\MenuManager.h" />
     <ClInclude Include="h\MyEffect.h" />
+    <ClInclude Include="h\MyMath.h" />
     <ClInclude Include="h\NormalBullet.h" />
     <ClInclude Include="h\NumSelectButton.h" />
     <ClInclude Include="h\NumUtility.h" />
