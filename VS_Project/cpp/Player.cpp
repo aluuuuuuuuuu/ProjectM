@@ -541,7 +541,8 @@ void Player::Draw() const
 	//}
 #endif // DEBUG
 	if (_bulletManager->GetBulletExist(_padNum)) {
-		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), Position.VGet(), 0xff16ff);
+		Vec3 pos = Vec3{ Position.x,Position.y + 15.0f,Position.z };
+		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), pos.VGet(), 0xff16ff);
 	}
 	// ƒ‚ƒfƒ‹‚Ì•`‰æ
 	DrawModel();

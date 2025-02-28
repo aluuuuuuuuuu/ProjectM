@@ -75,6 +75,9 @@ private:
 	// 各ボタンハンドル
 	int _buttonHandle[4];
 
+	// フレームハンドル
+	int _frameHandle[4];
+
 	// ボタンの座標
 	Vec2 _buttonPos[4];
 
@@ -94,5 +97,9 @@ private:
 	Vec2 _marginPos;
 
 	bool _input;
+
+	// 矢印の移動ベクトル
+	Vec2 _arrowVec;
+	float _scale = 0.0f;
 };
 

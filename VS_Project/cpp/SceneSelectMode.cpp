@@ -8,6 +8,7 @@
 #include "SoundManager.h"
 #include "SceneMenu.h"
 #include "SceneSelect.h"
+#include "SceneTutorial.h"
 
 SceneSelectMode::SceneSelectMode(bool slideInFlag):
 	_titleFrag(false),
@@ -68,6 +69,9 @@ void SceneSelectMode::NormalUpdate()
 
 		// タイトルに戻るフラグを立てる
 		_titleFrag = true;
+
+		// スライド画像の初期位置を設定する
+		_slidePos.x = -3840;
 
 		_updateFunc = &SceneSelectMode::SlideOutUpdate;
 		_drawFunc = &SceneSelectMode::SlideOutDraw;
@@ -134,7 +138,7 @@ void SceneSelectMode::SlideInUpdate()
 		_slidePos.x -= 80;
 
 		// 移動が終わったら処理の切り替え
-		if (_slidePos.x >= -2000) {
+		if (_slidePos.x <= -3840) {
 			_updateFunc = &SceneSelectMode::NormalUpdate;
 			_drawFunc = &SceneSelectMode::NormalDraw;
 		}
@@ -148,7 +152,7 @@ void SceneSelectMode::SlideOutUpdate()
 	_pSkyDome->Update();
 	
 	// UIの更新処理
-	_pUi->Update();
+	//_pUi->Update();
 
 	// タイトルフラグで処理を変える
 	if (_titleFrag) {
@@ -175,7 +179,7 @@ void SceneSelectMode::SlideOutUpdate()
 
 				break;
 			case TUTORIAL_MODE:
-
+				SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTutorial>());
 				break;
 			case OPTION_MODE:
 			default:

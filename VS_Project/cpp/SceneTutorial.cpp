@@ -42,6 +42,8 @@ void SceneTutorial::NormalDraw() const
 
 void SceneTutorial::FadeInUpdate()
 {
+	NormalUpdate();
+
 	_frame--;
 	if (_frame == 0) {
 		_updateFunc = &SceneTutorial::NormalUpdate;

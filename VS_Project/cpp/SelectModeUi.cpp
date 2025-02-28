@@ -34,6 +34,12 @@ SelectModeUi::SelectModeUi() :
 		_buttonHandle[TUTORIAL_MODE] = LoadGraph("data/image/Button3.png");
 		_buttonHandle[OPTION_MODE] = LoadGraph("data/image/Button4.png");
 
+		// フレーム
+		_frameHandle[SOLO_MODE] = LoadGraph("data/image/Frame1.png");
+		_frameHandle[MULTI_MODE] = LoadGraph("data/image/Frame2.png");
+		_frameHandle[TUTORIAL_MODE] = LoadGraph("data/image/Frame3.png");
+		_frameHandle[OPTION_MODE] = LoadGraph("data/image/Frame4.png");
+
 		// ハイライト
 		_highlightHandle[SOLO_MODE] = LoadGraph("data/image/Highlight1.png");
 		_highlightHandle[MULTI_MODE] = LoadGraph("data/image/Highlight2.png");
@@ -84,29 +90,11 @@ SelectModeUi::~SelectModeUi()
 
 void SelectModeUi::Update()
 {
-	// 選択されているボタンによって角度を変える
-	switch (_selectButtonNum)
-	{
-	case SOLO_MODE:
-		_circleAngle = GetRadian(SOLO_ANGLE);
-		break;
-	case MULTI_MODE:
-		_circleAngle = GetRadian(MULTI_ANGLE);
-		break;
-	case TUTORIAL_MODE:
-		_circleAngle = GetRadian(TUTORIAL_ANGLE);
-		break;
-	case OPTION_MODE:
-		_circleAngle = GetRadian(OPTION_ANGLE);
-		break;
-	default:
-		break;
-	}
-
 	// スティックで選択を切り替える
 	Vec3 stick = Input::GetInstance().GetStickVector(INPUT_LEFT_STICK, INPUT_PAD_1);
 
 	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, INPUT_PAD_1) > 10000.0f) {
+
 		if (stick.x < 0.0f && stick.z > 0.0f) {
 			_selectButtonNum = SOLO_MODE;
 		}
@@ -122,6 +110,7 @@ void SelectModeUi::Update()
 
 		// フレームを初期化
 		if (_oldSelectButtonNum != _selectButtonNum) {
+			_circleScale = 0.7;
 			_frame = 0;
 			SoundManager::GetInstance().RingSE(SE_NUM_SELECT);
 		}
@@ -129,27 +118,45 @@ void SelectModeUi::Update()
 		// 変更フラグを立てる
 		_changeFrag = true;
 	}
+
+	// 選択しているボタンを保存する
 	_oldSelectButtonNum = _selectButtonNum;
 
-	// 変更フラグが立っていたらフレームを加算する
-	if (_changeFrag) _frame++;
+	// 円の拡大率を変更する
+	_circleScale += 0.05;
+	_circleScale = min(1.0, _circleScale);
 
-	// 既定のフレーム数を超えたら
-	if (_frame > 30) {
-		_changeFrag = false;
+
+	// 選択されているボタンによって角度を変える
+	switch (_selectButtonNum)
+	{
+	case SOLO_MODE:
+		_circleAngle = GetRadian(SOLO_ANGLE);
+		_arrowVec = Vec2{ -1.0f, -1.0f }.GetNormalized();
+		break;
+	case MULTI_MODE:
+		_circleAngle = GetRadian(MULTI_ANGLE);
+		_arrowVec = Vec2{ 1.0f, -1.0f }.GetNormalized();
+		break;
+	case TUTORIAL_MODE:
+		_circleAngle = GetRadian(TUTORIAL_ANGLE);
+		_arrowVec = Vec2{ -1.0f, 1.0f }.GetNormalized();
+		break;
+	case OPTION_MODE:
+		_circleAngle = GetRadian(OPTION_ANGLE);
+		_arrowVec = Vec2{ -1.0f, -1.0f }.GetNormalized();
+		break;
+	default:
+		break;
 	}
-	else {
-		// フレームで拡大率の増減を切り替える
-		if (_frame < 3) {
-			_circleScale = 0.7;
-		}
-		else {
-			_circleScale += 0.05;
-			_circleScale = min(1.0, _circleScale);
-		}
 
-		// フレームの加算
+	// 円の拡大率が１であれば矢印を動かす
+	if (_circleScale == 1.0) {
 		_frame++;
+
+		float frequency = 2.0f * DX_PI_F / 60;
+		_scale = 5.0f + 20.0f * std::sin(frequency * _frame);
+		_arrowVec = _arrowVec * _scale;
 	}
 }
 
@@ -168,11 +175,15 @@ void SelectModeUi::Draw() const
 		DrawGraph(_buttonPos[i].intX(), _buttonPos[i].intY(), _buttonHandle[i], true);
 	}
 
+
 	// 中央の円の描画
 	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), 1.0, 0.0, _marginHandle[_selectButtonNum], true);
+
+	// フレームの描画
+	DrawGraph(_buttonPos[_selectButtonNum].intX(), _buttonPos[_selectButtonNum].intY(), _frameHandle[_selectButtonNum], true);
 	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, 0.0, _circleHandle[_selectButtonNum], true);
 	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, 0.0, _circleLogoHandle, true);
-	DrawRotaGraph(_circlePos.intX(), _circlePos.intY(), _circleScale, _circleAngle, _centerArrowHandle[_selectButtonNum], true);
+	DrawRotaGraph(_circlePos.intX() + _arrowVec.intX(), _circlePos.intY() + _arrowVec.intY(), _circleScale, _circleAngle, _centerArrowHandle[_selectButtonNum], true);
 
 	// 下の四角の描画
 	DrawBox(0, 986, 1920, 1080, 0x000000, true);

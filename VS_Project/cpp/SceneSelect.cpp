@@ -125,7 +125,7 @@ void SceneSelect::SlideOutUpdate()
 	_slidePos.x += 80;
 	if (_slidePos.x >= -300) {
 		// Ÿ‚ÌƒV[ƒ“‚ÉˆÚs‚·‚é
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(false));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(true));
 	}
 }
 

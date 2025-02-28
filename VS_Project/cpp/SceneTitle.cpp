@@ -216,7 +216,7 @@ void SceneTitle::SlideOutUpdate()
 	// ˆÚ“®‚ªI‚í‚Á‚½‚çƒV[ƒ“‘JˆÚ
 	if (_slidePos.x <= -300) {
 		//SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(true));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(false));
 	}
 }
 
