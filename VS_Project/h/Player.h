@@ -25,7 +25,6 @@ public:
 	/// <param name="data"></param>
 	Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum,BulletData& data);
 
-
 	/// <summary>
 	/// 
 	/// </summary>
@@ -140,7 +139,12 @@ private:
 	/// <summary>
 	/// ‘I‘ğ‚µ‚½’e‚ğ”­Ë‚·‚é
 	/// </summary>
-	void BulletTrigger();
+	
+	/// <summary>
+	/// ˆø”‚Ì’e‚ğ”­Ë‚·‚é
+	/// </summary>
+	/// <param name="bullet">’e‚Ìí—Ş</param>
+	void BulletTrigger(int bullet);
 
 	// Y²‚ÌˆÚ“®—Ê
 	float _moveScaleY;

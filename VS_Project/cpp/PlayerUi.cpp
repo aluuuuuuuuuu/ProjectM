@@ -12,7 +12,6 @@ PlayerUi::PlayerUi(int playerNum):
 	_bombBulletHandle = LoadGraph("data/image/Icon_Bomb.png");
 	_grappleBulletHandle = LoadGraph("data/image/Icon_Anchor.png");
 	_reticleHandle = LoadGraph("data/image/circle.png");
-	_frameHandle = LoadGraph("data/image/IconFlame.png");
 
 	// プレイヤーの総数で座標や拡大率を変更する
 	switch (playerNum)
@@ -49,7 +48,6 @@ PlayerUi::~PlayerUi()
 	DeleteGraph(_bombBulletHandle);
 	DeleteGraph(_grappleBulletHandle);
 	DeleteGraph(_reticleHandle);
-	DeleteGraph(_frameHandle);
 }
 
 void PlayerUi::Update()
@@ -71,22 +69,6 @@ void PlayerUi::Draw(Vec2 center, BulletData data) const
 	DrawRotaGraph(x, y, 0.2f, 0.0, _normalBulletHandle, true);
 	DrawRotaGraph(x + _margin, y, 0.2f, 0.0, _grappleBulletHandle, true);
 	DrawRotaGraph(x + _margin * 2, y, 0.2f, 0.0, _bombBulletHandle, true);
-
-	// アイコンフレームの描画
-	switch (data._selectBullet)
-	{
-	case NORMAL_BULLET:
-		DrawRotaGraph(x, y, _exRate, 0.0, _frameHandle, true);
-		break;
-	case GRAPPLER_BULLET:
-		DrawRotaGraph(x + _margin, y, _exRate, 0.0, _frameHandle, true);
-		break;
-	case BOMB_BULLET:
-		DrawRotaGraph(x + _margin * 2, y, _exRate, 0.0, _frameHandle, true);
-		break;
-	default:
-		break;
-	}
 
 	// クールタイムを四角形で描画
 	double margin = 0;

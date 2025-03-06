@@ -12,7 +12,9 @@
 TutorialManager::TutorialManager() :
 	_frame(0),
 	_tutorialProgress(GUIDE_CAMERA),
-	_endFrag(false)
+	_endFrag(false),
+	_clearScale(10.0),
+	_shotCount(0)
 {
 	PlayerData data;
 
@@ -50,20 +52,33 @@ TutorialManager::TutorialManager() :
 		_guideHandle[GUIDE_MOVE] = LoadGraph("data/image/GuideMove.png");
 		_guideHandle[GUIDE_JUMP] = LoadGraph("data/image/GuideJump.png");
 		_guideHandle[GUIDE_SHOT] = LoadGraph("data/image/GuideShot.png");
+		_guideHandle[GUIDE_BOMB] = LoadGraph("data/image/GuideBomb.png");
+		_guideHandle[GUIDE_GRAPPLE] = LoadGraph("data/image/GuideGrapple.png");
+
 
 		// クリア画像のロード
 		_clearHandle = LoadGraph("data/image/Clear.png");
+
+		// ゲーム説明の画像ロード
+		_explainHandle[0] = LoadGraph("data/image/Story1.png");
+		_explainHandle[1] = LoadGraph("data/image/Story2.png");
+		_explainHandle[2] = LoadGraph("data/image/Story3.png");
+		_explainHandle[3] = LoadGraph("data/image/Story4.png");
+		_explainHandle[4] = LoadGraph("data/image/Story5.png");
+		_explainHandle[5] = LoadGraph("data/image/Story6.png");
 	}
 
 	// ガイド文章の座標の設定
 	_guidePos = Vec2{ 1920 / 2, 200 };
 
 	// クリア画像の座標の設定
-	_clearPos = Vec2{ 1920 / 2, 1080 / 2 };
+	_clearPos = Vec2{ CLEAR_POS_X, CLEAR_POS_Y };
 
 	// 関数ポインタの初期化
 	_updateFunc = &TutorialManager::CameraUpdate;
 	_drawFunc = &TutorialManager::ShareDraw;
+	//_updateFunc = &TutorialManager::FirstUpdate;
+	//_drawFunc = &TutorialManager::FirstDraw;
 
 	// 禊虫の更新
 	_pWedgewormManager->Update();
@@ -78,6 +93,14 @@ TutorialManager::~TutorialManager()
 	for (int i = 0; i < 5; i++) {
 		DeleteGraph(_guideHandle[i]);
 	}
+	
+	// クリア画像の削除
+	DeleteGraph(_clearHandle);
+
+	// ゲーム説明の画像の削除
+	for (int i = 0; i < 7; i++) {
+		DeleteGraph(_explainHandle[i]);
+	}
 }
 
 void TutorialManager::Update()
@@ -91,6 +114,19 @@ void TutorialManager::Update()
 void TutorialManager::Draw() const
 {
 	(this->*_drawFunc)();
+}
+
+void TutorialManager::FirstUpdate()
+{
+	// フレームの加算
+	_frame++;
+
+	if (7 * MAX_STORY_FRAME < _frame) {
+
+		// 関数ポインタの初期化
+		_updateFunc = &TutorialManager::CameraUpdate;
+		_drawFunc = &TutorialManager::ShareDraw;
+	}
 }
 
 void TutorialManager::CameraUpdate()
@@ -168,20 +204,53 @@ void TutorialManager::ShotUpdate()
 			_frame = 0;
 			_endFrag = false;
 
+			_shotCount = 0;
+
 			// チュートリアルを進める
-			_updateFunc = &TutorialManager::SelectUpdate;
+			_updateFunc = &TutorialManager::BombUpdate;
 			_tutorialProgress++;
 		}
 	}
-	// ジャンプ操作が一回以上行われたらクリア処理を行う
-	else if (Input::GetInstance().IsTrigger(INPUT_X, INPUT_PAD_1) || Input::GetInstance().IsTrigger(INPUT_RIGHT_TRIGGER, INPUT_PAD_1)) {
+	// 射撃操作が一回以上行われたらクリア処理を行う
+	else if (Input::GetInstance().IsHold(INPUT_RIGHT_TRIGGER, INPUT_PAD_1)) {
+		_shotCount++;
+	}
+
+	if (_shotCount == 150) {
 		_endFrag = true;
 		_frame = 0;
 		_clearScale = 10.0;
+		_shotCount = 0;
 	}
 }
 
-void TutorialManager::SelectUpdate()
+void TutorialManager::BombUpdate()
+{
+	if (_endFrag) {
+		if (ClearFunction()) {
+			_frame = 0;
+			_endFrag = false;
+			_shotCount = 0;
+
+			// チュートリアルを進める
+			_updateFunc = &TutorialManager::GrappleUpdate;
+			_tutorialProgress++;
+		}
+	}
+	// 爆弾操作が一回以上行われたらクリア処理を行う
+	else if (Input::GetInstance().IsTrigger(INPUT_Y, INPUT_PAD_1)) {
+		_shotCount++;
+	}
+
+	if (_shotCount == 2) {
+		_endFrag = true;
+		_frame = 0;
+		_clearScale = 10.0;
+		_shotCount = 0;
+	}
+}
+
+void TutorialManager::GrappleUpdate()
 {
 	if (_endFrag) {
 		if (ClearFunction()) {
@@ -193,8 +262,8 @@ void TutorialManager::SelectUpdate()
 			_tutorialProgress++;
 		}
 	}
-	// ジャンプ操作が一回以上行われたらクリア処理を行う
-	else if (Input::GetInstance().IsTrigger(INPUT_RIGHT_SHOULDER, INPUT_PAD_1) || Input::GetInstance().IsTrigger(INPUT_LEFT_SHOULDER, INPUT_PAD_1)) {
+	// グラップル操作が一回以上行われたらクリア処理を行う
+	else if (Input::GetInstance().IsTrigger(INPUT_X, INPUT_PAD_1)) {
 		_endFrag = true;
 		_frame = 0;
 		_clearScale = 10.0;
@@ -203,6 +272,39 @@ void TutorialManager::SelectUpdate()
 
 void TutorialManager::LastUpdate()
 {
+}
+
+void TutorialManager::FirstDraw() const
+{
+
+	// 背景を少し暗くする
+	SetDrawBlendMode(DX_BLENDMODE_MULA, 0);
+	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// カメラの設定
+	_pPlayerManager->CameraSet(0);
+
+	//スカイドームの描画
+	_pSkyDome->Draw();
+
+	// バレットの描画
+	_pBulletManager->Draw();
+
+	// ステージの描画
+	_pStage->DrawStage();
+
+	// 禊虫の描画
+	_pWedgewormManager->Draw();
+
+	// エフェクトの描画
+	EffectManager::GetInstance().Draw();
+
+	// プレイヤーの描画
+	_pPlayerManager->Draw(0);
+
+	// 説明文の描画
+	DrawRotaGraph(_guidePos.intX(), _guidePos.intY(), 1.0, 0.0, _explainHandle[static_cast<int>(_frame / MAX_STORY_FRAME)], true);
 }
 
 void TutorialManager::ShareDraw() const
@@ -241,10 +343,29 @@ bool TutorialManager::ClearFunction()
 
 	_clearScale = max(1.0, _clearScale);
 
-	// Aボタンが押されたらtrueを返す
-	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1) && _clearScale >= 1.0) {
+	if (_clearScale == 1.0 && _frame < 30) {
+		_clearPos.x = CLEAR_POS_X + GetRand(20) - 10;
+		_clearPos.y = CLEAR_POS_Y + GetRand(20) - 10;
+	}
+
+	if (_frame > 30) {
+		_clearPos = Vec2{ CLEAR_POS_X,CLEAR_POS_Y };
+	}
+
+	_frame++;
+	if (_frame > 90) {
 		return true;
 	}
+	else {
+		return false;
+	}
+
+
+
+	//// Aボタンが押されたらtrueを返す
+	//if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1) && _clearScale >= 1.0) {
+	//	return true;
+	//}
 }
 
 void TutorialManager::DefaultUpdate()

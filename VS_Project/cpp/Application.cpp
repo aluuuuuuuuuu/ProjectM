@@ -13,6 +13,7 @@
 #include "EffectManager.h"
 #include "resource.h"
 #include "SceneSelectMode.h"
+#include "SceneTutorial.h"
 
 bool Application::Init()
 {
@@ -108,6 +109,7 @@ void Application::Run()
 	//manager.ChangeScene(std::make_shared <SceneTitle>(false));
 	//manager.ChangeScene(std::make_shared <SceneSelect>());
 	//manager.ChangeScene(std::make_shared <ScenePve>(data));
+	//manager.ChangeScene(std::make_shared<SceneTutorial>());
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();

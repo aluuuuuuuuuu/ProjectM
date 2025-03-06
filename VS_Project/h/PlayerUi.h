@@ -41,9 +41,6 @@ private:
 	// レティクル画像ハンドル
 	int _reticleHandle;
 
-	// アイコンフレーム画像ハンドル
-	int _frameHandle;
-
 	// 画面中心からの描画余白
 	Vec2 _drawMargin;
 

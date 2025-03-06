@@ -131,9 +131,17 @@ void Player::ControlPl()
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
 
-	// 弾を発射する
-	if (input.IsHold(INPUT_X, _padNum) || input.IsHold(INPUT_RIGHT_TRIGGER, _padNum)) {
-		BulletTrigger();
+	// 通常弾を発射
+	if (input.IsHold(INPUT_RIGHT_TRIGGER, _padNum)) {
+		BulletTrigger(NORMAL_BULLET);
+	}
+
+	// 特殊弾の発射	
+	if (input.IsHold(INPUT_X, _padNum)) {		// グラップル
+		BulletTrigger(GRAPPLER_BULLET);
+	}
+	else if(input.IsHold(INPUT_Y, _padNum)) {	// 爆弾
+		BulletTrigger(BOMB_BULLET);
 	}
 
 	// クールタイムの計算
@@ -154,32 +162,6 @@ void Player::ControlPl()
 	}
 	else {
 		_bulletData._bullletCoolTime[BOMB_BULLET] = 0;
-	}
-
-	// 弾の種類のの切り替え
-	if (input.IsTrigger(INPUT_RIGHT_SHOULDER, _padNum)) {
-
-		// 切り替え音を鳴らす
-		SoundManager::GetInstance().RingSE(SE_BULLET_SELECT);
-
-		if (_bulletData._selectBullet == MAX_TYPE_NUM - 1) {
-			_bulletData._selectBullet = MIN_TYPE_NUM;
-		}
-		else {
-			_bulletData._selectBullet++;
-		}
-	}
-	if (input.IsTrigger(INPUT_LEFT_SHOULDER, _padNum)) {
-
-		// 切り替え音を鳴らす
-		SoundManager::GetInstance().RingSE(SE_BULLET_SELECT);
-
-		if (_bulletData._selectBullet == MIN_TYPE_NUM) {
-			_bulletData._selectBullet = MAX_TYPE_NUM - 1;
-		}
-		else {
-			_bulletData._selectBullet--;
-		}
 	}
 
 	// 右スティックで回転
@@ -313,20 +295,7 @@ void Player::ControlAI()
 
 		// 30フレームに一回弾を発射する
 		if (_frame % 30 == 0) {
-			BulletTrigger();
-		}
-
-		// 120フレームごとに弾の種類を切り替える
-		if (_frame % 120 == 0) {
-			if (_bulletData._bullletCoolTime[GRAPPLER_BULLET] == 0) {
-				_bulletData._selectBullet = GRAPPLER_BULLET;
-			}
-			else if (_bulletData._bullletCoolTime[BOMB_BULLET] == 0) {
-				_bulletData._selectBullet = BOMB_BULLET;
-			}
-			else {
-				_bulletData._selectBullet = NORMAL_BULLET;
-			}
+			BulletTrigger(rand() % 3);
 		}
 	}
 
@@ -709,12 +678,12 @@ void Player::AnimationContorol()
 	}
 }
 
-void Player::BulletTrigger()
+void Player::BulletTrigger(int bullet)
 {
 	// 発射する座標
 	Vec3 pos = MV1GetFramePosition(GetModelHandle(), 65);
 
-	switch (_bulletData._selectBullet)
+	switch (bullet)
 	{
 	case NORMAL_BULLET:
 		if (_bulletData._bullletCoolTime[NORMAL_BULLET] == 0) {

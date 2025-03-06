@@ -6,6 +6,13 @@ constexpr int GUIDE_CAMERA = 0;
 constexpr int GUIDE_MOVE = 1;
 constexpr int GUIDE_JUMP = 2;
 constexpr int GUIDE_SHOT = 3;
+constexpr int GUIDE_BOMB = 4;
+constexpr int GUIDE_GRAPPLE = 5;
+
+constexpr int MAX_STORY_FRAME = 180;
+
+constexpr int CLEAR_POS_X = 1920 / 2;
+constexpr int CLEAR_POS_Y = 1080 / 2;
 
 class WedgewormManager;
 class StageManager;
@@ -49,6 +56,8 @@ private:
 	_updateFunc_t _updateFunc = nullptr;
 	_drawFunc_t  _drawFunc = nullptr;
 
+	void FirstUpdate();
+
 	void CameraUpdate();
 
 	void MoveUpdate();
@@ -57,9 +66,13 @@ private:
 
 	void ShotUpdate();
 
-	void SelectUpdate();
+	void BombUpdate();
+
+	void GrappleUpdate();
 
 	void LastUpdate();
+
+	void FirstDraw() const;
 
 	void ShareDraw() const;
 
@@ -97,7 +110,7 @@ private:
 	int _frame;
 
 	// チュートリアルのガイド文章画像ハンドル
-	int _guideHandle[5];
+	int _guideHandle[6];
 
 	// ガイド文章の座標
 	Vec2 _guidePos;
@@ -116,6 +129,12 @@ private:
 
 	// クリア画像のScale
 	double _clearScale;
+
+	// ゲーム説明の画像ハンドル
+	int _explainHandle[7];
+
+	// 弾を撃った回数のカウント
+	int _shotCount;
 
 };
  
