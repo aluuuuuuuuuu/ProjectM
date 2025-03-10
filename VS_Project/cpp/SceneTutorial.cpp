@@ -1,7 +1,8 @@
 #include "SceneTutorial.h"
 #include "TutorialManager.h"
 #include "SceneManager.h"
-#include "SceneTitle.h"
+#include "SceneSelectMode.h"
+#include "SoundManager.h"
 
 SceneTutorial::SceneTutorial():
 	_frame(60)
@@ -12,6 +13,10 @@ SceneTutorial::SceneTutorial():
 	// 関数ポインタの初期化
 	_updateFunc = &SceneTutorial::FadeInUpdate;
 	_drawFunc = &SceneTutorial::FadeInDraw;
+
+	// BGMの再生
+	SoundManager::GetInstance().StopBGM(BGM_OPENING);
+	SoundManager::GetInstance().StartBGM(BGM_BATTLE);
 }
 
 SceneTutorial::~SceneTutorial()
@@ -32,6 +37,12 @@ void SceneTutorial::Draw() const
 
 void SceneTutorial::NormalUpdate()
 {
+	// チュートリアルが終了したらフェードアウト処理に移行する
+	if (_pManager->GetEndFrag()) {
+		_updateFunc = &SceneTutorial::FadeOutUpdate;
+		_drawFunc = &SceneTutorial::FadeOutDraw;
+	}
+
 	_pManager->Update();
 }
 
@@ -55,7 +66,7 @@ void SceneTutorial::FadeOutUpdate()
 {
 	_frame++;
 	if (_frame > 60) {
-		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
+		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(false));
 	}
 }
 

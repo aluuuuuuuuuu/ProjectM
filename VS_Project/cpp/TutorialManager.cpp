@@ -14,7 +14,8 @@ TutorialManager::TutorialManager() :
 	_tutorialProgress(GUIDE_CAMERA),
 	_endFrag(false),
 	_clearScale(10.0),
-	_shotCount(0)
+	_shotCount(0),
+	_finishFrag(false)
 {
 	PlayerData data;
 
@@ -54,6 +55,8 @@ TutorialManager::TutorialManager() :
 		_guideHandle[GUIDE_SHOT] = LoadGraph("data/image/GuideShot.png");
 		_guideHandle[GUIDE_BOMB] = LoadGraph("data/image/GuideBomb.png");
 		_guideHandle[GUIDE_GRAPPLE] = LoadGraph("data/image/GuideGrapple.png");
+		_guideHandle[GUIDE_END] = LoadGraph("data/image/GuideEnd.png");
+		_guideHandle[GUIDE_RETURN] = LoadGraph("data/image/GuideReturn.png");
 
 
 		// クリア画像のロード
@@ -114,6 +117,11 @@ void TutorialManager::Update()
 void TutorialManager::Draw() const
 {
 	(this->*_drawFunc)();
+}
+
+bool TutorialManager::GetEndFrag() const
+{
+	return _finishFrag;
 }
 
 void TutorialManager::FirstUpdate()
@@ -216,7 +224,7 @@ void TutorialManager::ShotUpdate()
 		_shotCount++;
 	}
 
-	if (_shotCount == 150) {
+	if (_shotCount == 60) {
 		_endFrag = true;
 		_frame = 0;
 		_clearScale = 10.0;
@@ -259,6 +267,7 @@ void TutorialManager::GrappleUpdate()
 
 			// チュートリアルを進める
 			_updateFunc = &TutorialManager::LastUpdate;
+			_drawFunc = &TutorialManager::LastDraw;
 			_tutorialProgress++;
 		}
 	}
@@ -272,6 +281,18 @@ void TutorialManager::GrappleUpdate()
 
 void TutorialManager::LastUpdate()
 {
+	if (_frame < 240) {
+		_lastDrawGraph = _guideHandle[GUIDE_END];
+		_frame++;
+	}
+	else {
+		_lastDrawGraph = _guideHandle[GUIDE_RETURN];
+
+		// スタートボタンでセレクト画面に戻る
+		if (Input::GetInstance().IsTrigger(INPUT_START, INPUT_PAD_1)) {
+			_finishFrag = true;
+		}
+	}
 }
 
 void TutorialManager::FirstDraw() const
@@ -337,6 +358,33 @@ void TutorialManager::ShareDraw() const
 	if (_endFrag) DrawRotaGraph(_clearPos.intX(), _clearPos.intY(), _clearScale, 0.0, _clearHandle, true);
 }
 
+void TutorialManager::LastDraw() const
+{
+	// カメラの設定
+	_pPlayerManager->CameraSet(0);
+
+	//スカイドームの描画
+	_pSkyDome->Draw();
+
+	// バレットの描画
+	_pBulletManager->Draw();
+
+	// ステージの描画
+	_pStage->DrawStage();
+
+	// 禊虫の描画
+	_pWedgewormManager->Draw();
+
+	// エフェクトの描画
+	EffectManager::GetInstance().Draw();
+
+	// プレイヤーの描画
+	_pPlayerManager->Draw(0);
+
+	// 文章の描画
+	DrawRotaGraph(_guidePos.intX(), _guidePos.intY(), 1.0, 0.0, _lastDrawGraph, true);
+}
+
 bool TutorialManager::ClearFunction()
 {
 	_clearScale -= 0.5;
@@ -359,13 +407,6 @@ bool TutorialManager::ClearFunction()
 	else {
 		return false;
 	}
-
-
-
-	//// Aボタンが押されたらtrueを返す
-	//if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1) && _clearScale >= 1.0) {
-	//	return true;
-	//}
 }
 
 void TutorialManager::DefaultUpdate()

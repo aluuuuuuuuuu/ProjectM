@@ -8,6 +8,8 @@ constexpr int GUIDE_JUMP = 2;
 constexpr int GUIDE_SHOT = 3;
 constexpr int GUIDE_BOMB = 4;
 constexpr int GUIDE_GRAPPLE = 5;
+constexpr int GUIDE_END = 6;
+constexpr int GUIDE_RETURN = 7;
 
 constexpr int MAX_STORY_FRAME = 180;
 
@@ -45,6 +47,12 @@ public:
 	/// </summary>
 	void Draw() const;
 
+	/// <summary>
+	/// チュートリアルが終わったかどうかを返す
+	/// </summary>
+	/// <returns>true:終わっている</returns>
+	bool GetEndFrag() const;
+
 
 private:
 
@@ -75,6 +83,8 @@ private:
 	void FirstDraw() const;
 
 	void ShareDraw() const;
+
+	void LastDraw() const; 
 
 	/// <summary>
 	/// クリアしたときの処理
@@ -110,7 +120,7 @@ private:
 	int _frame;
 
 	// チュートリアルのガイド文章画像ハンドル
-	int _guideHandle[6];
+	int _guideHandle[8];
 
 	// ガイド文章の座標
 	Vec2 _guidePos;
@@ -135,6 +145,11 @@ private:
 
 	// 弾を撃った回数のカウント
 	int _shotCount;
+
+	// すべてのチュートリアルが終了したフラグ
+	int _finishFrag;
+
+	int _lastDrawGraph;
 
 };
  

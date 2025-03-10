@@ -38,6 +38,9 @@ SceneSelectMode::SceneSelectMode(bool slideInFlag):
 	// ƒJƒƒ‰‚Ì‰Šú‰»
 	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{ 150.0f, 250.0f, 0.0f });
 	SetCameraNearFar(1, 1000);
+
+	// BGM‚ÌÄ¶
+	SoundManager::GetInstance().StartBGM(BGM_OPENING);
 }
 
 SceneSelectMode::~SceneSelectMode()
