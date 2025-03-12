@@ -78,10 +78,10 @@ TutorialManager::TutorialManager() :
 	_clearPos = Vec2{ CLEAR_POS_X, CLEAR_POS_Y };
 
 	// 関数ポインタの初期化
-	_updateFunc = &TutorialManager::CameraUpdate;
-	_drawFunc = &TutorialManager::ShareDraw;
-	//_updateFunc = &TutorialManager::FirstUpdate;
-	//_drawFunc = &TutorialManager::FirstDraw;
+	//_updateFunc = &TutorialManager::CameraUpdate;
+	//_drawFunc = &TutorialManager::ShareDraw;
+	_updateFunc = &TutorialManager::FirstUpdate;
+	_drawFunc = &TutorialManager::FirstDraw;
 
 	// 禊虫の更新
 	_pWedgewormManager->Update();

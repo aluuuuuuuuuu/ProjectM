@@ -5,7 +5,7 @@
 #include "Vec3.h"
 #include "SoundManager.h"
 
-SelectModeUi::SelectModeUi() :
+SelectModeUi::SelectModeUi(bool selectMode) :
 	_selectButtonNum(SOLO_MODE),
 	_circleAngle(0.0),
 	_frame(0),
@@ -29,10 +29,18 @@ SelectModeUi::SelectModeUi() :
 		_centerArrowHandle[OPTION_MODE] = LoadGraph("data/image/CenterArrow4.png");
 
 		// ボタン
-		_buttonHandle[SOLO_MODE] = LoadGraph("data/image/Button1.png");
-		_buttonHandle[MULTI_MODE] = LoadGraph("data/image/Button2.png");
-		_buttonHandle[TUTORIAL_MODE] = LoadGraph("data/image/Button3.png");
-		_buttonHandle[OPTION_MODE] = LoadGraph("data/image/Button4.png");
+		if (selectMode) {
+			_buttonHandle[SOLO_MODE] = LoadGraph("data/image/Button1.png");
+			_buttonHandle[MULTI_MODE] = LoadGraph("data/image/Button2.png");
+			_buttonHandle[TUTORIAL_MODE] = LoadGraph("data/image/Button3.png");
+			_buttonHandle[OPTION_MODE] = LoadGraph("data/image/Button4.png");
+		}
+		else {
+			_buttonHandle[SOLO_MODE] = LoadGraph("data/image/PlayerNum1.png");
+			_buttonHandle[MULTI_MODE] = LoadGraph("data/image/PlayerNum2.png");
+			_buttonHandle[TUTORIAL_MODE] = LoadGraph("data/image/PlayerNum3.png");
+			_buttonHandle[OPTION_MODE] = LoadGraph("data/image/PlayerNum4.png");
+		}
 
 		// フレーム
 		_frameHandle[SOLO_MODE] = LoadGraph("data/image/Frame1.png");
@@ -47,10 +55,19 @@ SelectModeUi::SelectModeUi() :
 		_highlightHandle[OPTION_MODE] = LoadGraph("data/image/Highlight4.png");
 
 		// メッセージ
-		_messageHandle[SOLO_MODE] = LoadGraph("data/image/Message01.png");
-		_messageHandle[MULTI_MODE] = LoadGraph("data/image/Message02.png");
-		_messageHandle[TUTORIAL_MODE] = LoadGraph("data/image/Message03.png");
-		_messageHandle[OPTION_MODE] = LoadGraph("data/image/Message04.png");
+		if (selectMode) {
+			_messageHandle[SOLO_MODE] = LoadGraph("data/image/Message01.png");
+			_messageHandle[MULTI_MODE] = LoadGraph("data/image/Message02.png");
+			_messageHandle[TUTORIAL_MODE] = LoadGraph("data/image/Message03.png");
+			_messageHandle[OPTION_MODE] = LoadGraph("data/image/Message04.png");
+		}
+		else {
+			_messageHandle[SOLO_MODE] = LoadGraph("data/image/Play1.png");
+			_messageHandle[MULTI_MODE] = LoadGraph("data/image/Play2.png");
+			_messageHandle[TUTORIAL_MODE] = LoadGraph("data/image/Play3.png");
+			_messageHandle[OPTION_MODE] = LoadGraph("data/image/Play4.png");
+		}
+		
 
 		// 余白
 		_marginHandle[SOLO_MODE] = LoadGraph("data/image/Margin1.png");

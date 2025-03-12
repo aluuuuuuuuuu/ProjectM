@@ -86,5 +86,8 @@ private:
 
     // セレクトシーンから戻ったフラグ
     bool _returnSelectFrag;
+
+    // フレームカウンタ
+    int _frame;
 };
 

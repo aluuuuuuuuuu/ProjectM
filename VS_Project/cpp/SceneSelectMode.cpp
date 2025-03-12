@@ -9,17 +9,19 @@
 #include "SceneMenu.h"
 #include "SceneSelect.h"
 #include "SceneTutorial.h"
+#include "SceneSelectNum.h"
 
-SceneSelectMode::SceneSelectMode(bool slideInFlag):
+SceneSelectMode::SceneSelectMode(bool slideInFlag) :
 	_titleFrag(false),
-	_returnSelectFrag(slideInFlag)
+	_returnSelectFrag(slideInFlag),
+	_frame(0)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelectMode::SlideInUpdate;
 	_drawFunc = &SceneSelectMode::SlideInDraw;
 
 	// UIインスタンス作成
-	_pUi = std::make_shared<SelectModeUi>();
+	_pUi = std::make_shared<SelectModeUi>(true);
 
 	// スカイドームインスタンス作成
 	_pSkyDome = std::make_shared<SkyDome>();
@@ -45,6 +47,7 @@ SceneSelectMode::SceneSelectMode(bool slideInFlag):
 
 SceneSelectMode::~SceneSelectMode()
 {
+	DeleteGraph(_slideHandle);
 }
 
 void SceneSelectMode::Update()
@@ -82,6 +85,10 @@ void SceneSelectMode::NormalUpdate()
 
 	// Aボタンで選択しているボタンの処理をする
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
+
+		// 決定音を鳴らす
+		SoundManager::GetInstance().RingSE(SE_CHARA_SELECT);
+
 		switch (_pUi->GetSelect())
 		{
 		case SOLO_MODE:
@@ -153,7 +160,7 @@ void SceneSelectMode::SlideOutUpdate()
 {
 	// スカイドームの更新処理
 	_pSkyDome->Update();
-	
+
 	// UIの更新処理
 	//_pUi->Update();
 
@@ -180,6 +187,7 @@ void SceneSelectMode::SlideOutUpdate()
 				break;
 			case MULTI_MODE:
 
+				SceneManager::GetInstance().ChangeScene(std::make_shared <SceneSelectNum>());
 				break;
 			case TUTORIAL_MODE:
 				SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTutorial>());

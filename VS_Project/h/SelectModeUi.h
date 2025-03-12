@@ -11,6 +11,11 @@ constexpr float MULTI_ANGLE = 45.0f;
 constexpr float TUTORIAL_ANGLE = 225.0f;
 constexpr float OPTION_ANGLE = 135.0f;
 
+constexpr int PLAYER_NUM_1 = 0;
+constexpr int PLAYER_NUM_2 = 1;
+constexpr int PLAYER_NUM_3 = 2;
+constexpr int PLAYER_NUM_4 = 3;
+
 constexpr int MARGIN_X = 90;
 constexpr int MARGIN_Y = 90;
 
@@ -21,7 +26,8 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	SelectModeUi();
+	/// <param name="selectMode">true:セレクトモード</param>
+	SelectModeUi(bool selectMode);
 
 	/// <summary>
 	/// デストラクタ
@@ -100,6 +106,8 @@ private:
 
 	// 矢印の移動ベクトル
 	Vec2 _arrowVec;
+
+	// 円の拡大率
 	float _scale = 0.0f;
 };
 
