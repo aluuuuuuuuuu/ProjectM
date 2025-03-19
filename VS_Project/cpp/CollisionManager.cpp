@@ -139,7 +139,6 @@ Vec3 CollisionManager::ClosetPointBox(Vec3 max, Vec3 min, Vec3 point)
 	closestPoint.x = (std::max)(min.x, (std::min)(point.x, max.x));
 	closestPoint.y = (std::max)(min.y, (std::min)(point.y, max.y));
 	closestPoint.z = (std::max)(min.z, (std::min)(point.z, max.z));
-	//DrawSphere3D(closestPoint.VGet(), 2, 8, 0xffff00, 0xffff00, true);
 
 	return closestPoint;
 }
@@ -251,39 +250,52 @@ Vec3 CollisionManager::CreateMoveVectorBox(Vec3 max, Vec3 min, CapsuleData data)
 
 float CollisionManager::DistanceLineToLine(CapsuleData dataA, CapsuleData dataB)
 {
+	// 線分 dataA の方向ベクトル
 	Vec3 d1 = dataA.PointA - dataA.PointB;
+	// 線分 dataB の方向ベクトル
 	Vec3 d2 = dataB.PointA - dataB.PointB;
+	// 2つの線分の始点間のベクトル
 	Vec3 r = dataA.PointA - dataB.PointA;
-	float a = d1.dot(d1);
-	float e = d2.dot(d2);
-	float f = d2.dot(r);
+
+	// 各種スカラー値の計算
+	float a = d1.dot(d1); // d1 の長さの2乗
+	float e = d2.dot(d2); // d2 の長さの2乗
+	float f = d2.dot(r);   // d2 と r の内積
 
 	float s, t;
-	const float epsilon = static_cast<float>(1e-6);
-	float c = d1.dot(r);
-	float b = d1.dot(d2);
-	float denom = a * e - b * b;
+	const float epsilon = static_cast<float>(1e-6); // 許容誤差
+	float c = d1.dot(r);  // d1 と r の内積
+	float b = d1.dot(d2); // d1 と d2 の内積
+	float denom = a * e - b * b; // 分母の計算
 
+	// s の計算（線分 dataA 上の最近接点のパラメータ）
 	if (denom != 0) {
 		s = (b * f - c * e) / denom;
 	}
 	else {
-		s = 0.0f;
+		s = 0.0f; // 平行な場合
 	}
+	// s を [0,1] の範囲にクランプ
 	s = (std::max)(0.0f, (std::min)(1.0f, s));
+
+	// t の計算（線分 dataB 上の最近接点のパラメータ）
 	t = (b * s + f) / e;
 
+	// t の範囲制約処理
 	if (t < 0.0f) {
 		t = 0.0f;
-		s = (std::max)(0.0f, (std::min)(1.0f, -c / a));
+		s = (std::max)(0.0f, (std::min)(1.0f, -c / a)); // s を再計算
 	}
 	else if (t > 1.0f) {
 		t = 1.0f;
-		s = (std::max)(0.0f, (std::min)(1.0f, (b - c) / a));
+		s = (std::max)(0.0f, (std::min)(1.0f, (b - c) / a)); // s を再計算
 	}
 
+	// 線分上の最近接点の計算
 	Vec3 closestPoint1 = dataA.PointA + d1 * s;
 	Vec3 closestPoint2 = dataB.PointA + d2 * t;
+
+	// 2つの最近接点の距離を返す
 	return (closestPoint1 - closestPoint2).Length();
 }
 
