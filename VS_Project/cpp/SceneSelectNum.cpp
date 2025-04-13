@@ -7,9 +7,11 @@
 #include "SceneSelectMode.h"
 #include "PlayerManager.h"
 #include "SceneSelect.h"
-#include "SoundManager.h"
 
-SceneSelectNum::SceneSelectNum()
+SceneSelectNum::SceneSelectNum() :
+	_selectFrag(false),
+	_warningFrag(false),
+	_returnFrag(false)
 {
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelectNum::SlideInUpdate;
@@ -36,6 +38,10 @@ SceneSelectNum::SceneSelectNum()
 	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{ 150.0f, 250.0f, 0.0f });
 	SetCameraNearFar(1, 1000);
 
+	// warning画像のロード
+	_warningHandle = LoadGraph("data/image/warning.png");
+
+
 	// BGMの再生
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
 }
@@ -43,6 +49,7 @@ SceneSelectNum::SceneSelectNum()
 SceneSelectNum::~SceneSelectNum()
 {
 	DeleteGraph(_slideHandle);
+	DeleteGraph(_warningHandle);
 }
 
 void SceneSelectNum::Update()
@@ -61,7 +68,10 @@ void SceneSelectNum::NormalUpdate()
 	_pSkyDome->Update();
 
 	// UIの更新処理
-	_pUi->Update();
+	if (!_warningFrag) {
+		_pUi->Update();
+
+	}
 
 	// Bボタンでモードセレクトに戻る
 	if (Input::GetInstance().IsTrigger(INPUT_B, INPUT_PAD_1)) {
@@ -81,18 +91,28 @@ void SceneSelectNum::NormalUpdate()
 	// Aボタンで選択しているボタンの処理をする
 	if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 
-		// 決定音を鳴らす
-		SoundManager::GetInstance().RingSE(SE_CHARA_SELECT);
+		if (_warningFrag) {
+			_warningFrag = false;
+			SoundManager::GetInstance().RingSE(SE_CLOSE_MENU);
+		}
+		else if (_pUi->GetSelect() + 1 > Input::GetInstance().GetPadNum()) {
+			_warningFrag = true;
+			SoundManager::GetInstance().RingSE(SE_BEEP);
+		}
+		else {
 
-		// スライド画像の初期位置を設定する
-		_slidePos.x = 2000;
 
-		// スライドアウト処理に移行する
-		_updateFunc = &SceneSelectNum::SlideOutUpdate;
-		_drawFunc = &SceneSelectNum::SlideOutDraw;
+			// 決定音を鳴らす
+			SoundManager::GetInstance().RingSE(SE_CHARA_SELECT);
+
+			// スライド画像の初期位置を設定する
+			_slidePos.x = 2000;
+
+			// スライドアウト処理に移行する
+			_updateFunc = &SceneSelectNum::SlideOutUpdate;
+			_drawFunc = &SceneSelectNum::SlideOutDraw;
+		}
 	}
-
-
 }
 
 void SceneSelectNum::NormalDraw() const
@@ -102,6 +122,11 @@ void SceneSelectNum::NormalDraw() const
 
 	// UIの描画処理
 	_pUi->Draw();
+
+	// waring表示
+	if (_warningFrag) {
+		DrawRotaGraph(1920 / 2, 1080 / 2, 1.0, 0.0, _warningHandle, true);
+	}
 }
 
 void SceneSelectNum::SlideInUpdate()
@@ -156,7 +181,7 @@ void SceneSelectNum::SlideOutUpdate()
 		if (_slidePos.x >= -300) {
 
 			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(true));
-			
+
 		}
 	}
 	else {

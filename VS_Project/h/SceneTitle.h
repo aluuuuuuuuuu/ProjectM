@@ -135,5 +135,14 @@ private:
 	int _serihu;
 	int _serihu2;
 	int _serihu3;
+
+	// ゲーム終了フラグ
+	bool _endFrag;
+
+	// ゲーム終了確認画像ハンドル
+	int _endHandle;
+
+	// ゲーム終了ボタンテキスト画像
+	int _gameEndHandle;
 };
 

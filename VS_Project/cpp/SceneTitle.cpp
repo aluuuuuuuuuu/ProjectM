@@ -13,7 +13,8 @@
 
 SceneTitle::SceneTitle(bool slidInFlag) :
 	_frame(110),
-	_selectDrawFlag(false)
+	_selectDrawFlag(false),
+	_endFrag(false)
 {
 	// 乱数生成器の初期化
 	srand(static_cast<unsigned int>(time(nullptr)));
@@ -81,6 +82,12 @@ SceneTitle::SceneTitle(bool slidInFlag) :
 
 	_serihu3 = LoadGraph("data/image/message4.png");
 
+	// ゲーム終了画像のロード
+	_endHandle = LoadGraph("data/image/GameEnda.png");
+
+	// ゲーム終了ボタンテキスト画像
+	_gameEndHandle = LoadGraph("data/image/startToGameEnd.png");
+
 	// オープニングのテーマを再生する
 	SoundManager::GetInstance().StopBGM(BGM_THEME);
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
@@ -95,6 +102,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(_serihu2);
 	DeleteGraph(_serihu3);
 	DeleteGraph(_slideHandle);
+	DeleteGraph(_endHandle);
 }
 
 void SceneTitle::Update()
@@ -126,10 +134,9 @@ void SceneTitle::NormalUpdate()
 	_pModel2->Update();
 
 	// Xボタンが押されたらクレジット表示
-
 	if (Input::GetInstance().GetPadNum() != 0) {
 		for (int num = 0; num < Input::GetInstance().GetPadNum(); num++) {
-			if (Input::GetInstance().IsTrigger(INPUT_X, num)) {
+			if (Input::GetInstance().IsTrigger(INPUT_X, num) && !_endFrag) {
 
 				_frame = 0;
 
@@ -137,7 +144,7 @@ void SceneTitle::NormalUpdate()
 				_updateFunc = &SceneTitle::NormalFadeOutUpdate;
 				_drawFunc = &SceneTitle::NormalFadeDraw;
 			}
-			else if (Input::GetInstance().IsTrigger(INPUT_A, num)) {
+			else if (Input::GetInstance().IsTrigger(INPUT_A, num) && !_endFrag) {
 
 				// 決定音を鳴らす
 				SoundManager::GetInstance().RingSE(SE_TITLE_START);
@@ -146,8 +153,26 @@ void SceneTitle::NormalUpdate()
 				_updateFunc = &SceneTitle::SlideOutUpdate;
 				_drawFunc = &SceneTitle::SlideOutDraw;
 			}
+			else if (Input::GetInstance().IsTrigger(INPUT_A, num) && _endFrag) {
+				SceneManager::GetInstance().GameEnd();
+			}
+			else if (Input::GetInstance().IsTrigger(INPUT_B, num) && _endFrag) {
+				_endFrag = false;
+			}
+
+			// startボタンが押されたらゲーム終了確認画像を表示
+			if (Input::GetInstance().IsTrigger(INPUT_START, num)) {
+				if (_endFrag) {
+					_endFrag = false;
+				}
+				else {
+					_endFrag = true;
+				}
+			}
 		}
 	}
+
+
 }
 
 void SceneTitle::NormalDraw() const
@@ -178,6 +203,11 @@ void SceneTitle::NormalDraw() const
 	// 両翼の描画
 	_pModel1->Draw();
 	_pModel2->Draw();
+
+	DrawGraph(1300, 950, _gameEndHandle, true);
+
+	// ゲーム終了画像の描画
+	if (_endFrag) DrawRotaGraph(1920 / 2, 1080 / 2, 1.0, 0.0, _endHandle, false);
 }
 
 void SceneTitle::SlideInUpdate()

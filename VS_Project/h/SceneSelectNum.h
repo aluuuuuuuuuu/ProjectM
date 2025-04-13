@@ -88,5 +88,11 @@ private:
     // セレクトモードに戻るフラグ
     bool _selectFrag;
 
+    // コントローラーが足りない画像ハンドル
+    int _warningHandle;
+
+    // コントローラーが足りないフラグ
+    bool _warningFrag;
+
 };
 
