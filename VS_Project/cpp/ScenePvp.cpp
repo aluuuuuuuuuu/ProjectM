@@ -18,6 +18,7 @@
 #include "EffectManager.h"
 #include "EffekseerForDXLib.h"
 #include "PlayerBulletCollisionManager.h"
+#include "ItemManager.h"
 
 ScenePvp::ScenePvp(PlayerData data):
 	_frame(110)
@@ -37,6 +38,7 @@ ScenePvp::ScenePvp(PlayerData data):
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
 		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
 		_pPlayerBulletCollisionManager = std::make_shared<PlayerBulletCollisionManager>(_pBulletManager, _pPlayerManager);
+		_pItemManager = std::make_shared<ItemManager>(_pPlayerManager,_pStage);
 	}
 
 	// ライトの設定
@@ -103,6 +105,9 @@ void ScenePvp::NormalUpdate()
 	// プレイヤーの更新処理
 	_pPlayerManager->Update();
 
+	// アイテムの更新処理
+	_pItemManager->Update();
+
 	// ゲームフローの更新処理
 	_pGameFlowManager->Update();
 
@@ -156,8 +161,12 @@ void ScenePvp::NormalDraw() const
 		// エフェクトの描画
 		EffectManager::GetInstance().Draw();
 
+		// アイテムの描画
+		_pItemManager->Draw();
+
 		// プレイヤーの描画
 		_pPlayerManager->Draw(i);
+
 	}
 
 	// 描画先を戻す

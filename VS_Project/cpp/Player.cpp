@@ -9,6 +9,7 @@
 #include "EffectManager.h"
 #include "MyEffect.h"
 #include "SoundManager.h"
+#include "ItemManager.h"
 
 Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
 	_moveScaleY(0),
@@ -22,7 +23,9 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_bulletData(data),
 	_frame(0),
 	_stunFrag(false),
-	_stunFrame(0)
+	_stunFrame(0),
+	_speedUpFrag(false),
+	_speedUpFrame(0)
 {
 	// 関数ポインタの初期化
 	_controlFunc = &Player::ControlPl;
@@ -52,6 +55,9 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 		time = 0;
 	}
 
+	// エフェクトインスタンスの作成
+	_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Vec3{ 0,500,0 });
+
 	// 選択している弾の初期化
 	_bulletData._selectBullet = NORMAL_BULLET;
 }
@@ -68,7 +74,9 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 	_frame(0),
 	_padNum(1),
 	_stunFrag(false),
-	_stunFrame(0)
+	_stunFrame(0),
+	_speedUpFrag(false),
+	_speedUpFrame(0)
 {
 	// 関数ポインタの初期化
 	_controlFunc = &Player::ControlAI;
@@ -98,6 +106,9 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 		time = 0;
 	}
 
+	// エフェクトインスタンスの作成
+	_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Vec3{ 0,500,0 });
+
 	// 選択している弾の初期化
 	_bulletData._selectBullet = NORMAL_BULLET;
 
@@ -115,15 +126,27 @@ void Player::Control()
 
 void Player::Update()
 {
-	(this->*_updateFunc)();
-
+	// スタンフラグの計測
 	if (_stunFrag) {
 		_stunFrame++;
-		if (_stunFrame > 30) {
+		if (_stunFrame > 20) {
 			_stunFrame = 0;
 			_stunFrag = false;
 		}
 	}
+
+	// スピードフラグのフレームを計測する
+	if (_speedUpFrag) {
+		_pEffect->Update(Position);
+		_speedUpFrame++;
+		if (_speedUpFrame > 180) {
+			_pEffect->StopEffect();
+			_speedUpFrag = false;
+			_speedUpFrame = 0;
+		}
+	}
+
+	(this->*_updateFunc)();
 }
 
 void Player::ControlPl()
@@ -140,7 +163,7 @@ void Player::ControlPl()
 	if (input.IsHold(INPUT_X, _padNum)) {		// グラップル
 		BulletTrigger(GRAPPLER_BULLET);
 	}
-	else if(input.IsHold(INPUT_Y, _padNum)) {	// 爆弾
+	else if (input.IsHold(INPUT_Y, _padNum)) {	// 爆弾
 		BulletTrigger(BOMB_BULLET);
 	}
 
@@ -198,7 +221,18 @@ void Player::ControlPl()
 		_moveVec = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum);
 
 		// 単位ベクトルの方向に移動速度分移動するベクトルを作成する
-		_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED");
+		if (_stunFrag) {
+			_moveVec = _moveVec * (_manager.GetConstantFloat("WALK_SPEED") * 0.8f);
+		}
+		else {
+
+			if (_speedUpFrag) {
+				_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED") * 2.0f;
+			}
+			else {
+				_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED");
+			}
+		}
 	}
 
 	// Aボタンでジャンプ
@@ -272,7 +306,7 @@ void Player::ControlAI()
 		Angle.y = atan2(dist.x, dist.z) - 1.5708f;	// プレイヤーの方向を向く 
 
 		// forwardVecがプレイヤーの足元の少し下を向くようにする
-		_forwardVec = (Vec3{targetPos.x,0.0f,targetPos.z} - Position).GetNormalized();
+		_forwardVec = (Vec3{ targetPos.x,0.0f,targetPos.z } - Position).GetNormalized();
 
 		// グラップルが着弾していたらプレイヤーの方法に移動する
 		if (_bulletManager->IsCollisionBullet(_padNum) && !_bulletManager->GetInvalidFlag(_padNum)) {
@@ -291,7 +325,17 @@ void Player::ControlAI()
 			_oldPos = Position;
 		}
 
-		_moveVec += dist * 0.3f;
+		if (_stunFrag) {
+			_moveVec += dist * 0.15f;
+		}
+		else {
+			if (_speedUpFrag) {
+				_moveVec += dist * 0.20f * 2.0f;
+			}
+			else {
+				_moveVec += dist * 0.20f;
+			}
+		}
 
 		// 30フレームに一回弾を発射する
 		if (_frame % 30 == 0) {
@@ -389,7 +433,12 @@ void Player::UpdatePl()
 	AnimationContorol();
 
 	// アニメーションの更新
-	UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
+	if (_speedUpFrag) {
+			UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK") * 2.0f);
+	}
+	else {
+		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
+	}
 
 	// モデル用のトランスフォームを作成する
 	Transform trans;
@@ -472,7 +521,12 @@ void Player::UpdateAI()
 	AnimationContorol();
 
 	// アニメーションの更新
-	UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
+	if (_speedUpFrag) {
+		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK") * 2.0f);
+	}
+	else {
+		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
+	}
 
 	// モデル用のトランスフォームを作成する
 	Transform trans;
@@ -548,7 +602,7 @@ void Player::BulletCollision(int bul)
 	// 弾の種類によって処理を変える
 	switch (bul) {
 	case NORMAL_BULLET:
-		//_stunFrag = true;
+		if (!_speedUpFrag) _stunFrag = true;
 		break;
 	case GRAPPLER_BULLET:
 		break;
@@ -560,6 +614,26 @@ void Player::BulletCollision(int bul)
 bool Player::GetStunFlag() const
 {
 	return _stunFrag;
+}
+
+void Player::GiveItem(int itemType)
+{
+	switch (itemType)
+	{
+	case ITEM_TYPE_SPEED:	// スピードアップ
+		_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Position);
+
+		if (_speedUpFrag) {
+			_speedUpFrame = 0;
+		}
+		else {
+			// スピードアップフラグを立てる
+			_speedUpFrag = true;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void Player::RotateAngleY(float targetAngle)

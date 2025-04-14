@@ -87,7 +87,14 @@ public:
 	/// <param name="bul">弾の種類</param>
 	void BulletCollision(int bul);
 
+	/// <summary>
+	/// スタンフラグを取得する
+	/// </summary>:スタン中
+	/// <returns>true</returns>
 	bool GetStunFlag() const;
+
+
+	void GiveItem(int itemType);
 
 private:
 
@@ -202,5 +209,11 @@ private:
 
 	// スタンフレーム
 	int _stunFrame;
+
+	// アイテムによるスピードアップフラグ
+	bool _speedUpFrag;
+
+	// スピードアップフレーム
+	int _speedUpFrame;
 };
 

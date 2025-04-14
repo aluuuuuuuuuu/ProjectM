@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 
+class ItemManager;
 class PlayerBulletCollisionManager;
 class NumUtility;
 class GameFlowManager;
@@ -103,6 +104,9 @@ private:
 
     // 禊虫マネージャー
     std::shared_ptr<WedgewormManager> _pWedgewormManager;
+
+    // アイテムマネージャー
+    std::shared_ptr<ItemManager> _pItemManager;
 
     // ゲームフローマネージャー
     std::shared_ptr<GameFlowManager> _pGameFlowManager;

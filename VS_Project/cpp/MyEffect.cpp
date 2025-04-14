@@ -5,6 +5,7 @@
 MyEffect::MyEffect(int effect,Vec3 pos)
 {
 	_playHandle = PlayEffekseer3DEffect(EffectManager::GetInstance().GetEffectHandle(effect));
+	SetPosPlayingEffekseer3DEffect(_playHandle, pos.x, pos.y, pos.z);
 }
 
 MyEffect::~MyEffect()

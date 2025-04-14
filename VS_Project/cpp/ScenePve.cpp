@@ -17,7 +17,7 @@
 #include "SoundManager.h"
 #include "EffectManager.h"
 #include "PlayerBulletCollisionManager.h"
-
+#include "ItemManager.h"
 
 ScenePve::ScenePve(PlayerData data):
 	_frame(110)
@@ -37,6 +37,7 @@ ScenePve::ScenePve(PlayerData data):
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
 		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
 		_pPlayerBulletCollisionManager = std::make_shared<PlayerBulletCollisionManager>(_pBulletManager, _pPlayerManager);
+		_pItemManager = std::make_shared<ItemManager>(_pPlayerManager,_pStage);
 	}
 
 	// AIの追加
@@ -100,6 +101,9 @@ void ScenePve::NormalUpdate()
 	// プレイヤーの更新処理
 	_pPlayerManager->Update();
 
+	// アイテムの更新処理
+	_pItemManager->Update();
+
 	// ゲームフローの更新処理
 	_pGameFlowManager->Update();
 
@@ -138,6 +142,9 @@ void ScenePve::NormalDraw() const
 
 	// 禊虫の描画
 	_pWedgewormManager->Draw();
+
+	// アイテムの描画
+	_pItemManager->Draw();
 
 	// エフェクトの描画
 	EffectManager::GetInstance().Draw();

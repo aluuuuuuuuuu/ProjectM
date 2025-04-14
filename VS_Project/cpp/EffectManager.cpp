@@ -77,6 +77,8 @@ void EffectManager::LoadEffect(int effect)
 	case SHOT_DOWN_EFFECT:
 		_effectMap[effect] = LoadEffekseerEffect("data/effect/gekitui.efk", 10.0f);
 		break;
+	case SPEED_UP_EFFECT:
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/SpeedUp.efk", 10.0f);
 	default:
 		break;
 	}

@@ -158,6 +158,9 @@
     <ClCompile Include="cpp\GameFlowManager.cpp" />
     <ClCompile Include="cpp\GrapplerBullet.cpp" />
     <ClCompile Include="cpp\Input.cpp" />
+    <ClCompile Include="cpp\ItemBase.cpp" />
+    <ClCompile Include="cpp\ItemManager.cpp" />
+    <ClCompile Include="cpp\ItemSpeedUp.cpp" />
     <ClCompile Include="cpp\Logo.cpp" />
     <ClCompile Include="cpp\MapBulletCollisionManager.cpp" />
     <ClCompile Include="cpp\MenuButton.cpp" />
@@ -221,6 +224,9 @@
     <ClInclude Include="h\GameFlowManager.h" />
     <ClInclude Include="h\GrapplerBullet.h" />
     <ClInclude Include="h\Input.h" />
+    <ClInclude Include="h\ItemBase.h" />
+    <ClInclude Include="h\ItemManager.h" />
+    <ClInclude Include="h\ItemSpeedUp.h" />
     <ClInclude Include="h\Logo.h" />
     <ClInclude Include="h\MapBulletCollisionManager.h" />
     <ClInclude Include="h\MenuButton.h" />

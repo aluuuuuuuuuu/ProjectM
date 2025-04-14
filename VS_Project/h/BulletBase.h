@@ -11,7 +11,15 @@ class BulletBase:
 	public Transform
 {
 public:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	BulletBase();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~BulletBase() {};
 
 	/// <summary>
