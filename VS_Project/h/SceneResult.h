@@ -2,13 +2,15 @@
 #include "SceneBase.h"
 #include <memory>
 #include "PlayerManager.h"
+#include "Constant.h"
 
 class SkyDome;
 class ResultCharacter;
 class NumUtility;
 class ResultUi;
 class SceneResult :
-	public SceneBase
+	public SceneBase,
+	public Constant
 {
 public:
 

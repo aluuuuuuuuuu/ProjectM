@@ -10,10 +10,14 @@
 #include "SkyDome.h"
 #include "ScenePause.h"
 #include "SceneSelectMode.h"
+#include "Application.h"
 
 SceneSelect::SceneSelect(int num) :
 	_frame(0)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/SceneSelect.csv");
+
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelect::SlideInUpdate;
 	_drawFunc = &SceneSelect::SlideInDraw;
@@ -34,7 +38,7 @@ SceneSelect::SceneSelect(int num) :
 	// スライド画像のロード
 	_slideHandle = LoadGraph("data/image/Slide.png");
 
-	_slidePos = Vec2{ -300,0 };
+	_slidePos = Vec2{ GetConstantInt("SLIDE_OUT_START_X"),GetConstantInt("SLIDE_OUT_START_Y") };
 }
 
 SceneSelect::~SceneSelect()
@@ -101,8 +105,8 @@ void SceneSelect::SlideInUpdate()
 	_pSkyDome->Update();
 
 	// スライド画像の移動
-	_slidePos.x -= 80;
-	if (_slidePos.x <= -3840) {
+	_slidePos.x -= GetConstantFloat("SLIDE_MOVE_SCALE");
+	if (_slidePos.x <= GetConstantInt("SLIDE_IN_END_X")) {
 		_updateFunc = &SceneSelect::CharacterSelectUpdate;
 		_drawFunc = &SceneSelect::CharacterSelectDraw;
 	}
@@ -122,8 +126,8 @@ void SceneSelect::SlideOutUpdate()
 	// スカイドームの更新処理
 	_pSkyDome->Update();
 
-	_slidePos.x += 80;
-	if (_slidePos.x >= -300) {
+	_slidePos.x += GetConstantFloat("SLIDE_MOVE_SCALE");
+	if (_slidePos.x >= GetConstantInt("SLIDE_OUT_START_X")) {
 		// 次のシーンに移行する
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(true));
 	}
@@ -144,7 +148,7 @@ void SceneSelect::FadeOutUpdate()
 	_pSkyDome->Update();
 
 	_frame++;
-	if (_frame > 60) {
+	if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 
 		// 次のシーンに移行する
 		SceneManager::GetInstance().ChangeScene(std::make_shared<ScenePause>(_plData));
@@ -157,8 +161,8 @@ void SceneSelect::FadeOutDraw() const
 	CharacterSelectDraw();
 
 	//フェード暗幕
-	int alpha = (int)(255 * ((float)_frame / 60));
+	int alpha = (int)(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM")));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	DrawBox(0, 0, Application::GetInstance().GetConstantInt("SCREEN_WIDTH"), Application::GetInstance().GetConstantInt("SCREEN_HEIGHT"), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

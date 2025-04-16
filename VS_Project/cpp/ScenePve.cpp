@@ -19,9 +19,12 @@
 #include "PlayerBulletCollisionManager.h"
 #include "ItemManager.h"
 
-ScenePve::ScenePve(PlayerData data):
-	_frame(110)
+ScenePve::ScenePve(PlayerData data) :
+	_frame(Application::GetInstance().GetConstantInt("FRAME_NUM") * 2)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/ScenePve");
+
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
 
@@ -35,9 +38,9 @@ ScenePve::ScenePve(PlayerData data):
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
-		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
+		_pNum = std::make_shared<NumUtility>(GetConstantFloat("NUM_SIZE"), Vec2{ GetConstantFloat("NUM_POS_X"),GetConstantFloat("NUM_POS_Y") });	// 数字ユーティリティ
 		_pPlayerBulletCollisionManager = std::make_shared<PlayerBulletCollisionManager>(_pBulletManager, _pPlayerManager);
-		_pItemManager = std::make_shared<ItemManager>(_pPlayerManager,_pStage);
+		_pItemManager = std::make_shared<ItemManager>(_pPlayerManager, _pStage);
 	}
 
 	// AIの追加
@@ -45,14 +48,20 @@ ScenePve::ScenePve(PlayerData data):
 
 	// ライトの設定
 	{
+		auto& app = Application::GetInstance();
 		// ライティングを使用する
 		SetUseLighting(true);
 
 		// ライトのカラーを調整する
-		SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+		SetLightDifColor(GetColorF(app.GetConstantFloat("LIGHT_COLOR_R"),
+			app.GetConstantFloat("LIGHT_COLOR_G"),
+			app.GetConstantFloat("LIGHT_COLOR_B"),
+			app.GetConstantFloat("LIGHT_COLOR_ALPHA")));
 
 		// ライトの角度を設定
-		SetLightDirection(VECTOR{ 1.0f, -1.0f ,0.0f, });
+		SetLightDirection(VECTOR{ app.GetConstantFloat("LIGHT_DIRECTION_X"),
+			app.GetConstantFloat("LIGHT_DIRECTION_Y"),
+			app.GetConstantFloat("LIGHT_DIRECTION_Z"), });
 	}
 
 	// 関数ポインタの初期化
@@ -165,17 +174,13 @@ void ScenePve::EndUpdate()
 	_pPlayerManager->Update();
 
 	_frame++;
-	if (_frame >= 110) {
-		
+
+	// ゲームが終了してから2秒たてばリザルト画面へ移行
+	if (_frame >= Application::GetInstance().GetConstantInt("FRAME_NUM") * 2) {
+
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
 	}
-
-	//// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
-	//if (_pGameFlowManager->GetFlameCount() >= 120) {
-	//	SoundManager::GetInstance().StopBGM(BGM_BATTLE);
-	//	SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
-	//}
 }
 
 void ScenePve::EndDraw() const
@@ -184,7 +189,7 @@ void ScenePve::EndDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -209,7 +214,7 @@ void ScenePve::FadeInDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

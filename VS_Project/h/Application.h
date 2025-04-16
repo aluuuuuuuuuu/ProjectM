@@ -2,6 +2,11 @@
 #include "Singleton.h"
 #include "Constant.h"
 
+namespace
+{
+	constexpr const char* WINDOW_NAME = "OtoshiKing";
+};
+
 class Application:
 	public Singleton<Application>,
 	public Constant

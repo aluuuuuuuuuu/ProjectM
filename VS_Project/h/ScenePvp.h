@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "SceneBase.h"
 #include "Constant.h"
 #include <memory>

@@ -10,9 +10,10 @@
 #include "TitlePlayer.h"
 #include "SceneSelectMode.h"
 #include "SceneCredit.h"
+#include "Application.h"
 
 SceneTitle::SceneTitle(bool slidInFlag) :
-	_frame(110),
+	_frame(Application::GetInstance().GetConstantInt("FRAME_NUM")),
 	_selectDrawFlag(false),
 	_endFrag(false)
 {
@@ -23,18 +24,20 @@ SceneTitle::SceneTitle(bool slidInFlag) :
 	ReadCSV("data/constant/SceneTitle.csv");
 
 	// カメラの初期化
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{ 150.0f, 250.0f, 0.0f });
-	SetCameraNearFar(1, 1000);
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ GetConstantFloat("CAMERA_POS_X"),GetConstantFloat("CAMERA_POS_Y"),GetConstantFloat("CAMERA_POS_Z") },
+		VECTOR{ GetConstantFloat("CAMERA_TARGET_X"), GetConstantFloat("CAMERA_TARGET_Y"), GetConstantFloat("CAMERA_TARGET_Z") });
+
+	SetCameraNearFar(GetConstantFloat("CAMERA_NEAR"), GetConstantFloat("CAMERA_FAR"));
 
 	// 関数ポインタの初期化
 	{
 		if (slidInFlag) {
-			_slidePos.x = -300;
+			_slidePos.x = GetConstantInt("SLIDE_MOVE_SCALE");
 			_updateFunc = &SceneTitle::SlideInUpdate;
 			_drawFunc = &SceneTitle::SlideInDraw;
 		}
 		else {
-			_slidePos.x = 2000;
+			_slidePos.x = GetConstantInt("SLIDE_IN_START_X");
 			_updateFunc = &SceneTitle::FadeInUpdate;
 			_drawFunc = &SceneTitle::FadeInDraw;
 		}
@@ -194,20 +197,22 @@ void SceneTitle::NormalDraw() const
 
 	// メッセージの描画処理
 	if (Input::GetInstance().GetPadNum() == 0) {
-		DrawGraph(30, 170, _serihu, true);
+		DrawGraph(GetConstantInt("MASSAGE_POS_X"), GetConstantInt("MASSAGE_POS_Y"), _serihu, true);
 	}
 	else {
-		DrawGraph(30, 170, _serihu2, true);
+		DrawGraph(GetConstantInt("MASSAGE_POS_X"), GetConstantInt("MASSAGE_POS_Y"), _serihu2, true);
 	}
 
 	// 両翼の描画
 	_pModel1->Draw();
 	_pModel2->Draw();
 
-	DrawGraph(1300, 950, _gameEndHandle, true);
+	// ゲーム終了ガイド画像を表示
+	DrawGraph(GetConstantInt("GAME_END_POS_X"), GetConstantInt("GAME_END_POS_Y"), _gameEndHandle, true);
 
+	auto& app = Application::GetInstance();
 	// ゲーム終了画像の描画
-	if (_endFrag) DrawRotaGraph(1920 / 2, 1080 / 2, 1.0, 0.0, _endHandle, false);
+	if (_endFrag) DrawRotaGraph(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT") / 2, 1.0, 0.0, _endHandle, false);
 }
 
 void SceneTitle::SlideInUpdate()
@@ -216,14 +221,14 @@ void SceneTitle::SlideInUpdate()
 	_pSkyDome->Update();
 
 	// スライド画像の移動
-	_slidePos.x += 80;
+	_slidePos.x += GetConstantInt("SLIDE_MOVE_SCALE");
 
 	// 両翼の更新処理
 	_pModel1->Update();
 	_pModel2->Update();
 
 	// 移動が終わったら通常の状態に遷移
-	if (_slidePos.x > 2000) {
+	if (_slidePos.x > GetConstantInt("SLIDE_IN_START_X")) {
 		_updateFunc = &SceneTitle::NormalUpdate;
 		_drawFunc = &SceneTitle::NormalDraw;
 	}
@@ -232,7 +237,7 @@ void SceneTitle::SlideInUpdate()
 void SceneTitle::SlideOutUpdate()
 {
 	// スライド画像の移動 
-	_slidePos.x -= 80;
+	_slidePos.x -= GetConstantInt("SLIDE_MOVE_SCALE");
 
 	// スカイドームの更新処理
 	_pSkyDome->Update();
@@ -244,8 +249,7 @@ void SceneTitle::SlideOutUpdate()
 	_pModel2->Update();
 
 	// 移動が終わったらシーン遷移
-	if (_slidePos.x <= -300) {
-		//SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelect>(_pNum->GetSelectNum()));
+	if (_slidePos.x <= GetConstantInt("SLIDE_OUT_START_X")) {
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(false));
 	}
 }
@@ -300,11 +304,11 @@ void SceneTitle::FadeInUpdate()
 void SceneTitle::FadeInDraw() const
 {
 	NormalDraw();
-
+	auto& app = Application::GetInstance();
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
-	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	DrawBox(0, 0, app.GetConstantInt("SCREEN_WIDTH"), app.GetConstantInt("SCREEN_HEIGHT"), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -353,7 +357,7 @@ void SceneTitle::NormalFadeOutUpdate()
 	_pModel2->Update();
 
 	_frame++;
-	if (_frame == 60) {
+	if (_frame == Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 
 		// シーンの切り替え
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneCredit>());
@@ -365,7 +369,7 @@ void SceneTitle::NormalFadeDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 60));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM")));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

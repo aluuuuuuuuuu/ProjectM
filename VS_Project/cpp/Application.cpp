@@ -24,7 +24,7 @@ bool Application::Init()
 	ChangeWindowMode(true);
 
 	// ウィンドウ名の設定
-	DxLib::SetWindowTextDX("ProjectM");
+	DxLib::SetWindowTextDX(WINDOW_NAME);
 
 	// 画面サイズの設定
 	SetWindowSize(GetConstantInt("SCREEN_WIDTH"),
@@ -42,10 +42,15 @@ bool Application::Init()
 	SetUseLighting(true);
 
 	// ライトのカラーを調整する
-	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+	SetLightDifColor(GetColorF(GetConstantFloat("LIGHT_COLOR_R"),
+		GetConstantFloat("LIGHT_COLOR_G"),
+		GetConstantFloat("LIGHT_COLOR_B"),
+		GetConstantFloat("LIGHT_COLOR_ALPHA")));
 
 	// ライトの角度を設定
-	SetLightDirection(VECTOR{ 1.0f, -1.0f ,0.0f, });
+	SetLightDirection(VECTOR{ GetConstantFloat("LIGHT_DIRECTION_X"),
+		GetConstantFloat("LIGHT_DIRECTION_Y"),
+		GetConstantFloat("LIGHT_DIRECTION_Z"), });
 
 	// ニアレストネイバー法で描画する
 	SetDrawMode(DX_DRAWMODE_NEAREST);
@@ -67,17 +72,17 @@ bool Application::Init()
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// 背景色の設定
-	SetBackgroundColor(220, 220, 220);
+	SetBackgroundColor(GetConstantInt("BACK_GROUND_COLOR_R"),
+		GetConstantInt("BACK_GROUND_COLOR_G"),
+		GetConstantInt("BACK_GROUND_COLOR_B"));
 
 	// カーソルの表示設定
-	SetMouseDispFlag(true);
+	SetMouseDispFlag(false);
 
 	// Zバッファを有効にする。
-	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetUseZBuffer3D(TRUE);
 
 	// Zバッファへの書き込みを有効にする。
-	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
 
 	// サウンドマネージャーの初期処理
@@ -95,21 +100,7 @@ void Application::Run()
 	auto& manager = SceneManager::GetInstance();
 
 	// 初期シーンを設定
-
-		// 初期シーンを設定
-	PlayerData data;
-
-	data.playerNum = 0;
-	data.character[0] = 0;
-
-	//manager.ChangeScene(std::make_shared<SceneResult>(data,100));
-	//manager.ChangeScene(std::make_shared<SceneGrapple>());
-	//manager.ChangeScene(std::make_shared <SceneTest>(data));
-	//manager.ChangeScene(std::make_shared <SceneSelectMode>(false));
 	manager.ChangeScene(std::make_shared <SceneTitle>(false));
-	//manager.ChangeScene(std::make_shared <SceneSelect>());
-	//manager.ChangeScene(std::make_shared <ScenePve>(data));
-	//manager.ChangeScene(std::make_shared<SceneTutorial>());
 
 	// インプットのインスタンスを取得
 	auto& input = Input::GetInstance();
@@ -146,7 +137,7 @@ void Application::Run()
 			break;
 		}
 
-		// FPS60に固定する
+		// fpsを60に固定する(1フレーム ≒ 16.667ms)
 		while (GetNowHiPerformanceCount() - start < 16667) {}
 	}
 

@@ -2,10 +2,12 @@
 #include "SceneBase.h"
 #include <memory>
 #include "Vec2.h"
+#include "Constant.h"
 
 class CreditCharacter;
 class SceneCredit :
-    public SceneBase
+    public SceneBase,
+	public Constant
 {
 public:
     SceneCredit();
@@ -58,7 +60,7 @@ private:
 	int _creditY;
 
 	// クレジットフレームカウンタ
-	int _creditFlame;
+	int _creditFrame;
 
 	// クレジットキャラ
 	std::shared_ptr<CreditCharacter> _pChar1;

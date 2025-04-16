@@ -2,11 +2,13 @@
 #include "SceneBase.h"
 #include <memory>
 #include "Vec2.h"
+#include "Constant.h"
 
 class SkyDome;
 class SelectModeUi;
 class SceneSelectMode :
-    public SceneBase
+    public SceneBase,
+    public Constant
 {
 public:
 

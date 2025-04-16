@@ -1,9 +1,11 @@
 #pragma once
 #include "SceneBase.h"
 #include "PlayerManager.h"
+#include "Constant.h"
 
 class ScenePause :
-    public SceneBase
+    public SceneBase,
+    public Constant
 {
 public:
 
@@ -43,9 +45,9 @@ private:
 
     int _frame;
 
-    int _graph;
+    int _graphHandle;
 
-    int _text;
+    int _textImageHandle;
 
     int _textFrame;
 

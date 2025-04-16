@@ -4,14 +4,19 @@
 #include "ScenePve.h"
 #include "ScenePvp.h"
 #include "Input.h"
+#include "Application.h"
 
-ScenePause::ScenePause(PlayerData data):
+ScenePause::ScenePause(PlayerData data) :
 	_data(data),
-	_frame(60),
+	_frame(Application::GetInstance().GetConstantInt("FRAME_NUM")),
 	_textFrame(0)
 {
-	_graph = LoadGraph("data/image/Pause.png");
-	_text = LoadGraph("data/image/PressAnyButton.png");
+	// 定数ファイルの読み込み
+	ReadCSV("data/constan/ScenePause.csv");
+
+	// 画像のロード
+	_graphHandle = LoadGraph("data/image/Pause.png");
+	_textImageHandle = LoadGraph("data/image/PressAnyButton.png");
 
 	_updateFunc = &ScenePause::FadeInUpdate;
 	_drawFunc = &ScenePause::FadeDraw;
@@ -19,8 +24,8 @@ ScenePause::ScenePause(PlayerData data):
 
 ScenePause::~ScenePause()
 {
-	DeleteGraph(_graph);
-	DeleteGraph(_text);
+	DeleteGraph(_graphHandle);
+	DeleteGraph(_textImageHandle);
 }
 
 void ScenePause::Update()
@@ -43,7 +48,7 @@ void ScenePause::NormalUpdate()
 	}
 
 	// スタート指示を点滅させる
-	if (_textFrame == 120) {
+	if (_textFrame == Application::GetInstance().GetConstantInt("FRAME_NUM") * 2) {
 		_textFrame++;
 	}
 	else if (_textFrame == 1) {
@@ -59,13 +64,16 @@ void ScenePause::NormalUpdate()
 
 void ScenePause::NormalDraw() const
 {
-	DrawGraph(0, 0, _graph, true);
+	// 操作説明画像の描画
+	DrawGraph(0, 0, _graphHandle, true);
 
 	// フェードしながら描画
-	int alpha = static_cast<int>(255 * ((float)_textFrame / 120));
+	int alpha = static_cast<int>(255 * ((float)_textFrame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-	// 画像の描画
-	DrawRotaGraph(960, 945, 1.0f, 0.0f, _text, true);
+
+	// 下のテキスト画像の描画
+	DrawRotaGraph(GetConstantInt("IMAGE_DRAW_X"), GetConstantInt("IMAGE_DRAW_Y"), 1.0f, 0.0f, _textImageHandle, true);
+	
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -85,7 +93,7 @@ void ScenePause::FadeOutUpdate()
 	NormalUpdate();
 
 	_frame++;
-	if (_frame > 60) {
+	if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 		// 次のシーンに移行する
 		if (_data.playerNum == PLAYER_ONE) {
 			_data.aiFlag = true;
@@ -103,7 +111,7 @@ void ScenePause::FadeDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 60));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM")));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	DrawBox(0, 0, 1980, 1080, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

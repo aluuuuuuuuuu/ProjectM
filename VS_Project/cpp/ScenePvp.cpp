@@ -20,9 +20,12 @@
 #include "PlayerBulletCollisionManager.h"
 #include "ItemManager.h"
 
-ScenePvp::ScenePvp(PlayerData data):
-	_frame(110)
+ScenePvp::ScenePvp(PlayerData data) :
+	_frame(Application::GetInstance().GetConstantInt("FRAME_NUM") * 2)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/ScenePvp");
+
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
 
@@ -36,21 +39,27 @@ ScenePvp::ScenePvp(PlayerData data):
 		_pPlayerManager = std::make_shared<PlayerManager>(_pStage, _pBulletManager, data);	// プレイヤーマネージャー
 		_pSkyDome = std::make_shared<SkyDome>();	// スカイドーム
 		_pGameFlowManager = std::make_shared<GameFlowManager>(_pPlayerManager);	// ゲームフローマネージャー
-		_pNum = std::make_shared<NumUtility>(0.5f, Vec2{ 734,100 });	// 数字ユーティリティ
+		_pNum = std::make_shared<NumUtility>(GetConstantFloat("NUM_SIZE"), Vec2{ GetConstantFloat("NUM_POS_X"),GetConstantFloat("NUM_POS_Y") });	// 数字ユーティリティ
 		_pPlayerBulletCollisionManager = std::make_shared<PlayerBulletCollisionManager>(_pBulletManager, _pPlayerManager);
-		_pItemManager = std::make_shared<ItemManager>(_pPlayerManager,_pStage);
+		_pItemManager = std::make_shared<ItemManager>(_pPlayerManager, _pStage);
 	}
 
 	// ライトの設定
 	{
+		auto& app = Application::GetInstance();
 		// ライティングを使用する
 		SetUseLighting(true);
 
 		// ライトのカラーを調整する
-		SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+		SetLightDifColor(GetColorF(app.GetConstantFloat("LIGHT_COLOR_R"),
+			app.GetConstantFloat("LIGHT_COLOR_G"),
+			app.GetConstantFloat("LIGHT_COLOR_B"),
+			app.GetConstantFloat("LIGHT_COLOR_ALPHA")));
 
 		// ライトの角度を設定
-		SetLightDirection(VECTOR{ 1.0f, -1.0f ,0.0f, });
+		SetLightDirection(VECTOR{ app.GetConstantFloat("LIGHT_DIRECTION_X"),
+			app.GetConstantFloat("LIGHT_DIRECTION_Y"),
+			app.GetConstantFloat("LIGHT_DIRECTION_Z"), });
 	}
 
 	// 関数ポインタの初期化
@@ -142,7 +151,7 @@ void ScenePvp::NormalDraw() const
 		ClearDrawScreen();
 
 		// カメラの設定
-		SetCameraNearFar(1.0f, 1000.0f);
+		SetCameraNearFar(GetConstantFloat("CAMERA_NEAR"), GetConstantFloat("CAMERA_FAR"));
 
 		_pPlayerManager->CameraSet(i);
 
@@ -172,16 +181,19 @@ void ScenePvp::NormalDraw() const
 	// 描画先を戻す
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	auto& app = Application::GetInstance();
+
+
 	// スクリーンの描画
 	if (_pPlayerManager->GetPlayerNum() == 2) {
 		DrawGraph(0, 0, _screen[0], true);
-		DrawGraph(960, 0, _screen[1], true);
+		DrawGraph(app.GetConstantInt("SCREEN_WIDTH") / 2, 0, _screen[1], true);
 	}
 	else if (_pPlayerManager->GetPlayerNum() > 2) {
 		DrawGraph(0, 0, _screen[0], true);
-		DrawGraph(960, 0, _screen[1], true);
-		DrawGraph(0, 540, _screen[2], true);
-		DrawGraph(960, 540, _screen[3], true);
+		DrawGraph(app.GetConstantInt("SCREEN_WIDTH") / 2, 0, _screen[1], true);
+		DrawGraph(0, app.GetConstantInt("SCREEN_HEIGHT") / 2, _screen[2], true);
+		DrawGraph(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT") / 2, _screen[3], true);
 	}
 
 	// 時間の更新処理
@@ -197,50 +209,18 @@ void ScenePvp::EndUpdate()
 	_pPlayerManager->Update();
 
 	_frame++;
-	if (_frame >= 110) {
+
+	// ゲームが終了してから2秒たてばリザルト画面へ移行
+	if (_frame >= Application::GetInstance().GetConstantInt("FRAME_NUM") * 2) {
 
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
 	}
-
-	//// ゲームが終了してから１２０フレームたてばリザルト画面へ移行
-	//if (_pGameFlowManager->GetFlameCount() >= 180) {
-	//	SoundManager::GetInstance().StopBGM(BGM_BATTLE);
-	//	SceneManager::GetInstance().ChangeScene(std::make_shared<SceneResult>(_pPlayerManager->GetPlayerData(), _pGameFlowManager->GetGameTime()));
-	//}
 }
 
 void ScenePvp::EndDraw() const
 {
-
 	NormalDraw();
-
-	//// プレイヤーの画面の数だけ描画する
-	//for (int i = 0; i < _pPlayerManager->GetPlayerNum(); i++) {
-
-	//	// カメラの設定
-	//	_pPlayerManager->CameraSet(i);
-
-	//	// 描画範囲の設定
-	//	SetDrawArea(_pPlayerManager->GetArea(i).a, _pPlayerManager->GetArea(i).b, _pPlayerManager->GetArea(i).c, _pPlayerManager->GetArea(i).d);
-
-	//	// 描画先の中心を設定
-	//	SetCameraScreenCenter(static_cast<float>(_pPlayerManager->GetCenter(i).a), static_cast<float>(_pPlayerManager->GetCenter(i).b));
-
-	//	//スカイドームの描画
-	//	_pSkyDome->Draw();
-
-	//	// バレットの描画
-	//	_pBulletManager->Draw();
-
-	//	// ステージの描画
-	//	_pStage->DrawStage();
-
-	//	// 禊虫の描画
-	//	_pWedgewormManager->Draw();
-	//	// プレイヤーの描画
-	//	_pPlayerManager->Draw(i);
-	//}
 }
 
 void ScenePvp::FadeInUpdate()
@@ -261,22 +241,24 @@ void ScenePvp::FadeInDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
-	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	DrawBox(0, 0, Application::GetInstance().GetConstantInt("SCREEN_WIDTH"), Application::GetInstance().GetConstantInt("SCREEN_HEIGHT"), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void ScenePvp::MakeScreen()
 {
+	auto& app = Application::GetInstance();
+
 	if (_pPlayerManager->GetPlayerNum() == 2) {
-		_screen.push_back(DxLib::MakeScreen(960, 1080, true));
-		_screen.push_back(DxLib::MakeScreen(960, 1080, true));
+		_screen.push_back(DxLib::MakeScreen(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT"), true));
+		_screen.push_back(DxLib::MakeScreen(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT"), true));
 	}
 	else {
-		_screen.push_back(DxLib::MakeScreen(960, 540, true));
-		_screen.push_back(DxLib::MakeScreen(960, 540, true));
-		_screen.push_back(DxLib::MakeScreen(960, 540, true));
-		_screen.push_back(DxLib::MakeScreen(960, 540, true));
+		_screen.push_back(DxLib::MakeScreen(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT") / 2, true));
+		_screen.push_back(DxLib::MakeScreen(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT") / 2, true));
+		_screen.push_back(DxLib::MakeScreen(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT") / 2, true));
+		_screen.push_back(DxLib::MakeScreen(app.GetConstantInt("SCREEN_WIDTH") / 2, app.GetConstantInt("SCREEN_HEIGHT") / 2, true));
 	}
 }

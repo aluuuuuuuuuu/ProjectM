@@ -10,12 +10,16 @@
 #include "SceneSelect.h"
 #include "SceneTutorial.h"
 #include "SceneSelectNum.h"
+#include "Application.h"
 
 SceneSelectMode::SceneSelectMode(bool slideInFlag) :
 	_titleFrag(false),
 	_returnSelectFrag(slideInFlag),
 	_frame(0)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/SceneSelectMode.csv");
+
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelectMode::SlideInUpdate;
 	_drawFunc = &SceneSelectMode::SlideInDraw;
@@ -31,15 +35,17 @@ SceneSelectMode::SceneSelectMode(bool slideInFlag) :
 
 	// セレクトシーンから戻っていたらスライド画像は左から開く
 	if (_returnSelectFrag) {
-		_slidePos.x = -300;
+		_slidePos.x = GetConstantInt("SLIDE_OUT_START_X");
 	}
 	else {
-		_slidePos.x = -300;
+		_slidePos.x = GetConstantInt("SLIDE_OUT_START_X");
 	}
 
 	// カメラの初期化
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{ 150.0f, 250.0f, 0.0f });
-	SetCameraNearFar(1, 1000);
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ GetConstantFloat("CAMERA_POS_X"),GetConstantFloat("CAMERA_POS_Y"),GetConstantFloat("CAMERA_POS_Z") },
+		VECTOR{ GetConstantFloat("CAMERA_TARGET_X"), GetConstantFloat("CAMERA_TARGET_Y"), GetConstantFloat("CAMERA_TARGET_Z") });
+
+	SetCameraNearFar(GetConstantFloat("CAMERA_NEAR"), GetConstantFloat("CAMERA_FAR"));
 
 	// BGMの再生
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
@@ -77,7 +83,7 @@ void SceneSelectMode::NormalUpdate()
 		_titleFrag = true;
 
 		// スライド画像の初期位置を設定する
-		_slidePos.x = -3840;
+		_slidePos.x = GetConstantInt("SLIDE_OUT_END_X");
 
 		_updateFunc = &SceneSelectMode::SlideOutUpdate;
 		_drawFunc = &SceneSelectMode::SlideOutDraw;
@@ -96,7 +102,7 @@ void SceneSelectMode::NormalUpdate()
 		case TUTORIAL_MODE:
 
 			// スライド画像の初期位置を設定する
-			_slidePos.x = 2000;
+			_slidePos.x = GetConstantInt("SLIDE_IN_START_X");
 
 			// スライドアウト処理に移行する
 			_updateFunc = &SceneSelectMode::SlideOutUpdate;
@@ -134,10 +140,10 @@ void SceneSelectMode::SlideInUpdate()
 	if (_returnSelectFrag) {
 
 		// スライド画像の移動
-		_slidePos.x += 80;
+		_slidePos.x += GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったら処理の切り替え
-		if (_slidePos.x >= 2000) {
+		if (_slidePos.x >= GetConstantInt("SLIDE_IN_START_X")) {
 			_updateFunc = &SceneSelectMode::NormalUpdate;
 			_drawFunc = &SceneSelectMode::NormalDraw;
 		}
@@ -145,10 +151,10 @@ void SceneSelectMode::SlideInUpdate()
 	else {
 
 		// スライド画像の移動
-		_slidePos.x -= 80;
+		_slidePos.x -= GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったら処理の切り替え
-		if (_slidePos.x <= -3840) {
+		if (_slidePos.x <= GetConstantInt("SLIDE_OUT_END_X")) {
 			_updateFunc = &SceneSelectMode::NormalUpdate;
 			_drawFunc = &SceneSelectMode::NormalDraw;
 		}
@@ -167,19 +173,19 @@ void SceneSelectMode::SlideOutUpdate()
 	// タイトルフラグで処理を変える
 	if (_titleFrag) {
 		// スライド画像の移動 
-		_slidePos.x += 80;
+		_slidePos.x += GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったらシーン遷移
-		if (_slidePos.x >= -300) {
+		if (_slidePos.x >= GetConstantInt("SLIDE_OUT_START_X")) {
 			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(true));
 		}
 	}
 	else {
 		// スライド画像の移動 
-		_slidePos.x -= 80;
+		_slidePos.x -= GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったらシーン遷移
-		if (_slidePos.x <= -300) {
+		if (_slidePos.x <= GetConstantInt("SLIDE_OUT_START_X")) {
 			switch (_pUi->GetSelect())
 			{
 			case SOLO_MODE:

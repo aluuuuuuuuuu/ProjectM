@@ -3,6 +3,7 @@
 #include "PlayerManager.h"
 #include <memory>
 #include "Vec2.h"
+#include "Constant.h"
 
 constexpr int CHARACTOR_1 = 1;
 constexpr int CHARACTOR_2 = 2;
@@ -15,7 +16,8 @@ class CharacterSelectManager;
 class CharacterCard;
 class SelectFinger;
 class SceneSelect :
-    public SceneBase
+    public SceneBase,
+	public Constant
 {
 public:
 

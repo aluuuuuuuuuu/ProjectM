@@ -13,6 +13,7 @@
 #include "SkyDome.h"
 #include "Effekseer.h"
 #include <EffekseerForDXLib.h>
+#include "Application.h"
 
 SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_playerData(data),
@@ -23,7 +24,7 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_pCharacter = std::make_shared<ResultCharacter>(data.winner);
 
 	// 数字の作成
-	_pNum = std::make_shared<NumUtility>(1.0f, Vec2{ 10,400 }, gameTime);
+	_pNum = std::make_shared<NumUtility>(GetConstantFloat("NUM_SIZE"), Vec2{ GetConstantFloat("NUM_POS_X"),GetConstantFloat("NUM_POS_Y") }, gameTime);
 
 	// スカイドームの作成
 	_pSkyDome = std::make_shared<SkyDome>();
@@ -112,7 +113,7 @@ void SceneResult::NormalDraw() const
 {
 	// スカイドームの描画
 	_pSkyDome->Draw();
-	
+
 	// キャラクターの描画
 	_pCharacter->Draw();
 
@@ -128,7 +129,7 @@ void SceneResult::FadeOutUpdate()
 	_frame++;
 
 	// フェードが終了したら
-	if (_frame > 110) {
+	if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM") * 2) {
 		// 次のシーンに切り替える
 		switch (_nextScene)
 		{
@@ -153,8 +154,8 @@ void SceneResult::FadeOutDraw() const
 	NormalDraw();
 
 	//フェード暗幕
-	int alpha = static_cast<int>(255 * ((float)_frame / 110));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
-	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	DrawBox(0, 0, Application::GetInstance().GetConstantInt("SCREEN_WIDTH"), Application::GetInstance().GetConstantInt("SCREEN_HEIGHT"), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

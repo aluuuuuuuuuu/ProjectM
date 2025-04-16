@@ -8,19 +8,49 @@ std::map<std::string, Constant::ConstantVariant> Constant::GetConstants()
 	return Constants;
 }
 
-int Constant::GetConstantInt(std::string name)
+int Constant::GetConstantInt(std::string name) const
 {
-	return std::get<int>(Constants[name]);
+	auto it = Constants.find(name);
+	if (it == Constants.end()) {
+		throw std::runtime_error("Constant not found: " + name);
+	}
+
+	if (auto ptr = std::get_if<int>(&(it->second))) {
+		return *ptr;
+	}
+	else {
+		throw std::runtime_error("Constant is not an int: " + name);
+	}
 }
 
-float Constant::GetConstantFloat(std::string name)
+float Constant::GetConstantFloat(std::string name) const
 {
-	return std::get<float>(Constants[name]);
+	auto it = Constants.find(name);
+	if (it == Constants.end()) {
+		throw std::runtime_error("Constant not found: " + name);
+	}
+
+	if (auto ptr = std::get_if<float>(&(it->second))) {
+		return *ptr;
+	}
+	else {
+		throw std::runtime_error("Constant is not a float: " + name);
+	}
 }
 
-bool Constant::GetConstatBool(std::string name)
+bool Constant::GetConstatBool(std::string name) const
 {
-	return std::get<bool>(Constants[name]);
+	auto it = Constants.find(name);
+	if (it == Constants.end()) {
+		throw std::runtime_error("Constant not found: " + name);
+	}
+
+	if (auto ptr = std::get_if<bool>(&(it->second))) {
+		return *ptr;
+	}
+	else {
+		throw std::runtime_error("Constant is not a bool: " + name);
+	}
 }
 
 void Constant::ReadCSV(const std::string& filename)

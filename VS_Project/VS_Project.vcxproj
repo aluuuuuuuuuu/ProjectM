@@ -287,7 +287,14 @@
     <None Include="data\constant\NormalBullet.csv" />
     <None Include="data\constant\Player.csv" />
     <None Include="data\constant\PlayerCamera.csv" />
+    <None Include="data\constant\SceneCredit.csv" />
+    <None Include="data\constant\ScenePause.csv" />
+    <None Include="data\constant\ScenePve.csv" />
+    <None Include="data\constant\ScenePvp.csv" />
+    <None Include="data\constant\SceneResult.csv" />
     <None Include="data\constant\SceneSelect.csv" />
+    <None Include="data\constant\SceneSelectMode.csv" />
+    <None Include="data\constant\SceneSelectNum.csv" />
     <None Include="data\constant\SceneTitle.csv" />
     <None Include="data\constant\Stage.csv" />
     <None Include="data\constant\SubActor.csv" />

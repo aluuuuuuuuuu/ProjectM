@@ -7,12 +7,16 @@
 #include "SceneSelectMode.h"
 #include "PlayerManager.h"
 #include "SceneSelect.h"
+#include "Application.h"
 
 SceneSelectNum::SceneSelectNum() :
 	_selectFrag(false),
 	_warningFrag(false),
 	_returnFrag(false)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/SceneSelectNum");
+
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelectNum::SlideInUpdate;
 	_drawFunc = &SceneSelectNum::SlideInDraw;
@@ -28,19 +32,17 @@ SceneSelectNum::SceneSelectNum() :
 
 	// セレクトシーンから戻っていたらスライド画像は左から開く
 	if (_returnFrag) {
-		_slidePos.x = -300;
-	}
-	else {
-		_slidePos.x = -300;
+		_slidePos.x = GetConstantInt("SLIDE_OUT_START_X");
 	}
 
 	// カメラの初期化
-	SetCameraPositionAndTarget_UpVecY(VECTOR{ 100.0f, 250.0f, 0.0f }, VECTOR{ 150.0f, 250.0f, 0.0f });
-	SetCameraNearFar(1, 1000);
+	SetCameraPositionAndTarget_UpVecY(VECTOR{ GetConstantFloat("CAMERA_POS_X"),GetConstantFloat("CAMERA_POS_Y"),GetConstantFloat("CAMERA_POS_Z") },
+		VECTOR{ GetConstantFloat("CAMERA_TARGET_X"), GetConstantFloat("CAMERA_TARGET_Y"), GetConstantFloat("CAMERA_TARGET_Z") });
+
+	SetCameraNearFar(GetConstantFloat("CAMERA_NEAR"), GetConstantFloat("CAMERA_FAR"));
 
 	// warning画像のロード
 	_warningHandle = LoadGraph("data/image/warning.png");
-
 
 	// BGMの再生
 	SoundManager::GetInstance().StartBGM(BGM_OPENING);
@@ -82,7 +84,7 @@ void SceneSelectNum::NormalUpdate()
 		_selectFrag = true;
 
 		// スライド画像の初期位置を設定する
-		_slidePos.x = -3840;
+		_slidePos.x = GetConstantInt("SLIDE_OUT_END_X");
 
 		_updateFunc = &SceneSelectNum::SlideOutUpdate;
 		_drawFunc = &SceneSelectNum::SlideOutDraw;
@@ -106,7 +108,7 @@ void SceneSelectNum::NormalUpdate()
 			SoundManager::GetInstance().RingSE(SE_CHARA_SELECT);
 
 			// スライド画像の初期位置を設定する
-			_slidePos.x = 2000;
+			_slidePos.x = GetConstantInt("SLIDE_IN_START_X");
 
 			// スライドアウト処理に移行する
 			_updateFunc = &SceneSelectNum::SlideOutUpdate;
@@ -125,7 +127,7 @@ void SceneSelectNum::NormalDraw() const
 
 	// waring表示
 	if (_warningFrag) {
-		DrawRotaGraph(1920 / 2, 1080 / 2, 1.0, 0.0, _warningHandle, true);
+		DrawRotaGraph(Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2, Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2, 1.0, 0.0, _warningHandle, true);
 	}
 }
 
@@ -142,10 +144,10 @@ void SceneSelectNum::SlideInUpdate()
 	if (_selectFrag) {
 
 		// スライド画像の移動
-		_slidePos.x += 80;
+		_slidePos.x += GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったら処理の切り替え
-		if (_slidePos.x >= 2000) {
+		if (_slidePos.x >= GetConstantInt("SLIDE_IN_START_X")) {
 			_updateFunc = &SceneSelectNum::NormalUpdate;
 			_drawFunc = &SceneSelectNum::NormalDraw;
 		}
@@ -153,10 +155,10 @@ void SceneSelectNum::SlideInUpdate()
 	else {
 
 		// スライド画像の移動
-		_slidePos.x -= 80;
+		_slidePos.x -= GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったら処理の切り替え
-		if (_slidePos.x <= -3840) {
+		if (_slidePos.x <= GetConstantInt("SLIDE_OUT_END_X")) {
 			_updateFunc = &SceneSelectNum::NormalUpdate;
 			_drawFunc = &SceneSelectNum::NormalDraw;
 		}
@@ -175,10 +177,10 @@ void SceneSelectNum::SlideOutUpdate()
 	// タイトルフラグで処理を変える
 	if (_selectFrag) {
 		// スライド画像の移動 
-		_slidePos.x += 80;
+		_slidePos.x += GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったらシーン遷移
-		if (_slidePos.x >= -300) {
+		if (_slidePos.x >= GetConstantInt("SLIDE_OUT_START_X")) {
 
 			SceneManager::GetInstance().ChangeScene(std::make_shared<SceneSelectMode>(true));
 
@@ -186,10 +188,10 @@ void SceneSelectNum::SlideOutUpdate()
 	}
 	else {
 		// スライド画像の移動 
-		_slidePos.x -= 80;
+		_slidePos.x -= GetConstantInt("SLIDE_MOVE_SCALE");
 
 		// 移動が終わったらシーン遷移
-		if (_slidePos.x <= -300) {
+		if (_slidePos.x <= GetConstantInt("SLIDE_OUT_START_X")) {
 
 			// プレイヤーデータ
 			PlayerData data;

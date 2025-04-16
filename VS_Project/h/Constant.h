@@ -30,21 +30,21 @@ public:
 	/// </summary>
 	/// <param name="name">’è”–¼</param>
 	/// <returns>’è”‚Ì’l</returns>
-	int GetConstantInt(std::string name);
+	int GetConstantInt(std::string name) const;
 
 	/// <summary>
 	/// floatŒ^‚Ì’è”‚ğ•Ô‚·
 	/// </summary>
 	/// <param name="name">’è”–¼</param>
 	/// <returns>’è”‚Ì’l</returns>
-	float GetConstantFloat(std::string name);
+	float GetConstantFloat(std::string name) const;
 
 	/// <summary>
 	/// boolŒ^‚Ì’è”‚ğ•Ô‚·
 	/// </summary>
 	/// <param name="name">’è”–¼</param>
 	/// <returns>’è”‚Ì’l</returns>
-	bool GetConstatBool(std::string name);
+	bool GetConstatBool(std::string name) const;
 
 protected:
 
