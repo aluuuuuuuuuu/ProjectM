@@ -1,13 +1,14 @@
 #include "AnyPushButton.h"
 #include "DxLib.h"
 #include "SceneTitle.h"
+#include "Application.h"
 
-AnyPushButton::AnyPushButton(SceneTitle& scene):
+AnyPushButton::AnyPushButton(SceneTitle& scene) :
 	_frame(0)
 {
 	// 画像のロード
 	_textHandle = LoadGraph("data/image/PressAnyButton.png");
-	
+
 	// 表示位置の設定
 	_dispPos = Vec2{ scene.GetConstantInt("TEXT_POS_X"),scene.GetConstantInt("TEXT_POS_Y") };
 }
@@ -20,7 +21,7 @@ AnyPushButton::~AnyPushButton()
 void AnyPushButton::Update()
 {
 	// スタート指示を点滅させる
-	if (_frame == 120) {
+	if (_frame == Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 		_frame++;
 	}
 	else if (_frame == 1) {
@@ -37,7 +38,7 @@ void AnyPushButton::Update()
 void AnyPushButton::Draw() const
 {
 	// フェードしながら描画
-	int alpha = static_cast<int>(255 * ((float)_frame / 120));
+	int alpha = static_cast<int>(255 * ((float)_frame / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	// 画像の描画
 	DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), 1.0f, 0.0f, _textHandle, true);

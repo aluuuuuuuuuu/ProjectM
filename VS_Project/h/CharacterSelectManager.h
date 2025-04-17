@@ -3,10 +3,12 @@
 #include "PlayerManager.h"
 #include "SceneSelect.h"
 #include "Vec2.h"
+#include "Constant.h"
 
 class CharacterCard;
 class SelectFinger;
-class CharacterSelectManager
+class CharacterSelectManager:
+	public Constant
 {
 public:
 

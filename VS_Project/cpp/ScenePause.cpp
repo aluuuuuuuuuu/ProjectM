@@ -12,7 +12,7 @@ ScenePause::ScenePause(PlayerData data) :
 	_textFrame(0)
 {
 	// 定数ファイルの読み込み
-	ReadCSV("data/constan/ScenePause.csv");
+	ReadCSV("data/constant/ScenePause.csv");
 
 	// 画像のロード
 	_graphHandle = LoadGraph("data/image/Pause.png");

@@ -106,6 +106,7 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(_serihu3);
 	DeleteGraph(_slideHandle);
 	DeleteGraph(_endHandle);
+	DeleteGraph(_gameEndHandle);
 }
 
 void SceneTitle::Update()

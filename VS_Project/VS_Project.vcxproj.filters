@@ -189,9 +189,6 @@
     <ClCompile Include="cpp\SelectModeUi.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\SelectNumUi.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="cpp\SelectUI.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -215,9 +212,6 @@
     </ClCompile>
     <ClCompile Include="cpp\PlayerBulletCollisionManager.cpp">
       <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="cpp\NumSelectButton.cpp">
-      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -404,19 +398,10 @@
     <ClInclude Include="h\ItemSpeedUp.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="h\NumSelectButton.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="h\PlayerUi.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="h\resource.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="h\SelectModeUi.h">
-      <Filter>Object</Filter>
-    </ClInclude>
-    <ClInclude Include="h\SelectNumUi.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="h\SelectUI.h">
@@ -424,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="h\TitlePlayer.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="h\resource.h">
+      <Filter>リソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -451,7 +439,7 @@
     <None Include="data\constant\Input.csv">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="data\constant\NormalBullet.csv">
+    <None Include="data\constant\BulletManager.csv">
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="data\constant\PlayerCamera.csv">
@@ -488,6 +476,33 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="data\constant\SceneSelectNum.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\CharactorSelectManager.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\EffectManager.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\ItemManager.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\MenuManager.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\TutorialManager.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\CreditCharacotr.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\Crown.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\FallCharactor.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="data\constant\Item.csv">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>

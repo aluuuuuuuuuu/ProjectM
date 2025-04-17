@@ -2,15 +2,17 @@
 #include "DxLib.h"
 #include "ItemManager.h"
 #include "StageManager.h"
+#include "Application.h"
 
-ItemSpeedUp::ItemSpeedUp(Vec3 pos, std::shared_ptr<StageManager>& stageManager):
-	_pStage(stageManager)
+ItemSpeedUp::ItemSpeedUp(Vec3 pos, std::shared_ptr<StageManager>& stageManager, ItemManager& itemManager):
+	_pStage(stageManager),
+	_pItem(itemManager)
 {
 	// 初期位置の設定
 	Position = pos;
-	Scale = 17.0f;
+	Scale = _pItem.GetConstantFloat("SPEED_UP_SCALE");
 
-	_moveVec.y = -0.5f;
+	_moveVec.y = _pItem.GetConstantFloat("SPEED_UP_SPEED");
 
 	// アイテムタイプの設定
 	_itemType = ITEM_TYPE_SPEED;
@@ -25,48 +27,50 @@ ItemSpeedUp::~ItemSpeedUp()
 
 void ItemSpeedUp::Update()
 {
+	auto& app = Application::GetInstance();
+
 	if (_invalidFlag) {
 		_frame++;
-		if (_frame > 10) {
+		if (_frame > _pItem.GetConstantInt("LIFE_TIME")) {
 			_deadFlag = true;
 		}
 	}
 	else {
 		Position += _moveVec;
 
-		int x = static_cast<int>( Position.x / 10.0f) + 1;
-		int z = static_cast<int>( Position.z / 10.0f) + 1;
+		int x = static_cast<int>( Position.x / _pStage->GetConstantInt("BLOCK_SIZE")) + 1;
+		int z = static_cast<int>( Position.z / _pStage->GetConstantInt("BLOCK_SIZE")) + 1;
 
 		if (_pStage->GetStageInfo(x, 1, z) != 0) {
-			if (Position.y < 13.0f) {
-				Position.y = 13.0f;
+			if (Position.y < _pItem.GetConstantFloat("STOP_POS_2")) {
+				Position.y = _pItem.GetConstantFloat("STOP_POS_2");
 			}
 
-			if (Position.y == 13.0f) {
+			if (Position.y == _pItem.GetConstantFloat("STOP_POS_2")) {
 				_frame++;
 
-				if (_frame > 180) {
+				if (_frame > app.GetConstantInt("FRAME_NUM") * 3) {
 					_invalidFlag = true;
 					_frame = 0;
 				}
 			}
 		}
 		else if (_pStage->GetStageInfo(x, 0, z) != 0) {
-			if (Position.y < 2.0f) {
-				Position.y = 2.0f;
+			if (Position.y < _pItem.GetConstantFloat("STOP_POS_1")) {
+				Position.y = _pItem.GetConstantFloat("STOP_POS_1");
 			}
 
-			if (Position.y == 2.0f) {
+			if (Position.y == _pItem.GetConstantFloat("STOP_POS_1")) {
 				_frame++;
 
-				if (_frame > 180) {
+				if (_frame > app.GetConstantInt("FRAME_NUM") * 3) {
 					_invalidFlag = true;
 					_frame = 0;
 				}
 			}
 		}
 		else {
-			if (Position.y < 100) {
+			if (Position.y < _pItem.GetConstantInt("DEAD_LINE")) {
 				_deadFlag = true;
 			}
 		}

@@ -6,12 +6,16 @@
 #include "Player.h"
 #include <ctime>
 #include "StageManager.h"
+#include "Application.h"
 
-ItemManager::ItemManager(std::shared_ptr<PlayerManager>& playerManager, std::shared_ptr<StageManager>& stageManager):
+ItemManager::ItemManager(std::shared_ptr<PlayerManager>& playerManager, std::shared_ptr<StageManager>& stageManager) :
 	_frame(0),
 	_pPlayer(playerManager),
 	_pStage(stageManager)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/ItemManager.csv");
+
 	srand(static_cast<unsigned int>(time(nullptr)));
 }
 
@@ -43,15 +47,15 @@ void ItemManager::Update()
 	_frame++;
 
 	// ５秒に一回ランダムな場所にアイテムを落とす
-	if (_frame % 120 == 0) {
+	if (_frame % Application::GetInstance().GetConstantInt("FRAME_NUM") == 0) {
 
-		int min = 20;
-		int max = 180;
+		int min = GetConstantInt("RANDAM_MIN");
+		int max = GetConstantInt("RANDAM_MAX");
 
 		int randX = min + (rand() % (max - min + 1));
 		int randZ = min + (rand() % (max - min + 1));
 
-		_pItem.push_back(std::make_shared<ItemSpeedUp>(Vec3{ randX,100,randZ },_pStage));
+		_pItem.push_back(std::make_shared<ItemSpeedUp>(Vec3{ randX,GetConstantInt("SPAWN_Y"),randZ }, _pStage, *this));
 	}
 }
 
@@ -71,13 +75,13 @@ void ItemManager::Collision()
 			if (item->IsInvalid()) continue;
 
 			// 球の座標と線分の線分上の最近接点を求める
-			Vec3 closest = ClosestPointLine(item->Position,pl->_capsuleData.PointA, pl->_capsuleData.PointB);
+			Vec3 closest = ClosestPointLine(item->Position, pl->_capsuleData.PointA, pl->_capsuleData.PointB);
 
 			// 最近接点から球の座標への距離を求める
 			float dist = DistanceClosestPoint(closest, item->Position);
 
 			// 距離がお互いの半径の合計より小さければ当たっている
-			if (dist <= RADIUS + pl->_capsuleData.Radius) {
+			if (dist <= 4.0f + pl->_capsuleData.Radius) {
 
 				// プレイヤーのアイテム取得の関数を呼ぶ
 				pl->GiveItem(ITEM_TYPE_SPEED);

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Vec2.h"
+#include "Constant.h"
 
 #define BATU_BUTTON 0
 #define MANUAL_BUTTON 1
@@ -17,7 +18,8 @@
 class MenuCollisionManager;
 class MenuButton;
 class SelectFinger;
-class MenuManager
+class MenuManager:
+	public Constant
 {
 public:
 

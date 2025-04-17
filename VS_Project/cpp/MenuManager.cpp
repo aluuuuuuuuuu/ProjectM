@@ -9,10 +9,17 @@
 #include "SoundManager.h"
 #include "SceneTitle.h"
 
-MenuManager::MenuManager(int padNum) :
-	_margin(-905),
-	_frame(15)
+MenuManager::MenuManager(int padNum)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/MenuManager.csv");
+
+	// 余白
+	_margin = GetConstantInt("MARGIN");
+
+	// フレーム
+	_frame = GetConstantInt("FRAME");
+
 	// 関数ポインタの初期化
 	_updateFunc = &MenuManager::SlideInUpdate;
 	_drawFunc = &MenuManager::NormalDraw;
@@ -45,25 +52,25 @@ MenuManager::MenuManager(int padNum) :
 	_volumeSEGraph[MAX_GRAPH] = LoadGraph("data/image/VolumeMaxSE.png");
 
 	// 各ボタンの作成と初期設定
-	_pButton[0] = std::make_shared<MenuButton>(Vec2{ 1377,300 }, Vec2{ 260,230 }, LoadGraph("data/image/Cancel.png"), BATU_BUTTON);
-	_pButton[1] = std::make_shared<MenuButton>(Vec2{ 725,_bordPos.intY() }, Vec2{ 530,190 }, LoadGraph("data/image/Manual.png"), MANUAL_BUTTON);
-	_pButton[4] = std::make_shared<MenuButton>(Vec2{ _bordPos.intX(),800 }, Vec2{ 680,120 }, LoadGraph("data/image/End.png"), END_BUTTON);
+	_pButton[0] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("CANCEL_POS_X"),GetConstantInt("CANCEL_POS_Y") }, Vec2{ GetConstantInt("CANCEL_RANGE_X"),GetConstantInt("CANCEL_RANGE_Y") }, LoadGraph("data/image/Cancel.png"), BATU_BUTTON);
+	_pButton[1] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("MANUAL_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("MANUAL_RANGE_X"),GetConstantInt("MANUAL_RANGE_Y") }, LoadGraph("data/image/Manual.png"), MANUAL_BUTTON);
+	_pButton[4] = std::make_shared<MenuButton>(Vec2{ _bordPos.intX(),GetConstantInt("END_POS_Y") }, Vec2{ GetConstantInt("END_RANGE_X"),GetConstantInt("END_RANGE_Y") }, LoadGraph("data/image/End.png"), END_BUTTON);
 
 	auto& sound = SoundManager::GetInstance();
 
 	switch (sound.GetVolumeSE())
 	{
 	case VOLUME_ZERO:
-		_pButton[2] = std::make_shared<MenuButton>(Vec2{ 1200,_bordPos.intY() }, Vec2{ 160,150 }, _volumeSEGraph[ZERO_GRAPH], SE_BUTTON);
+		_pButton[2] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("SE_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("SE_RANGE_X"),GetConstantInt("SE_RANGE_Y") }, _volumeSEGraph[ZERO_GRAPH], SE_BUTTON);
 		break;
 	case VOLUME_MIN:
-		_pButton[2] = std::make_shared<MenuButton>(Vec2{ 1200,_bordPos.intY() }, Vec2{ 160,150 }, _volumeSEGraph[MIN_GRAPH], SE_BUTTON);
+		_pButton[2] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("SE_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("SE_RANGE_X"),GetConstantInt("SE_RANGE_Y") }, _volumeSEGraph[MIN_GRAPH], SE_BUTTON);
 		break;
 	case VOLUME_MIDDLE:
-		_pButton[2] = std::make_shared<MenuButton>(Vec2{ 1200,_bordPos.intY() }, Vec2{ 160,150 }, _volumeSEGraph[MIDDLE_GRAPH], SE_BUTTON);
+		_pButton[2] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("SE_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("SE_RANGE_X"),GetConstantInt("SE_RANGE_Y") }, _volumeSEGraph[MIDDLE_GRAPH], SE_BUTTON);
 		break;
 	case VOLUME_MAX:
-		_pButton[2] = std::make_shared<MenuButton>(Vec2{ 1200,_bordPos.intY() }, Vec2{ 160,150 }, _volumeSEGraph[MAX_GRAPH], SE_BUTTON);
+		_pButton[2] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("SE_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("SE_RANGE_X"),GetConstantInt("SE_RANGE_Y") }, _volumeSEGraph[MAX_GRAPH], SE_BUTTON);
 		break;
 	default:
 		break;
@@ -72,16 +79,16 @@ MenuManager::MenuManager(int padNum) :
 	switch (sound.GetVolumeBGM())
 	{
 	case VOLUME_ZERO:
-		_pButton[3] = std::make_shared<MenuButton>(Vec2{ 1400,_bordPos.intY() }, Vec2{ 160,150 }, _volumeBGMGraph[ZERO_GRAPH], BGM_BUTTON);
+		_pButton[3] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("BGM_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("BGM_RANGE_X"),GetConstantInt("BGM_RANGE_Y") }, _volumeBGMGraph[ZERO_GRAPH], BGM_BUTTON);
 		break;
 	case VOLUME_MIN:
-		_pButton[3] = std::make_shared<MenuButton>(Vec2{ 1400,_bordPos.intY() }, Vec2{ 160,150 }, _volumeBGMGraph[MIN_GRAPH], BGM_BUTTON);
+		_pButton[3] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("BGM_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("BGM_RANGE_X"),GetConstantInt("BGM_RANGE_Y") }, _volumeBGMGraph[MIN_GRAPH], BGM_BUTTON);
 		break;
 	case VOLUME_MIDDLE:
-		_pButton[3] = std::make_shared<MenuButton>(Vec2{ 1400,_bordPos.intY() }, Vec2{ 160,150 }, _volumeBGMGraph[MIDDLE_GRAPH], BGM_BUTTON);
+		_pButton[3] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("BGM_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("BGM_RANGE_X"),GetConstantInt("BGM_RANGE_Y") }, _volumeBGMGraph[MIDDLE_GRAPH], BGM_BUTTON);
 		break;
 	case VOLUME_MAX:
-		_pButton[3] = std::make_shared<MenuButton>(Vec2{ 1400,_bordPos.intY() }, Vec2{ 160,150 }, _volumeBGMGraph[MAX_GRAPH], BGM_BUTTON);
+		_pButton[3] = std::make_shared<MenuButton>(Vec2{ GetConstantInt("BGM_POS_X"),_bordPos.intY() }, Vec2{ GetConstantInt("BGM_RANGE_X"),GetConstantInt("BGM_RANGE_Y") }, _volumeBGMGraph[MAX_GRAPH], BGM_BUTTON);
 		break;
 	default:
 		break;
@@ -251,7 +258,7 @@ void MenuManager::SlideInUpdate()
 {
 	// 余白の調整
 	if (_margin < 0.0f) {
-		_margin += 45;
+		_margin += GetConstantInt("SLIDE_IN_SCALE");
 		if (_margin > 0) {
 			_margin = 0;
 		}
@@ -268,8 +275,8 @@ void MenuManager::SlideInUpdate()
 void MenuManager::SlideOutUpdate()
 {
 	// 余白の調整
-	if (1445 >= _margin) {
-		_margin += 60;
+	if (GetConstantInt("MARGIN_MAX") >= _margin) {
+		_margin += GetConstantInt("SLIDE_OUT_SCALE");
 	}
 	else {
 		_updateFunc = &MenuManager::FadeOutUpdate;
@@ -288,7 +295,7 @@ void MenuManager::FadeOutUpdate()
 void MenuManager::FadeOutDraw() const
 {
 	// ぼかしの描画
-	int alpha = static_cast<int>(255 * ((float)_frame / 15));
+	int alpha = static_cast<int>(255 * ((float)_frame / GetConstantInt("FRAME")));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
 	DrawGraph(1, 0, _backHandle, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -297,7 +304,7 @@ void MenuManager::FadeOutDraw() const
 void MenuManager::EndUpdate()
 {
 	_frame++;
-	if (_frame > 60) {
+	if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 		SoundManager::GetInstance().StopBGM(BGM_BATTLE);
 		SceneManager::GetInstance().PopScene();
 		SceneManager::GetInstance().ChangeScene(std::make_shared<SceneTitle>(false));
@@ -307,12 +314,14 @@ void MenuManager::EndUpdate()
 
 void MenuManager::EndDraw() const
 {
+	auto& app = Application::GetInstance();
+
 	// 通常の描画
 	NormalDraw();
-	
+
 	// ぼかしの描画
-	int alpha = static_cast<int>(255 * ((float)_frame / 60));
+	int alpha = static_cast<int>(255 * ((float)_frame / app.GetConstantInt("FRAME_NUM")));
 	SetDrawBlendMode(DX_BLENDMODE_MULA, alpha);
-	DrawBox(0, 0, 1920, 1080, 0x0000, true);
+	DrawBox(0, 0, app.GetConstantInt("SCREEN_WIDTH"), app.GetConstantInt("SCREEN_HEIGHT"), 0x0000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

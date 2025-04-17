@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Vec2.h"
+#include "Constant.h"
 
 constexpr int GUIDE_CAMERA = 0;
 constexpr int GUIDE_MOVE = 1;
@@ -13,9 +14,6 @@ constexpr int GUIDE_RETURN = 7;
 
 constexpr int MAX_STORY_FRAME = 180;
 
-constexpr int CLEAR_POS_X = 1920 / 2;
-constexpr int CLEAR_POS_Y = 1080 / 2;
-
 class WedgewormManager;
 class StageManager;
 class StageCollisionManager;
@@ -23,7 +21,8 @@ class BulletManager;
 class MapBulletCollisionManager;
 class PlayerManager;
 class SkyDome;
-class TutorialManager
+class TutorialManager:
+	public Constant
 {
 public:
 

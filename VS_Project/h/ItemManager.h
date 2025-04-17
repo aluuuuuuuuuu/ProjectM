@@ -2,16 +2,17 @@
 #include <memory>
 #include <vector>
 #include "Vec3.h"
+#include "Constant.h"
 
 namespace {
 	constexpr int ITEM_TYPE_SPEED = 0;
-	constexpr float RADIUS = 4.0f;
 }
 
 class StageManager;
 class ItemBase;
 class PlayerManager;
-class ItemManager
+class ItemManager:
+	public Constant
 {
 public:
 

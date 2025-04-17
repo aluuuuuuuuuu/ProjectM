@@ -1,6 +1,7 @@
 #include "Crown.h"
 #include "DxLib.h"
 #include "SceneTitle.h"
+#include "Application.h"
 
 Crown::Crown(SceneTitle& scene) :
 	_flame1(0),
@@ -8,6 +9,9 @@ Crown::Crown(SceneTitle& scene) :
 	_flame1Flag(true),
 	_blinkingFlag(false)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/Crown.csv");
+
 	// 表示位置の設定
 	_dispPos = Vec2{ scene.GetConstantInt("CROWN_POS_X"),scene.GetConstantInt("CROWN_POS_Y") };
 
@@ -41,28 +45,28 @@ void Crown::Update()
 			_flame2 = 0;
 		}
 		else {
-			_flame1 -= 2;
+			_flame1 -= GetConstantInt("CROWN_SPEED");
 		}
 	}
 	else {
-		if (_flame1 >= 120) {
+		if (_flame1 >= Application::GetInstance().GetConstantInt("FRAME_NUM") * 2) {
 			_blinkingFlag = true;
 		}
 		else {
-			_flame1 += 2;
+			_flame1 += GetConstantInt("CROWN_SPEED");
 		}
 	}
 
 	// パーティクルの点滅
 	if (_blinkingFlag) {
 		_flame2++;
-		if (_flame2 <= 30) {
+		if (_flame2 <= Application::GetInstance().GetConstantInt("FRAME_NUM") / 2) {
 			_crownParticle = _crownParticleHandle1;
 		}
-		else if (_flame2 <= 60) {
+		else if (_flame2 <= Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 			_crownParticle = _crownParticleHandle2;
 		}
-		else if (_flame2 <= 90) {
+		else if (_flame2 <= Application::GetInstance().GetConstantInt("FRAME_NUM") / 2 * 3) {
 			_crownParticle = _crownParticleHandle3;
 		}
 		else {
@@ -73,14 +77,14 @@ void Crown::Update()
 
 void Crown::Draw()
 {
-	int alpha = static_cast<int>(255 * ((float)_flame1 / 120));
+	int alpha = static_cast<int>(255 * ((float)_flame1 / Application::GetInstance().GetConstantInt("FRAME_NUM") * 2));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 	// 王冠画像の描画
-	DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), 0.2f, -0.5f, _crownHandle, true);
+	DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), GetConstantFloat("CROWN_EXRATE"), GetConstantFloat("CROWN_ANGLE"), _crownHandle, true);
 
 	// 王冠パーティクル画像の描画
 	if (_blinkingFlag) {
-		DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), 0.2f, -0.5f, _crownParticle, true);
+		DrawRotaGraph(_dispPos.intX(), _dispPos.intY(), GetConstantFloat("CROWN_EXRATE"), GetConstantFloat("CROWN_ANGLE"), _crownParticle, true);
 
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

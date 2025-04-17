@@ -30,7 +30,7 @@ GrapplerBullet::GrapplerBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCol
 	_pEffect = std::make_shared<MyEffect>(GRAPPLE_BULLET_EFFECT, pos);
 
 	// 半径の設定
-	_radius = 3.0f;
+	_radius = _bulletManager.GetConstantFloat("RADIUS");
 }
 
 GrapplerBullet::~GrapplerBullet()
@@ -59,24 +59,15 @@ void GrapplerBullet::Update()
 
 		_collisionFlag = true;
 	}
-	//// 禊虫との当たり判定をとる
-	//for (int i = 0; i < 2; i++) {
-	//	Vec3 pos = _wedgeManager->GetPos(i);
-	//	float dist = (pos - Position).Length();
-
-	//	if (dist < 16.0f + 16.0f) {
-	//		_collisionFlag = true;
-	//	}
-	//}
 
 	// 当たっても一定時間残るようにする
 	if (_invalidFlag) {
 		_frame++;
-		if (_frame >= 80) {
+		if (_frame >= _bulletManager.GetConstantInt("GRAPPLE_LIFE_TIME")) {
 			_deadFlag = true;
 		}
 	}
-	
+
 	// エフェクトの削除
 	if (_deadFlag) {
 		_pEffect->StopEffect();

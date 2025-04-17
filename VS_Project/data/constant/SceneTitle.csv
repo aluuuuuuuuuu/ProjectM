@@ -11,8 +11,8 @@ No.,定数名,型名,定数の値,説明
 10,CAMERA_TARGET_X,_FLOAT,150.0f,カメラのターゲット座標X
 11,CAMERA_TARGET_Y,_FLOAT,250.0f,カメラのターゲット座標Y
 12,CAMERA_TARGET_Z,_FLOAT,0.0f,カメラのターゲット座標Z
-13,CAMERA_NEAR,_INT,1,カメラのニア値
-14,CAMERA_FAR,_INT,1000,カメラのファー値
+13,CAMERA_NEAR,_FLOAT,1,カメラのニア値
+14,CAMERA_FAR,_FLOAT,1000,カメラのファー値
 15,SLIDE_MOVE_SCALE,_INT,80,スライド画像の移動速度
 16,SLIDE_OUT_START_X,_INT,-300,スライドが外れる初期位置X値
 17,SLIDE_IN_START_X,_INT,2000,スライドインするときの初期座標X

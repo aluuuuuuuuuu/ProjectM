@@ -4,8 +4,11 @@
 
 void EffectManager::Init()
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/EffectManager.csv");
+
 	// Effekseerを初期化する
-	Effekseer_Init(8000);
+	Effekseer_Init(GetConstantInt("MAX_PARTICLE"));
 
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
@@ -37,9 +40,9 @@ int& EffectManager::GetEffectHandle(int effect)
 {
 	// エフェクトが未ロードであればロードする
 	if (_effectMap[effect] == -1) {
-		 LoadEffect(effect);
+		LoadEffect(effect);
 	}
-	
+
 	// ハンドルの参照を返す
 	return _effectMap[effect];
 }
@@ -57,28 +60,29 @@ void EffectManager::LoadEffect(int effect)
 	switch (effect)
 	{
 	case NORMAL_BULLET_EFFECT:
-		_effectMap[effect] =  LoadEffekseerEffect("data/effect/NormalBullet.efk",2.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/NormalBullet.efk", GetConstantFloat("NORMAL_BULLET_SIZE"));
 		break;
 	case BOMB_BULLET_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/BombBullet.efk", 5.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/BombBullet.efk", GetConstantFloat("BOMB_BULLET_SIZE"));
 		break;
 	case GRAPPLE_BULLET_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/GrappleBullet2.efk", 5.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/GrappleBullet2.efk", GetConstantFloat("GRAPPLE_BULLET_SIZE"));
 		break;
 	case BLOCK_DESTROY_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effects/test.efk", 5.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effects/test.efk", GetConstantFloat("BLOCK_DESTROY_SIZE"));
 		break;
 	case JUMP_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/test.efk", 5.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/test.efk", GetConstantFloat("JUMP_SIZE"));
 		break;
 	case WIN_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/Winner.efk", 1.5f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/Winner.efk", GetConstantFloat("WIN_SIZE"));
 		break;
 	case SHOT_DOWN_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/gekitui.efk", 10.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/gekitui.efk", GetConstantFloat("SHOT_DOWN_SIZE"));
 		break;
 	case SPEED_UP_EFFECT:
-		_effectMap[effect] = LoadEffekseerEffect("data/effect/SpeedUp.efk", 10.0f);
+		_effectMap[effect] = LoadEffekseerEffect("data/effect/SpeedUp.efk", GetConstantFloat("SPEED_UP_SIZE"));
+		break;
 	default:
 		break;
 	}

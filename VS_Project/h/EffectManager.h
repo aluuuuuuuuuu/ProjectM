@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include <map>
 #include "Vec3.h"
+#include "Constant.h"
 
 constexpr int NORMAL_BULLET_EFFECT = 0;
 constexpr int BOMB_BULLET_EFFECT = 1;
@@ -15,7 +16,8 @@ constexpr int SPEED_UP_EFFECT = 7;
 constexpr int MAX_EFFECT_NUM = 8;
 
 class EffectManager:
-	public Singleton<EffectManager>
+	public Singleton<EffectManager>,
+	public Constant
 {
 public:
 

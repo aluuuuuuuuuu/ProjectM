@@ -9,6 +9,7 @@
 #include "EffectManager.h"
 #include "Effekseer.h"
 #include "SoundManager.h"
+#include "Application.h"
 
 PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::shared_ptr<BulletManager>& bullet, PlayerData& data) :
 	_playerData(data),
@@ -28,16 +29,11 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 	// 各インスタンスの作成
 	{
 		// 各インスタンスの作成
-		if (_playerData.playerNum <= 3) {
+		if (_playerData.playerNum < GetConstantInt("MAX_NUM")) {
 
-
-			//if (_playerData.playerNum == -2) {
-				//_pPlayer.push_back(std::make_shared<Player>(bullet, *this, 0, _bulletData[0]));
-			//}
-			//else {
 				// プレイヤーインスタンスの作成
 				for (int num = 0; num <= _playerData.playerNum; num++) {
-					if (num < 0 || num >= 4) {
+					if (num < 0 || num >= GetConstantInt("MAX_NUM")) {
 						assert(false);
 					}
 					_pPlayer.push_back(std::make_shared<Player>(bullet, *this, num, _bulletData[num]));
@@ -49,15 +45,15 @@ PlayerManager::PlayerManager(std::shared_ptr<StageManager>& stageManager, std::s
 						_pPlayer[num]->Angle.y = DX_PI_F / -4;
 						break;
 					case 1:
-						_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,180.0f };
+						_pPlayer[num]->Position = Vec3{ GetConstantFloat("PLAYER_POS"),0.0f, GetConstantFloat("PLAYER_POS") };
 						_pPlayer[num]->Angle.y = DX_PI_F / -4 * 5;
 						break;
 					case 2:
-						_pPlayer[num]->Position = Vec3{ 0.0f,0.0f,180.0f };
+						_pPlayer[num]->Position = Vec3{ 0.0f,0.0f, GetConstantFloat("PLAYER_POS") };
 						_pPlayer[num]->Angle.y = DX_PI_F / -4 * 3;
 						break;
 					case 3:
-						_pPlayer[num]->Position = Vec3{ 180.0f,0.0f,0.0f };
+						_pPlayer[num]->Position = Vec3{ GetConstantFloat("PLAYER_POS"),0.0f,0.0f };
 						_pPlayer[num]->Angle.y = DX_PI_F / -4 * 7;
 						break;
 					default:
@@ -148,7 +144,6 @@ void PlayerManager::Draw(int num) const
 	}
 
 	// UIの描画
-	//_pUi->Draw(Vec2{ _cameraSenter[num].a ,_cameraSenter[num].b }, _bulletData[num]);
 	_pUi->Draw(Vec2{_cameraSenter.a,_cameraSenter.b}, _bulletData[num]);
 
 }
@@ -199,22 +194,6 @@ void PlayerManager::SetWinner()
 {
 
 	if (_playerData.aiFlag) {
-		/*if (_pPlayer[0]->GetDeadFlag()) {
-			_playerData.winner = _playerData.character[_pPlayer[0]->GetPlayerNum()];
-
-			_pEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[0]->Position);
-			_pEffect->Update(_pPlayer[0]->Position);
-
-			_winner = 0;
-		}
-		else {
-			_playerData.winner = _playerData.character[_pPlayer[1]->GetPlayerNum()];
-
-			_pEffect = std::make_shared<MyEffect>(WIN_EFFECT, _pPlayer[1]->Position);
-			_pEffect->Update(_pPlayer[1]->Position);
-
-			_winner = 1;
-		}*/
 		if (_pPlayer[PLAYER_ONE]->GetDeadFlag()) {
 			_playerData.winner = _playerData.character[_pPlayer[PLAYER_TWO]->GetPlayerNum()];
 
@@ -254,7 +233,7 @@ void PlayerManager::AddAi()
 	_playerData.playerNum++;
 	_playerData.character[1] = rand() % 3;
 	_pPlayer.push_back(std::make_shared<Player>(_bulletManager, *this, _bulletData[_playerData.playerNum]));
-	_pPlayer[_playerData.playerNum]->Position = Vec3{ 180.0f,0.0f,180.0f };
+	_pPlayer[_playerData.playerNum]->Position = Vec3{ GetConstantFloat("PLAYER_POS"),0.0f, GetConstantFloat("PLAYER_POS") };
 	_pPlayer[_playerData.playerNum]->Angle.y = DX_PI_F / -4 * 5;
 }
 
@@ -341,17 +320,18 @@ VECTOR4 PlayerManager::CreateDrawArea(int num, int scWidth, int scHeight)
 
 VECTOR2 PlayerManager::CreateScreenCenter(int num)
 {
+	auto& app = Application::GetInstance();
 	switch (num)
 	{
 	case 0:
-		return VECTOR2{ 1920 / 2,1080 / 2 };
+		return VECTOR2{ app.GetConstantInt("SCREEN_WIDTH") / 2,app.GetConstantInt("SCREEN_HEIGHT") / 2};
 		break;
 	case 1:
-		return VECTOR2{ 1920 / 4,1080 / 2 };
+		return VECTOR2{ app.GetConstantInt("SCREEN_WIDTH") / 4,app.GetConstantInt("SCREEN_HEIGHT") / 2 };
 		break;
 	case 2:
 	case 3:
-		return VECTOR2{ 1920 / 4,1080 / 4 };
+		return VECTOR2{ app.GetConstantInt("SCREEN_WIDTH") / 4,app.GetConstantInt("SCREEN_HEIGHT") / 4 };
 		break;
 	default:
 		break;

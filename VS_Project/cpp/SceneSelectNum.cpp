@@ -15,7 +15,7 @@ SceneSelectNum::SceneSelectNum() :
 	_returnFrag(false)
 {
 	// 定数ファイルの読み込み
-	ReadCSV("data/constant/SceneSelectNum");
+	ReadCSV("data/constant/SceneSelectNum.csv");
 
 	// 関数ポインタの初期化
 	_updateFunc = &SceneSelectNum::SlideInUpdate;

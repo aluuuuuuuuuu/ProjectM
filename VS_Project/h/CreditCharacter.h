@@ -1,10 +1,12 @@
 #pragma once
 #include "Components.h"
+#include "Constant.h"
 
 class CreditCharacter:
 	public Transform,
 	public Model,
-	public Animation
+	public Animation,
+	public Constant
 {
 public:
 

@@ -12,19 +12,22 @@ CharacterSelectManager::CharacterSelectManager(PlayerData& plData) :
 	_startButtonHandle(0),
 	_viewStartButtonFlag(false)
 {
+	// 定数のファイルを読み込む
+	ReadCSV("data/constant/CharactorSelectManager.csv");
+
 	// 指のインスタンスを人数分作成する
 	for (int i = 0; i <= _plData.playerNum; i++) {
 		_pFinger[i] = std::make_shared<SelectFinger>(i);
 	}
 
 	// カードのインスタンスをキャラクター分作成する
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < GetConstantInt("CHARACTOR_NUM"); i++) {
 		_pCard[i] = std::make_shared<CharacterCard>(i);
 	}
 
 	// スタート画像のロード
 	_startButtonHandle = LoadGraph("data/image/ReadyFight.png");
-	_startButtonPos = Vec2{ 960,1500 };
+	_startButtonPos = Vec2{ GetConstantFloat("START_BUTTON_POS_X"),GetConstantFloat("START_BUTTON_POS_Y") };
 }
 
 CharacterSelectManager::~CharacterSelectManager()
@@ -54,16 +57,16 @@ void CharacterSelectManager::Update()
 	// スタートボタンをスライドイン・アウトさせる
 	if (_selectFinishFlag) {
 		_viewStartButtonFlag = true;
-		if (_startButtonPos.y > 900.0f) {
-			_startButtonPos.y -= 45.0f;
-			if (_startButtonPos.y < 900.0f) {
-				_startButtonPos.y = 900.0f;
+		if (_startButtonPos.y > GetConstantFloat("START_BUTTON_POS_X")) {
+			_startButtonPos.y -= GetConstantFloat("START_BUTTON_MOVE_SCALE");
+			if (_startButtonPos.y < GetConstantFloat("START_BUTTON_POS_X")) {
+				_startButtonPos.y = GetConstantFloat("START_BUTTON_POS_X");
 			}
 		}
 	}
 	else {
-		if (1500 >= _startButtonPos.y) {
-			_startButtonPos.y += 45.0f;
+		if (GetConstantFloat("START_BUTTON_POS_Y") >= _startButtonPos.y) {
+			_startButtonPos.y += GetConstantFloat("START_BUTTON_MOVE_SCALE");
 		}
 		else {
 			_viewStartButtonFlag = false;
@@ -126,8 +129,10 @@ void CharacterSelectManager::FingerFunction()
 
 			// 選択終了していたときに指がスタートボタンに重なっていたらゲームスタート処理を行う
 			if (_selectFinishFlag) {
-				if (_pFinger[num]->GetPos().x > _startButtonPos.x - 515 && _pFinger[num]->GetPos().x < _startButtonPos.x + 515 &&
-					_pFinger[num]->GetPos().y > _startButtonPos.y - 125 && _pFinger[num]->GetPos().y < _startButtonPos.y + 250) {
+				if (_pFinger[num]->GetPos().x > _startButtonPos.x - GetConstantFloat("CARD_WIDTH") &&
+					_pFinger[num]->GetPos().x < _startButtonPos.x + GetConstantFloat("CARD_WIDTH") &&
+					_pFinger[num]->GetPos().y > _startButtonPos.y - GetConstantFloat("CARD_HEIGHT") &&
+					_pFinger[num]->GetPos().y < _startButtonPos.y + GetConstantFloat("CARD_HEIGHT")) {
 					_pushStart = true;
 
 					// ゲームスタート音を鳴らす
@@ -159,7 +164,7 @@ bool CharacterSelectManager::IsFingerOnCard(std::shared_ptr<SelectFinger>& fing,
 {
 	// それぞれの座標を取得
 	Vec2 fingPos = fing->GetPos();
-	Vec2 cardPos = Vec2{ card->GetPos().x + 10.0f,card->GetPos().y + 10.0f };
+	Vec2 cardPos = Vec2{ card->GetPos().x + GetConstantFloat("CARD_MARGIN"),card->GetPos().y + GetConstantFloat("CARD_MARGIN") };
 
 	// fingerがカードの上にあるか判定
 	if (fingPos.x >= cardPos.x &&

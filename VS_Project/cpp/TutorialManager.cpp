@@ -8,15 +8,21 @@
 #include "WedgewormManager.h"
 #include "EffectManager.h"
 #include "Input.h"
+#include "Application.h"
 
 TutorialManager::TutorialManager() :
 	_frame(0),
 	_tutorialProgress(GUIDE_CAMERA),
 	_endFrag(false),
-	_clearScale(10.0),
 	_shotCount(0),
 	_finishFrag(false)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/TutorialManager.csv");
+
+	_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
+
+
 	PlayerData data;
 
 	data.aiFlag = false;
@@ -36,14 +42,15 @@ TutorialManager::TutorialManager() :
 
 	// ライトの設定
 	{
+		auto& app = Application::GetInstance();
 		// ライティングを使用する
 		SetUseLighting(true);
 
 		// ライトのカラーを調整する
-		SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+		SetLightDifColor(GetColorF(app.GetConstantFloat("LIGHT_COLOR_R"), app.GetConstantFloat("LIGHT_COLOR_G"), app.GetConstantFloat("LIGHT_COLOR_B"), app.GetConstantFloat("LIGHT_COLOR_ALPHA")));
 
 		// ライトの角度を設定
-		SetLightDirection(VECTOR{ 1.0f, -1.0f ,0.0f, });
+		SetLightDirection(VECTOR{ app.GetConstantFloat("LIGHT_DIRECTION_X"), app.GetConstantFloat("LIGHT_DIRECTION_Y") ,app.GetConstantFloat("LIGHT_DIRECTION_Z"), });
 	}
 
 	// 画像のロード
@@ -72,14 +79,12 @@ TutorialManager::TutorialManager() :
 	}
 
 	// ガイド文章の座標の設定
-	_guidePos = Vec2{ 1920 / 2, 200 };
+	_guidePos = Vec2{ Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2, GetConstantInt("GUIDE_POS_Y") };
 
 	// クリア画像の座標の設定
-	_clearPos = Vec2{ CLEAR_POS_X, CLEAR_POS_Y };
+	_clearPos = Vec2{ Application::GetInstance().GetConstantInt("SCREEN_WIDTH") / 2, Application::GetInstance().GetConstantInt("SCREEN_HEIGHT") / 2 };
 
 	// 関数ポインタの初期化
-	//_updateFunc = &TutorialManager::CameraUpdate;
-	//_drawFunc = &TutorialManager::ShareDraw;
 	_updateFunc = &TutorialManager::FirstUpdate;
 	_drawFunc = &TutorialManager::FirstDraw;
 
@@ -96,7 +101,7 @@ TutorialManager::~TutorialManager()
 	for (int i = 0; i < 5; i++) {
 		DeleteGraph(_guideHandle[i]);
 	}
-	
+
 	// クリア画像の削除
 	DeleteGraph(_clearHandle);
 
@@ -150,13 +155,13 @@ void TutorialManager::CameraUpdate()
 		}
 	}
 	// カメラ操作が１秒以上行われたらクリア処理を行う
-	else if(Input::GetInstance().GetStickVectorLength(INPUT_RIGHT_STICK, INPUT_PAD_1) > 5000.0f){
+	else if (Input::GetInstance().GetStickVectorLength(INPUT_RIGHT_STICK, INPUT_PAD_1) > GetConstantFloat("STICK_DEAD_ZONE")) {
 
 		_frame++;
-		if (_frame > 60) {
+		if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 			_endFrag = true;
 			_frame = 0;
-			_clearScale = 10.0;
+			_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
 		}
 	}
 }
@@ -174,13 +179,13 @@ void TutorialManager::MoveUpdate()
 		}
 	}
 	// 移動操作が１ち秒以上行われたらクリア処理を行う
-	else if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, INPUT_PAD_1) > 5000.0f) {
+	else if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, INPUT_PAD_1) > GetConstantFloat("STICK_DEAD_ZONE")) {
 
 		_frame++;
-		if (_frame > 60) {
+		if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 			_endFrag = true;
 			_frame = 0;
-			_clearScale = 10.0;
+			_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
 		}
 	}
 }
@@ -201,7 +206,7 @@ void TutorialManager::JumpUpdate()
 	else if (Input::GetInstance().IsTrigger(INPUT_A, INPUT_PAD_1)) {
 		_endFrag = true;
 		_frame = 0;
-		_clearScale = 10.0;
+		_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
 	}
 }
 
@@ -224,10 +229,10 @@ void TutorialManager::ShotUpdate()
 		_shotCount++;
 	}
 
-	if (_shotCount == 60) {
+	if (_shotCount == Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 		_endFrag = true;
 		_frame = 0;
-		_clearScale = 10.0;
+		_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
 		_shotCount = 0;
 	}
 }
@@ -250,10 +255,10 @@ void TutorialManager::BombUpdate()
 		_shotCount++;
 	}
 
-	if (_shotCount == 2) {
+	if (_shotCount == GetConstantInt("BOMB_COUNT")) {
 		_endFrag = true;
 		_frame = 0;
-		_clearScale = 10.0;
+		_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
 		_shotCount = 0;
 	}
 }
@@ -275,7 +280,7 @@ void TutorialManager::GrappleUpdate()
 	else if (Input::GetInstance().IsTrigger(INPUT_X, INPUT_PAD_1)) {
 		_endFrag = true;
 		_frame = 0;
-		_clearScale = 10.0;
+		_clearScale = static_cast<double>(GetConstantFloat("CLEAR_SCALE"));
 	}
 }
 
@@ -300,7 +305,7 @@ void TutorialManager::FirstDraw() const
 
 	// 背景を少し暗くする
 	SetDrawBlendMode(DX_BLENDMODE_MULA, 0);
-	DrawBox(0, 0, 1980, 1080, 0x000000, true);
+	DrawBox(0, 0, Application::GetInstance().GetConstantInt("SCREEN_WIDTH"), Application::GetInstance().GetConstantInt("SCREEN_HEIGHT"), 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// カメラの設定
@@ -387,17 +392,19 @@ void TutorialManager::LastDraw() const
 
 bool TutorialManager::ClearFunction()
 {
-	_clearScale -= 0.5;
+	auto& app = Application::GetInstance();
+
+	_clearScale -= static_cast<double>(GetConstantFloat("CLEAR_SCALE_RATE"));
 
 	_clearScale = max(1.0, _clearScale);
 
 	if (_clearScale == 1.0 && _frame < 30) {
-		_clearPos.x = CLEAR_POS_X + GetRand(20) - 10;
-		_clearPos.y = CLEAR_POS_Y + GetRand(20) - 10;
+		_clearPos.x = app.GetConstantInt("SCREEN_WIDTH") / static_cast<float>(2) + GetRand(20) - 10;
+		_clearPos.y = app.GetConstantInt("SCREEN_HEIGHT") / static_cast<float>(2) + GetRand(20) - 10;
 	}
 
 	if (_frame > 30) {
-		_clearPos = Vec2{ CLEAR_POS_X,CLEAR_POS_Y };
+		_clearPos = Vec2{ app.GetConstantInt("SCREEN_WIDTH") / 2,app.GetConstantInt("SCREEN_HEIGHT") / 2 };
 	}
 
 	_frame++;

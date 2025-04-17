@@ -10,6 +10,8 @@
 #include "MyEffect.h"
 #include "SoundManager.h"
 #include "ItemManager.h"
+#include "Application.h"
+#include "Constant.h"
 
 Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, int padNum, BulletData& data) :
 	_moveScaleY(0),
@@ -32,7 +34,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	_updateFunc = &Player::UpdatePl;
 
 	// 拡大の設定
-	Scale = Vec3{ 0.12f,0.12f,0.12f };
+	Scale = manager.GetConstantFloat("MODEL_SCALE");
 
 	// モデルの初期処理
 	InitModel(_manager.GetModelHandle(padNum));
@@ -41,7 +43,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	Position = Vec3{ 0.0f,25.0f,0.0f };
 
 	// カプセルの初期化
-	InitCapsule(Position, 3.0f, 12);
+	InitCapsule(Position, _manager.GetConstantFloat("CAPSULE_RADIUS"), _manager.GetConstantFloat("CAPSULE_HEIGHT"));
 
 	// アニメーションの初期処理
 	InitAnimation(_modelHandle, _manager.GetConstantInt("ANIM_AIMING_IDLE"), _manager.GetConstantFloat("BLEND_RATE"));
@@ -56,7 +58,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, i
 	}
 
 	// エフェクトインスタンスの作成
-	_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Vec3{ 0,500,0 });
+	_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Position);
 
 	// 選択している弾の初期化
 	_bulletData._selectBullet = NORMAL_BULLET;
@@ -86,7 +88,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 	// 拡大の設定
-	Scale = Vec3{ 0.12f,0.12f,0.12f };
+	Scale = manager.GetConstantFloat("MODEL_SCALE");
 
 	// モデルの初期処理
 	InitModel(_manager.GetModelHandle(1));
@@ -95,7 +97,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 	Position = Vec3{ 0.0f,25.0f,0.0f };
 
 	// カプセルの初期化
-	InitCapsule(Position, 3.0f, 12);
+	InitCapsule(Position, _manager.GetConstantFloat("CAPSULE_RADIUS"), _manager.GetConstantFloat("CAPSULE_HEIGHT"));
 
 	// アニメーションの初期処理
 	InitAnimation(_modelHandle, _manager.GetConstantInt("ANIM_AIMING_IDLE"), _manager.GetConstantFloat("BLEND_RATE"));
@@ -107,7 +109,7 @@ Player::Player(std::shared_ptr<BulletManager>& bullet, PlayerManager& manager, B
 	}
 
 	// エフェクトインスタンスの作成
-	_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Vec3{ 0,500,0 });
+	_pEffect = std::make_shared<MyEffect>(SPEED_UP_EFFECT, Position);
 
 	// 選択している弾の初期化
 	_bulletData._selectBullet = NORMAL_BULLET;
@@ -129,7 +131,7 @@ void Player::Update()
 	// スタンフラグの計測
 	if (_stunFrag) {
 		_stunFrame++;
-		if (_stunFrame > 20) {
+		if (_stunFrame > _manager.GetConstantInt("STUN_TIME")) {
 			_stunFrame = 0;
 			_stunFrag = false;
 		}
@@ -139,7 +141,7 @@ void Player::Update()
 	if (_speedUpFrag) {
 		_pEffect->Update(Position);
 		_speedUpFrame++;
-		if (_speedUpFrame > 180) {
+		if (_speedUpFrame > _manager.GetConstantInt("SPEED_UP_TIME")) {
 			_pEffect->StopEffect();
 			_speedUpFrag = false;
 			_speedUpFrame = 0;
@@ -188,25 +190,25 @@ void Player::ControlPl()
 	}
 
 	// 右スティックで回転
-	if (input.GetStickVectorLength(INPUT_RIGHT_STICK, _padNum) > 3000) {
+	if (input.GetStickVectorLength(INPUT_RIGHT_STICK, _padNum) > _manager.GetConstantFloat("STICK_DEAD_ZONE")) {
 
 		// スティックを傾けた方向の回転の値を増減させる
 		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).x != 0) {
-			Angle.y += 0.000001f * (input.GetStickThumbX(INPUT_RIGHT_STICK, _padNum));
+			Angle.y += _manager.GetConstantFloat("ANGLE_SCALE") * (input.GetStickThumbX(INPUT_RIGHT_STICK, _padNum));
 
 			// ラジアン角を正規化する
 			Angle.y = fmodf(Angle.y, static_cast<float>(DX_TWO_PI));
 			if (Angle.y < 0.0f) Angle.y += static_cast<float>(DX_TWO_PI);
 		}
 		if (input.GetStickVector(INPUT_RIGHT_STICK, _padNum).z != 0) {
-			Angle.z += 0.000001f * (input.GetStickThumbY(INPUT_RIGHT_STICK, _padNum));
+			Angle.z += _manager.GetConstantFloat("ANGLE_SCALE") * (input.GetStickThumbY(INPUT_RIGHT_STICK, _padNum));
 
 			// 最大値と最低値を調整する
-			if (Angle.z <= -0.9f) {
-				Angle.z = -0.9f;
+			if (Angle.z <= -_manager.GetConstantFloat("MAX_ANGLE")) {
+				Angle.z = -_manager.GetConstantFloat("MAX_ANGLE");
 			}
-			else if (Angle.z >= 0.9f) {
-				Angle.z = 0.9f;
+			else if (Angle.z >= _manager.GetConstantFloat("MAX_ANGLE")) {
+				Angle.z = _manager.GetConstantFloat("MAX_ANGLE");
 			}
 		}
 	}
@@ -217,17 +219,17 @@ void Player::ControlPl()
 	_moveVec = 0;
 
 	// スティックの入力値を移動ベクトルに代入する
-	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, _padNum) > 3000) {
+	if (Input::GetInstance().GetStickVectorLength(INPUT_LEFT_STICK, _padNum) > _manager.GetConstantFloat("STICK_DEAD_ZONE")) {
 		_moveVec = Input::GetInstance().GetStickUnitVector(INPUT_LEFT_STICK, _padNum);
 
 		// 単位ベクトルの方向に移動速度分移動するベクトルを作成する
 		if (_stunFrag) {
-			_moveVec = _moveVec * (_manager.GetConstantFloat("WALK_SPEED") * 0.8f);
+			_moveVec = _moveVec * _manager.GetConstantFloat("STUN_WALK_SPEED");
 		}
 		else {
 
 			if (_speedUpFrag) {
-				_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED") * 2.0f;
+				_moveVec = _moveVec * _manager.GetConstantFloat("SPEED_UP_WALK");
 			}
 			else {
 				_moveVec = _moveVec * _manager.GetConstantFloat("WALK_SPEED");
@@ -239,7 +241,7 @@ void Player::ControlPl()
 	if (Input::GetInstance().IsTrigger(INPUT_A, _padNum) && _groundFlag) {
 
 		// ジャンプ力を与える
-		_moveScaleY = 2.0f;
+		_moveScaleY = _manager.GetConstantFloat("JUMP_SCALE");
 
 		// ジャンプの開始アニメーションを再生
 		ChangeAnimation(_modelHandle, _manager.GetConstantInt("ANIM_JUMP_UP"), false, _manager.GetConstantFloat("BLEND_RATE"));
@@ -251,7 +253,7 @@ void Player::ControlPl()
 	// 移動ベクトルをy軸回転させる
 
 	// 角度のずれを修正する
-	float angle = Angle.y - 1.5708f;
+	float angle = Angle.y - DX_PI_F / 2;
 
 	// Y軸回転行列に変換
 	MATRIX rotaMtx = MGetRotY(angle);
@@ -303,42 +305,42 @@ void Player::ControlAI()
 		Vec3 targetPos = _manager.GetPlayerPos();	// プレイヤーの座標
 		Vec3 length = targetPos - Position;	// プレイヤーとの距離
 		Vec3 dist = (targetPos - Position).GetNormalized();	// プレイヤーの方向への単位ベクトル
-		Angle.y = atan2(dist.x, dist.z) - 1.5708f;	// プレイヤーの方向を向く 
+		Angle.y = atan2(dist.x, dist.z) - DX_PI_F / 2;	// プレイヤーの方向を向く 
 
 		// forwardVecがプレイヤーの足元の少し下を向くようにする
 		_forwardVec = (Vec3{ targetPos.x,0.0f,targetPos.z } - Position).GetNormalized();
 
 		// グラップルが着弾していたらプレイヤーの方法に移動する
 		if (_bulletManager->IsCollisionBullet(_padNum) && !_bulletManager->GetInvalidFlag(_padNum)) {
-			_moveVec += dist * 0.5f;
+			_moveVec += dist * _manager.GetConstantFloat("STUN_WALK_SPEED") * 1.5f;
 		}
 
 		// ランダムな間隔でジャンプする
-		if (rand() % 300 == 0 && _groundFlag) {
-			_moveScaleY = 2.0f;
+		if (rand() % _manager.GetConstantInt("JUMP_INTERVAL") == 0 && _groundFlag) {
+			_moveScaleY = _manager.GetConstantFloat("JUMP_SCALE");
 		}
 
-		if (_frame % 60 == 0) {
+		if (_frame % Application::GetInstance().GetConstantInt("FRAME_NUM") == 0) {
 			if ((Position - _oldPos).Length() < 10.0f) {
-				_moveScaleY = 2.0f;
+				_moveScaleY = _manager.GetConstantFloat("JUMP_SCALE");
 			}
 			_oldPos = Position;
 		}
 
 		if (_stunFrag) {
-			_moveVec += dist * 0.15f;
+			_moveVec += dist * _manager.GetConstantFloat("STUN_WALK_SPEED");
 		}
 		else {
 			if (_speedUpFrag) {
-				_moveVec += dist * 0.20f * 2.0f;
+				_moveVec += dist * _manager.GetConstantFloat("SPEED_UP_WALK");
 			}
 			else {
-				_moveVec += dist * 0.20f;
+				_moveVec += dist * _manager.GetConstantFloat("WALK_SPEED");
 			}
 		}
 
 		// 30フレームに一回弾を発射する
-		if (_frame % 30 == 0) {
+		if (_frame % Application::GetInstance().GetConstantInt("FRAME_NUM") / 2 == 0) {
 			BulletTrigger(rand() % 3);
 		}
 	}
@@ -380,8 +382,8 @@ void Player::UpdatePl()
 	_frontPos = Position;
 
 	// 落下速度を少しづつ早くする
-	if (!_groundFlag && _moveScaleY > -1.5f) {
-		_moveScaleY -= 0.1f;
+	if (!_groundFlag && _moveScaleY > -_manager.GetConstantFloat("MAX_FALL_SPEED")) {
+		_moveScaleY -= _manager.GetConstantFloat("FALL_SPEED");
 	}
 
 	// 向いている方向のベクトルを求める
@@ -397,7 +399,7 @@ void Player::UpdatePl()
 		_grapplerScale = 0.0f;
 	}
 	else {
-		_grapplerScale -= 0.01f;
+		_grapplerScale -= _manager.GetConstantFloat("GRAPPLER_DECREASE_SCALE");
 	}
 
 	// グラップラーが当たっているかを知らべる
@@ -408,21 +410,21 @@ void Player::UpdatePl()
 
 		// 当たっていたら上方向とグラップラーの方向に移動ベクトルを与える
 		if (_groundFlag) {
-			_moveScaleY = 2.4f;
+			_moveScaleY = _manager.GetConstantFloat("GRAPPLER_JUMP_SCALE_GROUND");
 		}
 		else {
-			_moveScaleY = 1.5f;
+			_moveScaleY = _manager.GetConstantFloat("GRAPPLER_JUMP_SCALE");
 		}
 
 		// グラップラーに向かう単位ベクトルを作成する
 		_grapplerUnitVec = (_bulletManager->GetBulletPos(_padNum) - Position).GetNormalized();
 
 		// グラップラーの着弾点への距離によって移動速度を変化させる
-		_grapplerScale = 0.02f * (_bulletManager->GetBulletPos(_padNum) - Position).Length();
+		_grapplerScale = _manager.GetConstantFloat("GRAPPER_SPEED_BASE") * (_bulletManager->GetBulletPos(_padNum) - Position).Length();
 
 		// グラップラーによる移動速度の最大値を決める
-		if (_grapplerScale > 1.8f) {
-			_grapplerScale = 1.8f;
+		if (_grapplerScale > _manager.GetConstantFloat("GRAPPLER_MAX_SPEED")) {
+			_grapplerScale = _manager.GetConstantFloat("GRAPPLER_MAX_SPEED");
 		}
 	}
 
@@ -434,7 +436,7 @@ void Player::UpdatePl()
 
 	// アニメーションの更新
 	if (_speedUpFrag) {
-			UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK") * 2.0f);
+		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_UP_WALK"));
 	}
 	else {
 		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
@@ -444,7 +446,7 @@ void Player::UpdatePl()
 	Transform trans;
 	trans.Scale = Scale;
 	trans.Position = Position;
-	trans.Angle = Vec3{ Angle.x,Angle.y - 1.5708f,Angle.z };
+	trans.Angle = Vec3{ Angle.x,Angle.y - DX_PI_F / 2, Angle.z };
 
 	// モデルの更新
 	UpdateModel(trans);
@@ -476,8 +478,8 @@ void Player::UpdateAI()
 	_frontPos = Position;
 
 	// 落下速度を少しづつ早くする
-	if (!_groundFlag && _moveScaleY > -1.5f) {
-		_moveScaleY -= 0.1f;
+	if (!_groundFlag && _moveScaleY > -_manager.GetConstantFloat("MAX_FALL_SPEED")) {
+		_moveScaleY -= _manager.GetConstantFloat("FALL_SPEED");
 	}
 
 	// グラップラーの移動処理
@@ -499,10 +501,10 @@ void Player::UpdateAI()
 
 		// 当たっていたら上方向とグラップラーの方向に移動ベクトルを与える
 		if (_groundFlag) {
-			_moveScaleY = 2.4f;
+			_moveScaleY = _manager.GetConstantFloat("GRAPPLER_JUMP_SCALE_GROUND");
 		}
 		else {
-			_moveScaleY = 1.5f;
+			_moveScaleY = _manager.GetConstantFloat("GRAPPLER_JUMP_SCALE");
 		}
 
 		// グラップラーに向かう単位ベクトルを作成する
@@ -512,8 +514,8 @@ void Player::UpdateAI()
 		_grapplerScale = 0.02f * (_bulletManager->GetBulletPos(_padNum) - Position).Length();
 
 		// グラップラーによる移動速度の最大値を決める
-		if (_grapplerScale > 1.8f) {
-			_grapplerScale = 1.8f;
+		if (_grapplerScale > _manager.GetConstantFloat("GRAPPLER_MAX_SPEED")) {
+			_grapplerScale = _manager.GetConstantFloat("GRAPPLER_MAX_SPEED");
 		}
 	}
 
@@ -522,7 +524,7 @@ void Player::UpdateAI()
 
 	// アニメーションの更新
 	if (_speedUpFrag) {
-		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK") * 2.0f);
+		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_UP_WALK"));
 	}
 	else {
 		UpdateAnimation(_modelHandle, _manager.GetConstantFloat("ANIM_SPEED_WALK"));
@@ -532,7 +534,7 @@ void Player::UpdateAI()
 	Transform trans;
 	trans.Scale = Scale;
 	trans.Position = Position;
-	trans.Angle = Vec3{ Angle.x,Angle.y - 1.5708f,Angle.z };
+	trans.Angle = Vec3{ Angle.x,Angle.y - DX_PI_F / 2, Angle.z };
 
 	// モデルの更新
 	UpdateModel(trans);
@@ -564,7 +566,7 @@ void Player::Draw() const
 	//}
 #endif // DEBUG
 	if (_bulletManager->GetBulletExist(_padNum)) {
-		Vec3 pos = Vec3{ Position.x,Position.y + 15.0f,Position.z };
+		Vec3 pos = Vec3{ Position.x,Position.y + _manager.GetConstantFloat("GRAPPLE_MARGINE_Y"), Position.z };
 		DrawLine3D(_bulletManager->GetBulletPos(_padNum).VGet(), pos.VGet(), 0xff16ff);
 	}
 	// モデルの描画
@@ -755,7 +757,7 @@ void Player::AnimationContorol()
 void Player::BulletTrigger(int bullet)
 {
 	// 発射する座標
-	Vec3 pos = MV1GetFramePosition(GetModelHandle(), 65);
+	Vec3 pos = MV1GetFramePosition(GetModelHandle(), _manager.GetConstantInt("BONE_FINGER"));
 
 	switch (bullet)
 	{
@@ -769,7 +771,7 @@ void Player::BulletTrigger(int bullet)
 			_bulletManager->PushBullet(NORMAL_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bulletData._bullletCoolTime[NORMAL_BULLET] = 30;
+			_bulletData._bullletCoolTime[NORMAL_BULLET] = _manager.GetConstantInt("COOL_TIME_NORMAL");
 		}
 		break;
 	case GRAPPLER_BULLET:
@@ -782,7 +784,7 @@ void Player::BulletTrigger(int bullet)
 			_bulletManager->PushBullet(GRAPPLER_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bulletData._bullletCoolTime[GRAPPLER_BULLET] = 300;
+			_bulletData._bullletCoolTime[GRAPPLER_BULLET] = _manager.GetConstantInt("COOL_TIME_GRAPPLER");
 		}
 		break;
 	case BOMB_BULLET:
@@ -795,7 +797,7 @@ void Player::BulletTrigger(int bullet)
 			_bulletManager->PushBullet(BOMB_BULLET, _forwardVec, pos, _padNum);
 
 			// クールタイムを設定する
-			_bulletData._bullletCoolTime[BOMB_BULLET] = 300;
+			_bulletData._bullletCoolTime[BOMB_BULLET] = _manager.GetConstantInt("COOL_TIME_BOMB");
 		}
 		break;
 	default:

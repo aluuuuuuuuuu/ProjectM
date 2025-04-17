@@ -5,6 +5,7 @@
 #include "EffekseerForDXLib.h"
 #include "EffectManager.h"
 #include "SoundManager.h"
+#include "Application.h"
 
 BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
@@ -27,7 +28,7 @@ BombBullet::BombBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionMa
 	_pEffect = std::make_shared<MyEffect>(BOMB_BULLET_EFFECT, pos);
 
 	// ”¼Œa‚ÌÝ’è
-	_radius = 3.0f;
+	_radius = _bulletManager.GetConstantFloat("RADIUS");
 }
 
 BombBullet::~BombBullet()
@@ -57,7 +58,7 @@ void BombBullet::Update()
 	if (_frame > 0) {
 		_explosionEffect->Update(Position);
 		_frame++;
-		if (_frame == 60) {
+		if (_frame == Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 			_deadFlag = true;
 			_explosionEffect->StopEffect();
 		}

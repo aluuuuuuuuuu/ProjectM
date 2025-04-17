@@ -1,9 +1,12 @@
 #pragma once
 #include <Crown.h>
 #include "Vec2.h"
+#include <memory>
+#include "Constant.h"
 
 class SceneTitle;
-class Crown
+class Crown:
+	public Constant
 {
 public:
 
@@ -48,5 +51,6 @@ private:
 	bool _blinkingFlag;
 	
 	Vec2 _dispPos;
+
 };
 

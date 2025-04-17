@@ -5,6 +5,7 @@
 #include "MyEffect.h"
 #include "EffekseerForDXLib.h"
 #include "SoundManager.h"
+#include "Application.h"
 
 NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisionManager>& col, BulletManager& mgr, int plNum) :
 	_collManager(col),
@@ -24,10 +25,10 @@ NormalBullet::NormalBullet(Vec3 dist, Vec3 pos, std::shared_ptr<MapBulletCollisi
 	_distVec = dist;
 
 	// エフェクトインスタンスの作成
-	_pEffect = std::make_shared<MyEffect>(NORMAL_BULLET_EFFECT,pos);
+	_pEffect = std::make_shared<MyEffect>(NORMAL_BULLET_EFFECT, pos);
 
 	// 半径の設定
-	_radius = 3.0f;
+	_radius = _bulletManager.GetConstantFloat("RADIUS");
 }
 
 NormalBullet::~NormalBullet()
@@ -35,7 +36,7 @@ NormalBullet::~NormalBullet()
 	if (_frame == 0) {
 		_pEffect->StopEffect();
 	}
-	else if (!_deadFlag){
+	else if (!_deadFlag) {
 		_destroyEffect->StopEffect();
 	}
 }
@@ -69,7 +70,7 @@ void NormalBullet::Update()
 	else {
 		_destroyEffect->Update(Position);
 		_frame++;
-		if (_frame > 60) {
+		if (_frame > Application::GetInstance().GetConstantInt("FRAME_NUM")) {
 			_deadFlag = true;
 			_destroyEffect->StopEffect();
 		}

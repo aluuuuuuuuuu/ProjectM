@@ -168,7 +168,6 @@
     <ClCompile Include="cpp\MenuManager.cpp" />
     <ClCompile Include="cpp\MyEffect.cpp" />
     <ClCompile Include="cpp\NormalBullet.cpp" />
-    <ClCompile Include="cpp\NumSelectButton.cpp" />
     <ClCompile Include="cpp\NumUtility.cpp" />
     <ClCompile Include="cpp\Player.cpp" />
     <ClCompile Include="cpp\PlayerBulletCollisionManager.cpp" />
@@ -195,7 +194,6 @@
     <ClCompile Include="cpp\SelectFinger.cpp" />
     <ClCompile Include="cpp\CharacterSelectManager.cpp" />
     <ClCompile Include="cpp\SelectModeUi.cpp" />
-    <ClCompile Include="cpp\SelectNumUi.cpp" />
     <ClCompile Include="cpp\SelectUI.cpp" />
     <ClCompile Include="cpp\SkyDome.cpp" />
     <ClCompile Include="cpp\SoundManager.cpp" />
@@ -235,7 +233,6 @@
     <ClInclude Include="h\MyEffect.h" />
     <ClInclude Include="h\MyMath.h" />
     <ClInclude Include="h\NormalBullet.h" />
-    <ClInclude Include="h\NumSelectButton.h" />
     <ClInclude Include="h\NumUtility.h" />
     <ClInclude Include="h\Player.h" />
     <ClInclude Include="h\PlayerBulletCollisionManager.h" />
@@ -263,7 +260,6 @@
     <ClInclude Include="h\SelectFinger.h" />
     <ClInclude Include="h\CharacterSelectManager.h" />
     <ClInclude Include="h\SelectModeUi.h" />
-    <ClInclude Include="h\SelectNumUi.h" />
     <ClInclude Include="h\SelectUI.h" />
     <ClInclude Include="h\Singleton.h" />
     <ClInclude Include="h\SkyDome.h" />
@@ -280,11 +276,19 @@
   <ItemGroup>
     <None Include="data\constant\Application.csv" />
     <None Include="data\constant\CharacterCard.csv" />
+    <None Include="data\constant\CharactorSelectManager.csv" />
     <None Include="data\constant\Collision.csv" />
+    <None Include="data\constant\CreditCharacotr.csv" />
+    <None Include="data\constant\Crown.csv" />
     <None Include="data\constant\Direction.csv" />
+    <None Include="data\constant\EffectManager.csv" />
     <None Include="data\constant\Enemy.csv" />
+    <None Include="data\constant\FallCharactor.csv" />
     <None Include="data\constant\Input.csv" />
-    <None Include="data\constant\NormalBullet.csv" />
+    <None Include="data\constant\Item.csv" />
+    <None Include="data\constant\ItemManager.csv" />
+    <None Include="data\constant\MenuManager.csv" />
+    <None Include="data\constant\BulletManager.csv" />
     <None Include="data\constant\Player.csv" />
     <None Include="data\constant\PlayerCamera.csv" />
     <None Include="data\constant\SceneCredit.csv" />
@@ -299,6 +303,7 @@
     <None Include="data\constant\Stage.csv" />
     <None Include="data\constant\SubActor.csv" />
     <None Include="data\constant\Tama.csv" />
+    <None Include="data\constant\TutorialManager.csv" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

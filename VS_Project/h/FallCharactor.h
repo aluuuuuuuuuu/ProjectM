@@ -1,6 +1,8 @@
 #pragma once
 #include "Vec2.h"
 #include "vector"
+#include <memory>
+#include "Constant.h"
 
 constexpr int CHARACTER_1 = 0;
 constexpr int CHARACTER_2 = 1;
@@ -17,7 +19,9 @@ struct Character
 	bool _rotateFlag;
 };
 
-class FallCharactor
+class SceneTitle;
+class FallCharactor:
+	public Constant
 {
 public:
 

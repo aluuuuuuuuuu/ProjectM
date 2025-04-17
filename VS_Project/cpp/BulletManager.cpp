@@ -10,7 +10,7 @@ BulletManager::BulletManager(std::shared_ptr<MapBulletCollisionManager>& col, st
 	_wedgeManager(worm)
 {
 	// ’è”‚Ì“Ç‚İ‚İ
-	ReadCSV("data/constant/NormalBullet.csv");
+	ReadCSV("data/constant/BulletManager.csv");
 }
 
 BulletManager::~BulletManager()

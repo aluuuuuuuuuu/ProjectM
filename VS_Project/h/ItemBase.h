@@ -2,10 +2,12 @@
 #include "Vec3.h"
 #include <memory>
 #include "Components.h"
+#include "Constant.h"
 
 class ItemBase :
 	public Transform,
-	public Model
+	public Model,
+	public Constant
 {
 public:
 

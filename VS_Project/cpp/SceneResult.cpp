@@ -20,6 +20,9 @@ SceneResult::SceneResult(PlayerData data, int gameTime) :
 	_frame(0),
 	_nextScene(0)
 {
+	// 定数ファイルの読み込み
+	ReadCSV("data/constant/SceneResult.csv");
+
 	// キャラクターの作成
 	_pCharacter = std::make_shared<ResultCharacter>(data.winner);
 

@@ -24,7 +24,7 @@ ScenePvp::ScenePvp(PlayerData data) :
 	_frame(Application::GetInstance().GetConstantInt("FRAME_NUM") * 2)
 {
 	// 定数ファイルの読み込み
-	ReadCSV("data/constant/ScenePvp");
+	ReadCSV("data/constant/ScenePvp.csv");
 
 	// タイトルのBGMを止める
 	SoundManager::GetInstance().StopBGM(BGM_OPENING);
