@@ -30,10 +30,7 @@ SceneSelectNum::SceneSelectNum() :
 	// スライド画像のロード
 	_slideHandle = LoadGraph("data/image/Slide.png");
 
-	// セレクトシーンから戻っていたらスライド画像は左から開く
-	if (_returnFrag) {
-		_slidePos.x = GetConstantInt("SLIDE_OUT_START_X");
-	}
+	_slidePos.x = GetConstantInt("SLIDE_OUT_START_X");
 
 	// カメラの初期化
 	SetCameraPositionAndTarget_UpVecY(VECTOR{ GetConstantFloat("CAMERA_POS_X"),GetConstantFloat("CAMERA_POS_Y"),GetConstantFloat("CAMERA_POS_Z") },

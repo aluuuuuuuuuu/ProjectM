@@ -1,6 +1,6 @@
 No.,定数名,型名,定数の値,説明
 1,CHARACTOR_NUM,_INT,4,キャラクターの総数
-2,START_BUTTON_POS_X,_FLOAT,900.0f,スタート画像の表示座標X
+2,START_BUTTON_POS_X,_FLOAT,960.0f,スタート画像の表示座標X
 3,START_BUTTON_POS_Y,_FLOAT,1500.0f,スタート画像の表示座標Y
 4,START_BUTTON_MOVE_SCALE,_FLOAT,45.0f,スタート画像の移動速度
 5,CARD_MARGIN,_FLOAT,10.0f,カードの余白
